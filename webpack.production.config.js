@@ -6,9 +6,14 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
 // local css modules
+// loaders.push({
+// 	test: /[\/\\]src[\/\\].*\.css$/,
+// 	loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
+// });
+// local less modules
 loaders.push({
-	test: /[\/\\]src[\/\\].*\.css$/,
-	loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
+	test: /[\/\\]src[\/\\].*\.less$/,
+	loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'less')
 });
 // global css files
 loaders.push({
