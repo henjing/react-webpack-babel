@@ -15,13 +15,22 @@ loaders.push({
 		'css'
 	]
 });
-// local css modules
+// // local css modules
+// loaders.push({
+// 	test: /[\/\\]src[\/\\].*\.css$/,
+// 	loaders: [
+// 		'style?sourceMap',
+// 		'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+// 	]
+// });
+// local less modules
 loaders.push({
-	test: /[\/\\]src[\/\\].*\.css$/,
-	loaders: [
+  test : /[\/\\]src[\/\\].*\.less$/,
+  loaders : [
 		'style?sourceMap',
-		'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
-	]
+		'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+    'less'
+  ]
 });
 
 module.exports = {
