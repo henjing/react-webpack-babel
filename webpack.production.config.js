@@ -23,11 +23,12 @@ loaders.push({
 
 module.exports = {
 	entry: [
-		'./src/index.jsx'
+		'./src/app.js'
 	],
 	output: {
 		path: path.join(__dirname, 'public'),
-		filename: '[chunkhash].js'
+		// filename: '[chunkhash].js'
+		filename: 'bundle.js'
 	},
 	resolve: {
 		extensions: ['', '.js', '.jsx']
@@ -42,21 +43,22 @@ module.exports = {
 				NODE_ENV: '"production"'
 			}
 		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false,
-				screw_ie8: true,
-				drop_console: true,
-				drop_debugger: true
-			}
-		}),
+		// new webpack.optimize.UglifyJsPlugin({
+		// 	compress: {
+		// 		warnings: false,
+		// 		screw_ie8: true,
+		// 		drop_console: true,
+		// 		drop_debugger: true
+		// 	}
+		// }),
 		new webpack.optimize.OccurenceOrderPlugin(),
-		new ExtractTextPlugin('[contenthash].css', {
+		// new ExtractTextPlugin('[contenthash].css', {
+		new ExtractTextPlugin('bundle.css', {
 			allChunks: true
 		}),
 		new HtmlWebpackPlugin({
 			template: './src/template.html',
-			title: 'Webpack App'
+			title: '空店后台管理系统'
 		})
 	]
 };

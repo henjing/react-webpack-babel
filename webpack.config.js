@@ -11,7 +11,8 @@ const PORT = process.env.PORT || "8888";
 loaders.push({
 	test: /[\/\\](node_modules|global)[\/\\].*\.css$/,
 	loaders: [
-		'style?sourceMap',
+		// 'style?sourceMap',
+		'style',
 		'css'
 	]
 });
@@ -27,7 +28,8 @@ loaders.push({
 loaders.push({
   test : /[\/\\]src[\/\\].*\.less$/,
   loaders : [
-    'style?sourceMap',
+    'style',
+    // 'style?sourceMap',
     'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
     'less'
   ]
@@ -37,7 +39,7 @@ module.exports = {
 	entry: [
 		`webpack-dev-server/client?http://${HOST}:${PORT}`,
 		`webpack/hot/only-dev-server`,
-		`./src/index.jsx` // Your appʼs entry point
+		`./src/app.js` // Your appʼs entry point
 	],
 	devtool: process.env.WEBPACK_DEVTOOL || 'cheap-module-source-map',
 	output: {
