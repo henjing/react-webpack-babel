@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './main-layout.less';
-import sidebarLayoutContainer from '../containers/sidebar-layout-container';
-import outline from '../../helpers/outline';
+import SidebarLayoutContainer from '../containers/sidebar-layout-container';
+
 
 const MainLayout  = React.createClass({
     render : function () {
         return (
             <div className={styles.wrapper}>
                 <div className={styles.sidebar}>
-                    <sidebarLayoutContainer />
+                    <SidebarLayoutContainer />
                 </div>
                 <div className={styles.main}>
                     {this.props.children}
