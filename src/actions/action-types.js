@@ -1,3 +1,2 @@
-/**
- * Created by gttx on 16/9/10.
- */
+// navbar
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
