@@ -13,7 +13,7 @@ var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 // local less modules
 loaders.push({
 	test: /[\/\\]src[\/\\].*\.less$/,
-	loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'less')
+	loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!less')
 });
 // global css files
 loaders.push({
@@ -37,7 +37,7 @@ module.exports = {
 		loaders
 	},
 	plugins: [
-		new WebpackCleanupPlugin(),
+		// new WebpackCleanupPlugin(),
 		new webpack.DefinePlugin({
 			'process.env': {
 				NODE_ENV: '"production"'
