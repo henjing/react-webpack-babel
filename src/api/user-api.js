@@ -8,7 +8,7 @@ import { getUserUrl } from '../appConstants/urlConfig';
 export function getUser() {
     return axios.post(getUserUrl)
         .then(response => {
-            store.dispatch(getUserSuccess(response.info));
-            return response;
+            console.log(response);
+            store.dispatch(getUserSuccess(response.data.info));
         });
 }
