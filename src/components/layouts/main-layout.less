@@ -1,10 +1,10 @@
-body, .wrapper {
+body, .wrapper, .wrapperCollapse {
   min-height:100vh;
   position: relative;
   font-size:12px;
 }
 
-.wrapper {
+.wrapper, .wrapperCollapse {
   top: 0;
   height:100vh;
 }
@@ -14,26 +14,43 @@ body, .wrapper {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 200px;
+  //width: 200px;
   display: block;
-  z-index: 1;
+  overflow: inherit !important; // 若不添加此条,也会出现bug
+  z-index: 3; // 把z-index改为1,就会出现bug
   color: #fff;
   font-weight: 200;
   background-image: linear-gradient(#02326B, #0D6688);
+  transition: all 0.3s ease;
+}
+
+.wrapper .sidebar {
+  width:200px;
+}
+
+.wrapperCollapse .sidebar {
+  width:64px;
 }
 
 .main, .sidebar {
-  overflow: auto;
   max-height: 100%;
   height: 100%;
-  transition-property: top, bottom;
 }
 
 .main {
     position: relative;
     z-index: 2;
     float: right;
-    width: calc(~'100% - 200px');
     min-height: 100%;
+    transition: all 0.3s ease;
 }
+
+.wrapper .main {
+  width: calc(~'100% - 200px');
+}
+
+.wrapperCollapse .main {
+  width: calc(~'100% - 64px');
+}
+
 

@@ -2,6 +2,15 @@ import React from 'react';
 import styles from './navbar-layout-container.less';
 import { connect } from 'react-redux';
 import * as userApi from '../../api/user-api';
+import { Menu, Dropdown, Icon } from 'antd';
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" href="/Administrator/logout">注销</a>
+    </Menu.Item>
+  </Menu>
+);
 
 
 const NavbarLayoutContainer = React.createClass({
@@ -24,9 +33,11 @@ const NavbarLayoutContainer = React.createClass({
                                         <span>{this.props.user.user_name}</span>
                                     </li>
                                     <li className={styles.navLi + ' ' + styles.setup}>
-                                        <a href="#">
-                                            <span className="fa fa-cog" />
-                                        </a>
+                                        <Dropdown overlay={menu}>
+                                            <a href="#">
+                                                <span className="fa fa-cog" />
+                                            </a>
+                                        </Dropdown>
                                     </li>
                                 </ul>
                             </div>

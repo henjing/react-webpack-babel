@@ -7,14 +7,22 @@ import NavbarLayoutContainer from '../containers/navbar-layout-container';
 
 const MainLayout  = React.createClass({
     render : function () {
+        const collapse = this.props.collapse;
+        const wrapperName = collapse ? 'wrapperCollapse' : 'wrapper';
         return (
-            <div className={styles.wrapper}>
+            <div className={styles[wrapperName]}>
                 <div className={styles.sidebar}>
                     <SidebarLayoutContainer />
                 </div>
                 <div className={styles.main}>
                     <NavbarLayoutContainer />
-                    {/*this.props.children*/}
+
+                    <div id="content" className="content">
+
+                        {this.props.children}
+
+                    </div>
+
                 </div>
             </div>
         )
@@ -23,11 +31,8 @@ const MainLayout  = React.createClass({
 
 const mapStateToProps = function (store) {
 
-
-    
-
     return {
-
+        collapse : store.collapseState.collapse
     };
 
 };
