@@ -10,7 +10,7 @@ export function getUser() {
 
     return axios.post(getUserUrl)
         .then(data => {
-            console.log(data);
+            // console.log(data);
             const response = data.data;
             if (response.status === 1) {
                 store.dispatch(getUserSuccess(response.info));

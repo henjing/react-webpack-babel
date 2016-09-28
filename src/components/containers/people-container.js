@@ -8,7 +8,7 @@ const PeopleContainer = React.createClass({
         return (
             <div className="container-fluid">
                 <Row>
-                    <Col sm={20}>33</Col>
+                    <Col sm={20}></Col>
                     <Col sm={4}>44</Col>
                 </Row>
             </div>
@@ -17,9 +17,7 @@ const PeopleContainer = React.createClass({
 });
 
 const mapStateToProps = function (store) {
-    return {
-        
-    }
+    return Object.assign({}, store.peopleState);
 };
 
 export default connect(mapStateToProps)(PeopleContainer);

@@ -16,7 +16,7 @@
   "license": "MIT",
   "homepage": "https://github.com/alicoding/react-webpack-babel#readme",
   "dependencies": {
-    "antd": "^1.11.2",
+    "antd": "2.0.0",
     "axios": "^0.14.0",
     "bootstrap": "3.3.7",
     "font-awesome": "^4.6.3",
@@ -25,7 +25,8 @@
     "react-dom": "15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.7.0",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.6.1",
