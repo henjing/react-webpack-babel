@@ -18,7 +18,7 @@ const PeopleContainer = React.createClass({
 
 const mapStateToProps = function (store) {
     return {
-
+        
     }
 };
 

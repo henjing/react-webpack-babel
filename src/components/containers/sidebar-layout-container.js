@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import styles from './sidebar-layout-container.less';
 import { Link } from 'react-router';
+import { collapseFunc } from '../../api/collapse-api';
 import imgSrc from '../../appConstants/assets/images/logo_white.png';
 import { Menu, Breadcrumb, Icon } from 'antd';
 const SubMenu = Menu.SubMenu;
@@ -10,7 +11,7 @@ const SubMenu = Menu.SubMenu;
 const SidebarLayoutContainer = React.createClass({
 
       onCollapseChange() {
-          store.dispatch({ type : 'collapse'});
+          store.dispatch(collapseFunc());
       },
 
     render : function () {

@@ -1,3 +1,22 @@
-/**
- * Created by gttx on 16/9/27.
- */
+import * as types from '../actions/action-types';
+
+const initialState = {
+    currentPage : 1,
+    info : [{}],
+    totalPage : 1,
+    totalRows : 10
+};
+
+const peopleReducer = function (state = initialState, action) {
+
+    switch (action.type) {
+
+        case types.GET_PEOPLE_SUCCESS:
+            return Object.assign({}, state, {...action.info});
+
+    }
+
+    return state;
+};
+
+export default peopleReducer;
