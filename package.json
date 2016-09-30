@@ -19,6 +19,7 @@
     "antd": "2.0.0",
     "axios": "^0.14.0",
     "bootstrap": "3.3.7",
+    "classnames": "^2.2.5",
     "font-awesome": "^4.6.3",
     "lodash": "^4.15.0",
     "react": "15.3.2",

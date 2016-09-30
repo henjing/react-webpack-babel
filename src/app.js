@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.css';
 import 'antd/dist/antd.css';
+import './app.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
