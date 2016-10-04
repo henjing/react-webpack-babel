@@ -45,7 +45,7 @@ const App = React.createClass({
             </Select>
         </Col>
         <Col md={10} lg={6} className="lineHeight">
-            <SearchInput placeholder="input search text" onSearch={value => console.log(value)} style={{ width: 200 }} />
+            <SearchInput placeholder="输入姓名、手机号" style={{ width: 200 }} />
         </Col>
       </Row>
     );
@@ -53,7 +53,9 @@ const App = React.createClass({
 });
 
 const mapStateToProps = function (store) {
-    return Object.assign({}, store.villageState);
+    return {
+        villageState : Object.assign({}, {...store.villageState})
+    }
 };
 
 export default connect(mapStateToProps)(App);

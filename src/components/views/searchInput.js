@@ -2,34 +2,32 @@ import React from 'react';
 import { Input, Button } from 'antd';
 import classNames from 'classnames';
 const InputGroup = Input.Group;
+import { getPeople } from '../../api/people-api';
+import { connect } from 'react-redux';
+import store from '../../store';
+import { updatePeopleSearch } from '../../actions/people-actions';
 
 const SearchInput = React.createClass({
   getInitialState() {
     return {
-      value: '',
-      focus: false,
+      focus: false
     };
   },
-  handleInputChange(e) {
-    this.setState({
-      value: e.target.value,
-    });
-  },
+
   handleFocusBlur(e) {
     this.setState({
       focus: e.target === document.activeElement,
     });
   },
   handleSearch() {
-    if (this.props.onSearch) {
-      this.props.onSearch(this.state.value);
-    }
+      store.dispatch(updatePeopleSearch({ search : this.props.value}));
+      getPeople();
   },
   render() {
     const { style, size, placeholder } = this.props;
     const btnCls = classNames({
       'ant-search-btn': true,
-      'ant-search-btn-noempty': !!this.state.value.trim(),
+      'ant-search-btn-noempty': !!this.props.value.trim(),
     });
     const searchCls = classNames({
       'ant-search-input': true,
@@ -38,7 +36,7 @@ const SearchInput = React.createClass({
     return (
       <div className="ant-search-input-wrapper" style={style}>
         <InputGroup className={searchCls}>
-          <Input placeholder={placeholder} value={this.state.value} onChange={this.handleInputChange}
+          <Input placeholder={placeholder} value={this.props.value} onChange={this.handleInputChange}
             onFocus={this.handleFocusBlur} onBlur={this.handleFocusBlur} onPressEnter={this.handleSearch}
           />
           <div className="ant-input-group-wrap">
@@ -50,4 +48,10 @@ const SearchInput = React.createClass({
   },
 });
 
-export default SearchInput;
+function mapStateToProps(store) {
+    return {
+        value : store.peopleSearchState.search
+    }
+}
+
+export default connect(mapStateToProps)(SearchInput);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Table, Icon, Button, Col } from 'antd';
-import { updatePeopleSearch } from '../../actions/people-actions';
+import { updatePeopleSearch, peopleFormEdit } from '../../actions/people-actions';
 import { getPeople, deletePeople } from '../../api/people-api';
 import { Popconfirm } from 'antd';
 
@@ -54,7 +54,7 @@ const PeopleTable = React.createClass({
             render : (text, record, index) => {
                 return (
                     <Col>
-                        <Button size="small" icon="edit">编辑</Button>
+                        <Button onClick={this.handleClick(record)} size="small" icon="edit">编辑</Button>
                         &nbsp;
                         <Popconfirm title="确认删除此信息吗" onConfirm={this.deleteRow(record)} okText="删除" cancelText="取消">
                             <Button size="small" icon="delete">删除</Button>
@@ -72,6 +72,12 @@ const PeopleTable = React.createClass({
             deletePeople({ id : parseInt(record.id)});
         }
     },
+    
+    handleClick(record) {
+        return () => {
+            this.props.dispatch(peopleFormEdit(Object.assign({}, {...record}, { type : 'edit', visible : true })));
+        }
+    },
 
     onChange(page) {
         this.props.dispatch(updatePeopleSearch({ page : page }));
@@ -81,9 +87,18 @@ const PeopleTable = React.createClass({
     render() {
         const columns = this.getColumns();
         const dataSource = this.props.dataSource;
-        return (
-            <Table pagination={{ current : this.props.current, total : this.props.total, onChange : this.onChange }} columns={columns} dataSource={dataSource} />
-        )
+        if (this.props.hasData) {
+            return (
+                <Table pagination={{ current : this.props.current, total : this.props.total, onChange : this.onChange }} columns={columns} dataSource={dataSource} />
+            )
+        } else {
+            return (
+                <div>
+                    {this.props.emptyText}
+                </div>
+            )
+        }
+
     }
 });
 
@@ -91,7 +106,9 @@ const mapStateToProps = function (store) {
     return {
         dataSource : Object.assign([], store.peopleState.info),
         current : store.peopleState.currentPage,
-        total : store.peopleState.totalRows
+        total : store.peopleState.totalRows,
+        hasData : store.peopleState.hasData,
+        emptyText : store.peopleState.emptyText
     }
 };
 

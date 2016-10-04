@@ -3,7 +3,7 @@ import { Button, Icon, Select, Modal } from 'antd';
 import { Row, Col } from 'antd';
 import styles from './addPeopleForm.less';
 import { Form, Input, Upload } from 'antd';
-import { addPeople } from '../../api/people-api';
+import { addPeople, editPeople } from '../../api/people-api';
 import { connect } from 'react-redux';
 import { peopleFormAdd } from '../../actions/people-actions';
 const FormItem = Form.Item;
@@ -72,7 +72,11 @@ let AddPeopleForm = React.createClass({
         });
 
         const config = Object.assign({}, {...this.props.form.getFieldsValue()});
-        addPeople(config);
+        if (this.props.peopleFormState.type === 'add') {
+            addPeople(config);
+        } else {
+            editPeople(config);
+        }
     },
 
     render() {
@@ -97,7 +101,38 @@ let AddPeopleForm = React.createClass({
             thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
           }]
         };
-
+        const trueImgProps = {
+          action: '/upload.do',
+          listType: 'picture',
+          defaultFileList: [{
+            uid: -1,
+            name: 'xxx.png',
+            status: 'done',
+            url: this.props.peopleFormState.head_img,
+            thumbUrl: this.props.peopleFormState.head_img,
+          }]
+        };
+        const addUpload = (
+            <Upload name="head_img" listType="picture" {...imgProps}>
+                <Button type="ghost">
+                    <Icon type="upload" />点击上传
+                </Button>
+            </Upload>            
+        );
+        const editUpload = (
+            <Upload name="head_img" listType="picture" {...trueImgProps}>
+                <Button type="ghost">
+                    <Icon type="upload" />点击上传
+                </Button>
+            </Upload>        
+        );
+        const idItem = (
+            <FormItem {...formItemLayout} label="编号">
+                <p className="ant-form-text" id="id" name="id">{this.props.peopleFormState.id}</p>
+            </FormItem>
+        );
+        const finalUpload = this.props.peopleFormState.type === 'edit' ? editUpload : addUpload;
+        
         return (
             <Row>
                 <Col className={styles.topCol}>
@@ -107,6 +142,7 @@ let AddPeopleForm = React.createClass({
                     <Modal title={this.props.peopleFormState.type === 'add' ? '添加贫困户信息' : '编辑贫困户信息'} visible={this.props.peopleFormState.visible} onOk={this.handleSubmit} onCancel={this.hideModal}>
                         {/*<CustomForm formState={{name : {value : 'hehehe'}}} />*/}
                         <Form horizontal onSubmit={this.handleSubmit}>
+                            { this.props.peopleFormState.type === 'edit' ? (idItem) : ''}
                             <FormItem
                                 {...formItemLayout} hasFeedback label="姓名">
                                 {getFieldDecorator('name', {
@@ -169,11 +205,7 @@ let AddPeopleForm = React.createClass({
                             <FormItem
                                 {...formItemLayout} hasFeedback label="上传头像">
                                 {getFieldDecorator('head_img')(
-                                    <Upload name="head_img" listType="picture" {...imgProps}>
-                                        <Button type="ghost">
-                                            <Icon type="upload" />点击上传
-                                        </Button>
-                                    </Upload>
+                                    finalUpload
                                 )}
                             </FormItem>
                         </Form>
@@ -187,9 +219,23 @@ let AddPeopleForm = React.createClass({
 AddPeopleForm = createForm({
     mapPropsToFields(props) {
         console.log('props2333333',props);
-        return {};
-    }
-    ,
+        if (props.peopleFormState.type === 'edit') {
+            const formData = props.peopleFormState;
+            return {
+                id : { value : formData.id},
+                name : { value : formData.name},
+                identity_no : { value : formData.identity_no},
+                profile : { value : formData.profile},
+                remark : { value : formData.remark},
+                phone : { value : formData.phone},
+                village_info_id : { value : formData.village_info_id},
+                head_img : { value : formData.head_img}
+            }
+        } else {
+            return {}
+        }
+    },
+
     onFieldsChange(props, fields) {
         // console.log('props======', props, 'fields=====', fields);
     }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import { getPeopleSuccess, getVillageSuccess, peopleFormAdd } from '../actions/people-actions';
-import { getPeopleUrl, getVillageUrl, addPeopleUrl, deletePeopleUrl } from '../appConstants/urlConfig';
+import { getPeopleUrl, getVillageUrl, addPeopleUrl, deletePeopleUrl, editPeopleUrl } from '../appConstants/urlConfig';
 import { message } from 'antd';
 
 // 拿到贫困户列表
@@ -11,12 +11,13 @@ export function getPeople() {
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
-                store.dispatch(getPeopleSuccess(response));
+                store.dispatch(getPeopleSuccess(Object.assign({}, {hasData : true}, response)));
             }
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
+                // message.warning(response.info);
+                store.dispatch(getPeopleSuccess({ hasData : false, emptyText : response.info}));
             }
         }).catch(err => {
             message.error('服务器错误! ' + err);
@@ -42,6 +43,27 @@ export function getVillage() {
 
 export function addPeople(config) {
     return axios.post(addPeopleUrl, formData(config))
+        .then(data => {
+            const response = data.data;
+            if (response.status == 1) {
+                message.success(response.info);
+            }
+            setTimeout(() => {
+                store.dispatch(peopleFormAdd({ visible : false }));
+                getPeople();
+            }, 1500);
+            return response;
+        }).then(response => {
+            if (response.status == 0) {
+                message.warning(response.info);
+            }
+        }).catch(err => {
+            message.error('服务器错误! ' + err);
+        })
+}
+
+export function editPeople(config) {
+    return axios.post(editPeopleUrl, formData(config))
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
