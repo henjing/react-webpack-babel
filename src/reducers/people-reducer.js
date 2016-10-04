@@ -12,6 +12,7 @@ const peopleReducer = function (state = initialState, action) {
     switch (action.type) {
 
         case types.GET_PEOPLE_SUCCESS:
+            action.info.currentPage = parseInt(action.info.currentPage);
             return Object.assign({}, state, {...action.info});
 
     }

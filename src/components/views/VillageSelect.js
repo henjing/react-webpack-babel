@@ -4,6 +4,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import SearchInput from './searchInput';
 import styles from './villageSelect.less';
+import { connect } from 'react-redux';
 
 const provinceData = ['Zhejiang', 'Jiangsu'];
 const cityData = {
@@ -51,4 +52,8 @@ const App = React.createClass({
   }
 });
 
-export default App;
+const mapStateToProps = function (store) {
+    return Object.assign({}, store.villageState);
+};
+
+export default connect(mapStateToProps)(App);

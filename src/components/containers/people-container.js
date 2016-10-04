@@ -5,8 +5,16 @@ import { Row, Col } from 'antd';
 import VillageSelect from '../views/villageSelect';
 import DatePicker from '../views/datePicker';
 import AddPeopleForm from '../views/addPeopleForm';
+import PeopleTable from '../views/peopleTable';
+import { getPeople, getVillage } from '../../api/people-api';
 
 const PeopleContainer = React.createClass({
+
+    componentDidMount() {
+        getPeople();
+        getVillage();
+    },
+
     render : function () {
         return (
             <div className="container-fluid">
@@ -16,18 +24,19 @@ const PeopleContainer = React.createClass({
                         <DatePicker />
                     </Col>
                     <Col sm={4} className={styles.lineHeight}>
-                        <h1>4567</h1>
+                        <h1>{this.props.totalRows}</h1>
                         <span>当前贫困户</span>
                     </Col>
                 </Row>
                 <AddPeopleForm />
+                <PeopleTable />
             </div>
         )
     }
 });
 
 const mapStateToProps = function (store) {
-    return Object.assign({}, store.peopleState);
+    return Object.assign({}, {...store.peopleState});
 };
 
 export default connect(mapStateToProps)(PeopleContainer);
