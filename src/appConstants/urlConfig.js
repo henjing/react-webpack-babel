@@ -10,3 +10,13 @@ export const deletePeopleUrl = '/Printinfo/delPeopleInfo';
 
 export const getVillageUrl = '/Printinfo/getVillageInfo';
 
+export const getProductUrl = '/Printinfo/showProduct';
+
+export const editProductUrl = '/Printinfo/editProduct';
+
+export const deleteProductUrl = '/Printinfo/delProduct';
+
+export const addProductUrl = '/Printinfo/addProduct';
+
+
+

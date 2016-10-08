@@ -8,6 +8,8 @@ import peopleReducer from './people-reducer';
 import villageReducer from './village-reducer';
 import peopleFormReducer from './people-form-reducer';
 import peopleSearchReducer from './people-search-reducer';
+import modifyPasswordReducer from './modifyPassword-reducer';
+import productListReducer from './product-list-reducer';
 
 var reducers = combineReducers({
     mainLayoutState : mainLayoutReducer,
@@ -16,7 +18,9 @@ var reducers = combineReducers({
     peopleState : peopleReducer,
     villageState : villageReducer,
     peopleFormState : peopleFormReducer,
-    peopleSearchState : peopleSearchReducer
+    peopleSearchState : peopleSearchReducer,
+    modifyPasswordState : modifyPasswordReducer,
+    productListState : productListReducer
 });
 
 export default reducers;

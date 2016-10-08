@@ -5,7 +5,8 @@ import styles from './addPeopleForm.less';
 import { Form, Input, Upload } from 'antd';
 import { addPeople, editPeople } from '../../api/people-api';
 import { connect } from 'react-redux';
-import { peopleFormAdd } from '../../actions/people-actions';
+import { peopleFormAdd, peopleFormEdit } from '../../actions/people-actions';
+import store from '../../store';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
@@ -24,13 +25,13 @@ let AddPeopleForm = React.createClass({
     minLength(rule, value, callback) {
         try {
             if (value.length > 1) {
-                setTimeout(function(){
+                // setTimeout(function(){
                    callback();
-                }, 300);
+                // }, 300);
             } else {
-                setTimeout(function(){
+                // setTimeout(function(){
                    callback(['姓名必须两个字以上']);
-                }, 300);
+                // }, 300);
             }
         } catch (e) {
             callback(['不能为空'])
@@ -72,10 +73,61 @@ let AddPeopleForm = React.createClass({
         });
 
         const config = Object.assign({}, {...this.props.form.getFieldsValue()});
+        var finalConfig = config;
+        try {
+            finalConfig = Object.assign({}, {...config}, { head_img : this.state.fileList[0].response.info})
+        } catch (e) {}
+        console.log('-----------', finalConfig);
         if (this.props.peopleFormState.type === 'add') {
-            addPeople(config);
+            addPeople(finalConfig);
         } else {
-            editPeople(config);
+            editPeople(Object.assign({}, {...store.getState().peopleFormState}, {...config}));
+        }
+    },
+
+    uploadOnChange(info) {
+        console.log('filechange-========', info);
+        let fileList = info.fileList;
+
+        // 3. filter successfully uploaded files according to response from server
+        // fileList = fileList.filter((file) => {
+        //   if (file.response) {
+        //     return file.response.status === 'success';
+        //   }
+        //   return true;
+        // });
+
+        // 2. read from response and show file link
+        // fileList = fileList.map((file) => {
+        //   if (file.response) {
+        //     // Component will show file.url as link
+        //     file.url = file.response.url;
+        //   }
+        //   return file;
+        // });
+
+        // 1. Limit the number of uploaded files
+        //    Only to show one recent uploaded files, and old ones will be replaced by the new
+        fileList = fileList.slice(-1);
+
+        // try {
+        //     this.props.dispatch(peopleFormAdd({ fileList : fileList }));
+        // } catch (e) {}
+        this.setState({ fileList });
+
+        // if (this.props.peopleFormState.type == 'add') {
+        //     console.log('file111111', fileList);
+        //     this.props.dispatch(peopleFormAdd({ head_img : fileList[0]}));
+        // } else {
+        //     this.props.dispatch(peopleFormEdit({ head_img : fileList[0]}));
+        //     console.log('file', fileList);
+        // }
+
+    },
+
+    getInitialState() {
+        return {
+            fileList : ''
         }
     },
 
@@ -91,18 +143,18 @@ let AddPeopleForm = React.createClass({
             )
         });
         const imgProps = {
-          action: '/upload.do',
+          action: '/Printinfo/doTest',
           listType: 'picture',
-          defaultFileList: [{
-            uid: -1,
-            name: 'xxx.png',
-            status: 'done',
-            url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-            thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-          }]
+          // defaultFileList: [{
+          //   uid: -1,
+          //   name: 'xxx.png',
+          //   status: 'done',
+          //   url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+          //   thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+          // }]
         };
         const trueImgProps = {
-          action: '/upload.do',
+          action: '/Printinfo/doTest',
           listType: 'picture',
           defaultFileList: [{
             uid: -1,
@@ -113,18 +165,18 @@ let AddPeopleForm = React.createClass({
           }]
         };
         const addUpload = (
-            <Upload name="head_img" listType="picture" {...imgProps}>
+            <Upload name="head_img" listType="picture" {...imgProps} onChange={this.uploadOnChange} fileList={this.state.fileList}>
                 <Button type="ghost">
                     <Icon type="upload" />点击上传
                 </Button>
             </Upload>            
         );
         const editUpload = (
-            <Upload name="head_img" listType="picture" {...trueImgProps}>
+            <Upload name="head_img" listType="picture" {...trueImgProps} onChange={this.uploadOnChange} fileList={this.props.fileList}>
                 <Button type="ghost">
                     <Icon type="upload" />点击上传
                 </Button>
-            </Upload>        
+            </Upload>
         );
         const idItem = (
             <FormItem {...formItemLayout} label="编号">
@@ -140,7 +192,7 @@ let AddPeopleForm = React.createClass({
                 </Col>
                 <Col className={styles.topForm} md={10}>
                     <Modal title={this.props.peopleFormState.type === 'add' ? '添加贫困户信息' : '编辑贫困户信息'} visible={this.props.peopleFormState.visible} onOk={this.handleSubmit} onCancel={this.hideModal}>
-                        {/*<CustomForm formState={{name : {value : 'hehehe'}}} />*/}
+
                         <Form horizontal onSubmit={this.handleSubmit}>
                             { this.props.peopleFormState.type === 'edit' ? (idItem) : ''}
                             <FormItem
@@ -218,7 +270,6 @@ let AddPeopleForm = React.createClass({
 
 AddPeopleForm = createForm({
     mapPropsToFields(props) {
-        console.log('props2333333',props);
         if (props.peopleFormState.type === 'edit') {
             const formData = props.peopleFormState;
             return {
@@ -229,7 +280,7 @@ AddPeopleForm = createForm({
                 remark : { value : formData.remark},
                 phone : { value : formData.phone},
                 village_info_id : { value : formData.village_info_id},
-                head_img : { value : formData.head_img}
+                // head_img : { value : formData.head_img}
             }
         } else {
             return {}

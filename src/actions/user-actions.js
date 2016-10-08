@@ -8,3 +8,16 @@ export function getUserSuccess(user) {
     };
 }
 
+export function showPasswordModal() {
+    
+    return {
+        type : types.PASSWORD_MODAL_SHOW
+    }
+}
+
+export function hidePasswordModal() {
+    
+    return {
+        type : types.PASSWORD_MODAL_HIDE
+    }
+}

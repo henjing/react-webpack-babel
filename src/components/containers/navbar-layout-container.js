@@ -2,24 +2,37 @@ import React from 'react';
 import styles from './navbar-layout-container.less';
 import { connect } from 'react-redux';
 import * as userApi from '../../api/user-api';
-import { Menu, Dropdown, Icon } from 'antd';
-
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" href="/Administrator/logout">注销</a>
-    </Menu.Item>
-  </Menu>
-);
-
+import { getVillage } from '../../api/people-api';
+import { getProductList } from '../../api/product-api';
+import { Menu, Dropdown, Icon, Button } from 'antd';
+import ModifyPassword from '../views/modifyPassword';
+import { showPasswordModal } from '../../actions/user-actions';
+import store from '../../store';
 
 const NavbarLayoutContainer = React.createClass({
     
     componentDidMount : function () {
         userApi.getUser();
-        
+        getVillage();
+        getProductList();
     },
+
+    handleClick() {
+        store.dispatch(showPasswordModal());
+    },
+
     render : function () {
+        const menu = (
+          <Menu>
+            <Menu.Item>
+              <a target="_blank" href="/Administrator/logout">注销</a>
+            </Menu.Item>
+            <Menu.Item>
+                <span onClick={this.handleClick}>修改密码</span>
+                <ModifyPassword />
+            </Menu.Item>
+          </Menu>
+        );
         return (
             <nav className="navbar navbar-default navbar-fixed">
                 <div className="container-fluid">
