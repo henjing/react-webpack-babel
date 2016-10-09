@@ -18,5 +18,13 @@ export const deleteProductUrl = '/Printinfo/delProduct';
 
 export const addProductUrl = '/Printinfo/addProduct';
 
+export const getEnrollUrl = '/Printinfo/showStoreProduct';
+
+export const printPreview = '/Printinfo/printPreview';
+
+export const getPrinterList = '/Printinfo/getPrintorList';
+
+export const getPeopleForEnroll = '/Printinfo/getPeopleList';
+
 
 

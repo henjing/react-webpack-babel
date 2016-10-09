@@ -53,6 +53,23 @@ export function editProduct(config) {
         }).catch(errHandler)
 }
 
+export function deleteProduct(config) {
+    return axios.post(deleteProductUrl, formData(config))
+        .then(data => {
+            const response = data.data;
+            if (response.status == 1) {
+                message.success('删除产品成功');
+                store.dispatch(productModal({ visible : false }));
+                getProductList();
+            }
+            return response;
+        }).then(response => {
+            if (response.status == 0) {
+                message.warning(response.info);
+            }
+        }).catch(errHandler)
+}
+
 function errHandler(err) {
     message.error('服务器错误! ' + err);
 }

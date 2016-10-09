@@ -20,7 +20,7 @@ var reducers = combineReducers({
     peopleFormState : peopleFormReducer,
     peopleSearchState : peopleSearchReducer,
     modifyPasswordState : modifyPasswordReducer,
-    productListState : productListReducer
+    productListState : productListReducer,
 });
 
 export default reducers;

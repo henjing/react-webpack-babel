@@ -5,8 +5,7 @@ import styles from './addPeopleForm.less';
 import { Form, Input, Upload } from 'antd';
 import { addPeople, editPeople } from '../../api/people-api';
 import { connect } from 'react-redux';
-import { peopleFormAdd, peopleFormEdit } from '../../actions/people-actions';
-import store from '../../store';
+import { peopleFormAdd } from '../../actions/people-actions';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
@@ -15,23 +14,49 @@ let AddPeopleForm = React.createClass({
 
     showModal() {
         this.props.dispatch(peopleFormAdd({ type : 'add', visible : true }));
+
     },
 
     hideModal() {
-        this.props.dispatch(peopleFormAdd({ type : 'add', visible : false }));
+        this.props.dispatch(peopleFormAdd({ visible : false }));
         this.props.form.resetFields();
+        this.setState({
+            fileList : '',
+            defaultFileList : ''
+        });
+    },
+
+    getInitialState() {
+        return {
+            fileList : '',
+            defaultFileList : ''
+        }
+    },
+
+    componentWillReceiveProps(nextProps) {
+        console.log('下一个props', nextProps);
+        const formState = nextProps.peopleFormState;
+        if (formState.id && formState.type != 'add' && !this.props.peopleFormState.visible) {
+            // console.log('这里有更新默认图片'); // 这个if条件值得深思
+            this.setState({
+                defaultFileList : [{
+                    uid : formState.id,
+                    name : formState.name,
+                    status : 'done',
+                    url : formState.head_img,
+                    thumbUrl : formState.head_img
+                }]
+            });
+        }
+
     },
 
     minLength(rule, value, callback) {
         try {
             if (value.length > 1) {
-                // setTimeout(function(){
                    callback();
-                // }, 300);
             } else {
-                // setTimeout(function(){
                    callback(['姓名必须两个字以上']);
-                // }, 300);
             }
         } catch (e) {
             callback(['不能为空'])
@@ -40,7 +65,7 @@ let AddPeopleForm = React.createClass({
 
     phoneNum(rule, value, callback) {
         try {
-            if(/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/.test(value)) {
+            if(/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/.test(value) || !value) {
                 callback();
             } else {
                 callback(['请输入正确的手机号码']);
@@ -52,7 +77,7 @@ let AddPeopleForm = React.createClass({
 
     identityNum(rule, value, callback) {
         try {
-            if(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
+            if(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value) || !value) {
                 callback();
             } else {
                 callback(['请输入正确的身份证号']);
@@ -72,63 +97,29 @@ let AddPeopleForm = React.createClass({
             }
         });
 
-        const config = Object.assign({}, {...this.props.form.getFieldsValue()});
-        var finalConfig = config;
+        let finalConfig = Object.assign({}, {...this.props.form.getFieldsValue()});
+
         try {
-            finalConfig = Object.assign({}, {...config}, { head_img : this.state.fileList[0].response.info})
+            finalConfig = Object.assign({}, {...finalConfig}, { head_img : this.state.fileList[0].response.info });
         } catch (e) {}
-        console.log('-----------', finalConfig);
+
         if (this.props.peopleFormState.type === 'add') {
-            addPeople(finalConfig);
+            addPeople(finalConfig, this.hideModal);
         } else {
-            editPeople(Object.assign({}, {...store.getState().peopleFormState}, {...config}));
+            finalConfig = Object.assign({}, finalConfig, { id : this.props.peopleFormState.id});
+            editPeople(finalConfig, this.hideModal);
         }
     },
 
     uploadOnChange(info) {
-        console.log('filechange-========', info);
         let fileList = info.fileList;
-
-        // 3. filter successfully uploaded files according to response from server
-        // fileList = fileList.filter((file) => {
-        //   if (file.response) {
-        //     return file.response.status === 'success';
-        //   }
-        //   return true;
-        // });
-
-        // 2. read from response and show file link
-        // fileList = fileList.map((file) => {
-        //   if (file.response) {
-        //     // Component will show file.url as link
-        //     file.url = file.response.url;
-        //   }
-        //   return file;
-        // });
 
         // 1. Limit the number of uploaded files
         //    Only to show one recent uploaded files, and old ones will be replaced by the new
         fileList = fileList.slice(-1);
-
-        // try {
-        //     this.props.dispatch(peopleFormAdd({ fileList : fileList }));
-        // } catch (e) {}
-        this.setState({ fileList });
-
-        // if (this.props.peopleFormState.type == 'add') {
-        //     console.log('file111111', fileList);
-        //     this.props.dispatch(peopleFormAdd({ head_img : fileList[0]}));
-        // } else {
-        //     this.props.dispatch(peopleFormEdit({ head_img : fileList[0]}));
-        //     console.log('file', fileList);
-        // }
-
-    },
-
-    getInitialState() {
-        return {
-            fileList : ''
-        }
+        this.setState({ fileList }, () => {
+            console.log('this.state', this.state);
+        });
     },
 
     render() {
@@ -137,6 +128,11 @@ let AddPeopleForm = React.createClass({
             labelCol : { span : 6},
             wrapperCol : { span : 13 }
         };
+        let fileList = this.state.fileList;
+        let defaultFileList = this.state.defaultFileList;
+        // 用antd貌似每个组件都会render很多次
+        // console.log('fileList', fileList);
+        // console.log('defaultFileList', defaultFileList);
         const selectOptions = this.props.villageState.info.map(function (option) {
             return (
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
@@ -145,46 +141,14 @@ let AddPeopleForm = React.createClass({
         const imgProps = {
           action: '/Printinfo/doTest',
           listType: 'picture',
-          // defaultFileList: [{
-          //   uid: -1,
-          //   name: 'xxx.png',
-          //   status: 'done',
-          //   url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-          //   thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-          // }]
         };
-        const trueImgProps = {
-          action: '/Printinfo/doTest',
-          listType: 'picture',
-          defaultFileList: [{
-            uid: -1,
-            name: 'xxx.png',
-            status: 'done',
-            url: this.props.peopleFormState.head_img,
-            thumbUrl: this.props.peopleFormState.head_img,
-          }]
-        };
-        const addUpload = (
-            <Upload name="head_img" listType="picture" {...imgProps} onChange={this.uploadOnChange} fileList={this.state.fileList}>
-                <Button type="ghost">
-                    <Icon type="upload" />点击上传
-                </Button>
-            </Upload>            
-        );
-        const editUpload = (
-            <Upload name="head_img" listType="picture" {...trueImgProps} onChange={this.uploadOnChange} fileList={this.props.fileList}>
-                <Button type="ghost">
-                    <Icon type="upload" />点击上传
-                </Button>
-            </Upload>
-        );
+
         const idItem = (
             <FormItem {...formItemLayout} label="编号">
                 <p className="ant-form-text" id="id" name="id">{this.props.peopleFormState.id}</p>
             </FormItem>
         );
-        const finalUpload = this.props.peopleFormState.type === 'edit' ? editUpload : addUpload;
-        
+
         return (
             <Row>
                 <Col className={styles.topCol}>
@@ -199,7 +163,7 @@ let AddPeopleForm = React.createClass({
                                 {...formItemLayout} hasFeedback label="姓名">
                                 {getFieldDecorator('name', {
                                     rules : [
-                                        {required : true, whitespace : true},
+                                        {required : true, whitespace : true, message : '必填项'},
                                         {validator : this.minLength}
                                     ]
                                 })(
@@ -210,7 +174,9 @@ let AddPeopleForm = React.createClass({
                                 {...formItemLayout} hasFeedback label="手机号码">
                                 {getFieldDecorator('phone', {
                                     rules : [
-                                        {validator : this.phoneNum, required : true}
+                                        {validator : this.phoneNum,
+                                            // required : true,
+                                            message : '必填项,请输入正确的手机号码'}
                                     ]
                                 })(
                                     <Input/>
@@ -220,7 +186,8 @@ let AddPeopleForm = React.createClass({
                                 {...formItemLayout} hasFeedback label="身份证号码">
                                 {getFieldDecorator('identity_no', {
                                     rules : [{
-                                        required : true, whitespace : true
+                                        // required : true,
+                                        whitespace : true, message : '请输入正确的身份证号码'
                                     }, {
                                         validator : this.identityNum
                                     }]
@@ -247,7 +214,7 @@ let AddPeopleForm = React.createClass({
                             <FormItem
                                 {...formItemLayout} hasFeedback label="所在村">
                                 {getFieldDecorator('village_info_id', {
-                                    rules : [{ required : true }]
+                                    rules : [{ required : true, message : '请输入村庄信息' }]
                                 })(
                                     <Select>
                                         {selectOptions}
@@ -257,8 +224,14 @@ let AddPeopleForm = React.createClass({
                             <FormItem
                                 {...formItemLayout} hasFeedback label="上传头像">
                                 {getFieldDecorator('head_img')(
-                                    finalUpload
+                                    <Upload name="head_img" listType="picture"
+                                        {...imgProps} fileList={fileList || defaultFileList} onChange={this.uploadOnChange}>
+                                        <Button type="ghost">
+                                            <Icon type="upload" />点击上传
+                                        </Button>
+                                    </Upload>
                                 )}
+
                             </FormItem>
                         </Form>
                     </Modal>
@@ -279,8 +252,7 @@ AddPeopleForm = createForm({
                 profile : { value : formData.profile},
                 remark : { value : formData.remark},
                 phone : { value : formData.phone},
-                village_info_id : { value : formData.village_info_id},
-                // head_img : { value : formData.head_img}
+                village_info_id : { value : formData.village_info_id}
             }
         } else {
             return {}

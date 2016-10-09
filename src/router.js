@@ -2,6 +2,7 @@ import React from 'react';
 import { Router, Route, browserHistory, IndexRoute, hashHistory, IndexRedirect } from 'react-router';
 import PeopleContainer from './components/containers/people-container';
 import ProductContainer from './components/containers/product-container';
+import EnrollContainer from './components/containers/enroll-container';
 
 // Layouts
 import MainLayout from './components/layouts/main-layout';
@@ -15,6 +16,8 @@ export default (
             <Route path="people" component={PeopleContainer}></Route>
             
             <Route path="product" component={ProductContainer}></Route>
+            
+            <Route path="enroll" component={EnrollContainer}></Route>
             
         </Route>
     </Router>

@@ -25,27 +25,6 @@ const SidebarLayoutContainer = React.createClass({
                             <img src={imgSrc} alt="logo"/>
                         </Link>
                     </div>
-                    {/*<div className={styles.listGroup}>
-                        <Link className={styles.listGroupItem} to="/FPManage">
-                            <i className="fa fa-suitcase" />
-                            &nbsp;精准扶贫管理&nbsp;
-                            <span className="caret" />
-                        </Link>
-
-                        <Link className={styles.listGroupItem} activeClassName={styles.active} to="/">
-                            贫困户列表
-                        </Link>
-                        <Link className={styles.listGroupItem} to="/userList">
-                            贫困户列表
-                        </Link>
-                        <Link className={styles.listGroupItem} to="/userList">
-                            贫困户列表
-                        </Link>
-                        <Link className={styles.listGroupItem} to="/userList">
-                            贫困户列表
-                        </Link>
-
-                    </div>*/}
 
                     <Menu mode={mode}
                       defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']}>

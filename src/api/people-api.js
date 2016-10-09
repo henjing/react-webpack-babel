@@ -41,17 +41,15 @@ export function getVillage() {
         })
 }
 
-export function addPeople(config) {
+export function addPeople(config, callback) {
     return axios.post(addPeopleUrl, formData(config))
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
                 message.success(response.info);
-            }
-            setTimeout(() => {
-                store.dispatch(peopleFormAdd({ visible : false }));
                 getPeople();
-            }, 1500);
+                callback();
+            }
             return response;
         }).then(response => {
             if (response.status == 0) {
@@ -62,17 +60,15 @@ export function addPeople(config) {
         })
 }
 
-export function editPeople(config) {
+export function editPeople(config, callback) {
     return axios.post(editPeopleUrl, formData(config))
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
                 message.success(response.info);
-            }
-            setTimeout(() => {
-                store.dispatch(peopleFormAdd({ visible : false }));
                 getPeople();
-            }, 1500);
+                callback();
+            }
             return response;
         }).then(response => {
             if (response.status == 0) {
@@ -89,10 +85,8 @@ export function deletePeople(config) {
             const response = data.data;
             if (response.status == 1) {
                 message.success(response.info);
-            }
-            setTimeout(() => {
                 getPeople();
-            }, 1500);
+            }
             return response;
         }).then(response => {
             if (response.status == 0) {
