@@ -25,7 +25,9 @@ const datePicker = React.createClass({
     },
 
     handleReset() {
-        document.getElementsByClassName('ant-calendar-picker-clear')[0].click();
+        try {
+            document.getElementsByClassName('ant-calendar-picker-clear')[0].click();
+        } catch (e) {}
         this.props.dispatch(resetPeopleSearch());
         getPeople();
     },

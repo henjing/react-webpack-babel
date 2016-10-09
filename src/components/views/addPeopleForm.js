@@ -34,7 +34,7 @@ let AddPeopleForm = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        console.log('下一个props', nextProps);
+        // console.log('下一个props', nextProps);
         const formState = nextProps.peopleFormState;
         if (formState.id && formState.type != 'add' && !this.props.peopleFormState.visible) {
             // console.log('这里有更新默认图片'); // 这个if条件值得深思
@@ -48,7 +48,6 @@ let AddPeopleForm = React.createClass({
                 }]
             });
         }
-
     },
 
     minLength(rule, value, callback) {
@@ -98,7 +97,7 @@ let AddPeopleForm = React.createClass({
         });
 
         let finalConfig = Object.assign({}, {...this.props.form.getFieldsValue()});
-        console.log('原装的finalConfig', finalConfig);
+        // console.log('原装的finalConfig', finalConfig);
 
         try {
             finalConfig = Object.assign({}, {...finalConfig}, { head_img : this.state.fileList[0].response.info });

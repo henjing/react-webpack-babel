@@ -20,11 +20,14 @@ const SearchInput = React.createClass({
     });
   },
   handleSearch() {
-      store.dispatch(updatePeopleSearch({ search : this.props.value}));
       getPeople();
   },
+  handleInputChange(e) {
+      console.log('value', e);
+      store.dispatch(updatePeopleSearch({ search : e.target.value}));
+  },
   render() {
-    const { style, size, placeholder } = this.props;
+    const { style, placeholder, value } = this.props;
     const btnCls = classNames({
       'ant-search-btn': true,
       'ant-search-btn-noempty': !!this.props.value.trim(),
@@ -36,11 +39,11 @@ const SearchInput = React.createClass({
     return (
       <div className="ant-search-input-wrapper" style={style}>
         <InputGroup className={searchCls}>
-          <Input placeholder={placeholder} value={this.props.value} onChange={this.handleInputChange}
+          <Input placeholder={placeholder} value={value} onChange={this.handleInputChange}
             onFocus={this.handleFocusBlur} onBlur={this.handleFocusBlur} onPressEnter={this.handleSearch}
           />
           <div className="ant-input-group-wrap">
-            <Button icon="search" className={btnCls} size={size} onClick={this.handleSearch} />
+            <Button icon="search" className={btnCls} onClick={this.handleSearch} />
           </div>
         </InputGroup>
       </div>
