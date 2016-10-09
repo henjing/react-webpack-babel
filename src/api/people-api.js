@@ -48,7 +48,7 @@ export function addPeople(config, callback) {
             if (response.status == 1) {
                 message.success(response.info);
                 getPeople();
-                callback();
+                if(callback) callback();
             }
             return response;
         }).then(response => {
@@ -67,7 +67,7 @@ export function editPeople(config, callback) {
             if (response.status == 1) {
                 message.success(response.info);
                 getPeople();
-                callback();
+                if(callback) callback();
             }
             return response;
         }).then(response => {

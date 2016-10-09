@@ -98,6 +98,7 @@ let AddPeopleForm = React.createClass({
         });
 
         let finalConfig = Object.assign({}, {...this.props.form.getFieldsValue()});
+        console.log('原装的finalConfig', finalConfig);
 
         try {
             finalConfig = Object.assign({}, {...finalConfig}, { head_img : this.state.fileList[0].response.info });
@@ -167,7 +168,7 @@ let AddPeopleForm = React.createClass({
                                         {validator : this.minLength}
                                     ]
                                 })(
-                                    <Input ref={(c)=> this._input = c} maxLength="10" />
+                                    <Input maxLength="10" />
                                 )}
                             </FormItem>
                             <FormItem
