@@ -7,30 +7,16 @@ export function getEnrollSuccess(info) {
     }
 }
 
-export function editProductSuccess(info) {
+export function getPeopleForEnrollSuccess(info) {
     return {
-        type : types.EDIT_PRODUCT_SUCCESS,
+        type : types.GET_PEOPLE_FOR_ENROLL_SUCCESS,
         info
     }
 }
 
-export function deleteProductSuccess(info) {
+export function enrollModal(info) {
     return {
-        type : types.DELETE_PRODUCT_SUCCESS,
-        info
-    }
-}
-
-export function addProductSuccess(info) {
-    return {
-        type : types.ADD_PRODUCT_SUCCESS,
-        info
-    }
-}
-
-export function productModal(info) {
-    return {
-        type : types.PRODUCT_MODAL,
+        type : types.ENROLL_MODAL,
         info
     }
 }

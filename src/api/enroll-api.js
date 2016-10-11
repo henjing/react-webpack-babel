@@ -1,23 +1,42 @@
 import axios from 'axios';
 import store from '../store';
 import { getEnrollUrl, getPeopleForEnroll, getPrinterList, printPreview } from '../appConstants/urlConfig';
-import { getEnrollSuccess, editProductSuccess, deleteProductSuccess, addProductSuccess, productModal } from '../actions/enroll-actions';
+import { getEnrollSuccess, getPeopleForEnrollSuccess, editProductSuccess, deleteProductSuccess, addProductSuccess, enrollModal } from '../actions/enroll-actions';
 import { message } from 'antd';
 
-export function getEnrollList() {
+export function getEnrollList(callback) {
     return axios.post(getEnrollUrl)
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
-                store.dispatch(getProductSuccess(Object.assign([], response.info)));
+                store.dispatch(getEnrollSuccess(Object.assign({}, {...response})));
+                if (callback) callback();
             }
             return response;
         }).then(response => {
             if (response.status == 0) {
-                
+                message.warning(response.info);
             }
         }).catch(errHandler)
 }
+
+export function getEnrollPeopleList(callback) {
+    return axios.post(getPeopleForEnroll)
+        .then(data => {
+            const response = data.data;
+            if (response.status == 1) {
+                store.dispatch(getPeopleForEnrollSuccess(Object.assign([], response.info)));
+                if (callback) callback();
+            }
+            return response;
+        }).then(response => {
+            if (response.status == 0) {
+                message.warning(response.info);
+            }
+        }).catch(errHandler)
+}
+
+
 
 // export function addProduct(config) {
 //     return axios.post(addProductUrl, formData(config))
