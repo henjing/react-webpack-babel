@@ -41,3 +41,9 @@ export function resetPeopleSearch() {
         type : types.RESET_PEOPLE_SEARCH_STATE
     }
 }
+
+export function getPeopleReset() {
+    return {
+        type : types.GET_PEOPLE_RESET
+    }
+}

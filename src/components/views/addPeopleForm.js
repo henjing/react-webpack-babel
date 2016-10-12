@@ -6,6 +6,7 @@ import { Form, Input, Upload } from 'antd';
 import { addPeople, editPeople } from '../../api/people-api';
 import { connect } from 'react-redux';
 import { peopleFormAdd } from '../../actions/people-actions';
+import { uploadUrl } from '../../appConstants/urlConfig';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
@@ -139,7 +140,7 @@ let AddPeopleForm = React.createClass({
             )
         });
         const imgProps = {
-          action: '/Printinfo/doTest',
+          action: uploadUrl,
           listType: 'picture',
         };
 

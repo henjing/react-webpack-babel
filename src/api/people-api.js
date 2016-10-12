@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { getPeopleSuccess, getVillageSuccess, peopleFormAdd } from '../actions/people-actions';
+import { getPeopleSuccess, getVillageSuccess, getPeopleReset } from '../actions/people-actions';
 import { getPeopleUrl, getVillageUrl, addPeopleUrl, deletePeopleUrl, editPeopleUrl } from '../appConstants/urlConfig';
 import { message } from 'antd';
 
@@ -11,13 +11,13 @@ export function getPeople() {
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
-                store.dispatch(getPeopleSuccess(Object.assign({}, {hasData : true}, response)));
+                store.dispatch(getPeopleSuccess(Object.assign({}, {...response})));
             }
             return response;
         }).then(response => {
             if (response.status == 0) {
-                // message.warning(response.info);
-                store.dispatch(getPeopleSuccess({ hasData : false, emptyText : response.info}));
+                message.warning(response.info);
+                store.dispatch(getPeopleReset());
             }
         }).catch(err => {
             message.error('服务器错误! ' + err);

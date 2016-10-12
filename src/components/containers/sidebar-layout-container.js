@@ -18,33 +18,34 @@ const SidebarLayoutContainer = React.createClass({
         const collapse = this.props.collapse;
         const sidebarWrapperName = collapse ? 'sidebarWrapperCollapse' : 'sidebarWrapper';
         const mode = collapse ? 'vertical' : 'inline';
+        const pathName = window.location.pathname;
         return (
                 <div className={styles[sidebarWrapperName]} style={{transition: 'all 0.3s ease'}}>
                     <div className={styles.logo}>
-                        <Link to="/">
+                        <Link to="/admin/village/index/">
                             <img src={imgSrc} alt="logo"/>
                         </Link>
                     </div>
 
                     <Menu mode={mode}
-                      defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']}>
+                      defaultSelectedKeys={[pathName]} defaultOpenKeys={['sub1']}>
                       <SubMenu key="sub1" title={<span><Icon type="user" /><span className={styles.navText}>精准扶贫管理</span></span>}>
-                        <Menu.Item key="1">
-                            <Link to="/people">
+                        <Menu.Item key="/admin/village/index/people">
+                            <Link to="/admin/village/index/people" activeClassName={styles.activeName}>
                                 贫困户列表</Link>
                         </Menu.Item>
-                        <Menu.Item key="2">
-                            <Link to="/product">
+                        <Menu.Item key="/admin/village/index/product">
+                            <Link to="/admin/village/index/product" activeClassName={styles.activeName}>
                                 农产品列表
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="3">
-                            <Link to="/enroll">
+                        <Menu.Item key="/admin/village/index/enroll">
+                            <Link to="/admin/village/index/enroll" activeClassName={styles.activeName}>
                                 产品入库
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="4">
-                            <Link to="/printer">
+                        <Menu.Item key="/admin/village/index/printer">
+                            <Link to="/admin/village/index/printer" activeClassName={styles.activeName}>
                                 打印机信息
                             </Link>
                         </Menu.Item>

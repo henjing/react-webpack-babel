@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Row, Col } from 'antd';
+import { Form, Input, Modal, Row, Col, message } from 'antd';
 import classNames from 'classnames';
 const createForm = Form.create;
 const FormItem = Form.Item;
@@ -6,6 +6,7 @@ import React from 'react';
 import './modifyPassword.css'
 import { connect } from 'react-redux';
 import { hidePasswordModal } from '../../actions/user-actions';
+import { modifyPassword } from '../../api/password-api';
 
 function noop() {
   return false;
@@ -28,8 +29,19 @@ let Demo = React.createClass({
         console.log('Errors in form!!!');
         return;
       }
-      console.log('Submit!!!');
+      // console.log('Submit!!!');
       console.log(values);
+      var config = {
+          password : values.oldPassword,
+          newPassword : values.pass,
+          repeat : values.rePass
+      };
+      modifyPassword(config, function () {
+          message.success('修改密码成功');
+          this.onHide();
+      }.bind(this), function () {
+
+      }.bind(this))
     });
   },
 
@@ -107,6 +119,7 @@ let Demo = React.createClass({
 
     onHide() {
         this.props.dispatch(hidePasswordModal());
+        this.setState({...this.getInitialState()});
         this.props.form.resetFields();
     },
 
@@ -118,10 +131,31 @@ let Demo = React.createClass({
             <Form vertical style={{ maxWidth: 600 }}>
               <Row type="flex" align="middle">
                 <Col span={12}>
+                  <FormItem label="原有密码">
+                    {getFieldDecorator('oldPassword', {
+                      rules: [
+                        { required: true, whitespace: true, message: '请输入原有密码' },
+                      ],
+                    })(
+                      <Input type="password"
+                        onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop}
+                        autoComplete="off" id="pass"
+                        onChange={(e) => {
+
+                        }}
+                        onBlur={(e) => {
+
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={12}></Col>  
+                <Col span={12}>
                   <FormItem label="新密码">
                     {getFieldDecorator('pass', {
                       rules: [
-                        { required: true, whitespace: true, message: '请输入密码' },
+                        { required: true, whitespace: true, message: '请输入新密码' },
                         { validator: this.checkPass },
                       ],
                     })(
@@ -129,7 +163,7 @@ let Demo = React.createClass({
                         onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop}
                         autoComplete="off" id="pass"
                         onChange={(e) => {
-                          console.log('Your password is stolen in this way', e.target.value);
+                          // console.log('Your password is stolen in this way', e.target.value);
                         }}
                         onBlur={(e) => {
                           const value = e.target.value;
@@ -145,7 +179,7 @@ let Demo = React.createClass({
               </Row>
               <Row type="flex" align="middle">
                 <Col span={12}>
-                  <FormItem label="确认密码">
+                  <FormItem label="确认新密码">
                     {getFieldDecorator('rePass', {
                       rules: [{
                         required: true,

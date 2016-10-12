@@ -3,24 +3,24 @@ import { Router, Route, browserHistory, IndexRoute, hashHistory, IndexRedirect }
 import PeopleContainer from './components/containers/people-container';
 import ProductContainer from './components/containers/product-container';
 import EnrollContainer from './components/containers/enroll-container';
-import TestContainer from './components/containers/test-container';
+import PrinterContainer from './components/containers/printer-container';
 
 // Layouts
 import MainLayout from './components/layouts/main-layout';
 
 
 export default (
-    <Router history={hashHistory}>
-        <Route path="/" component={MainLayout} >
+    <Router history={browserHistory}>
+        <Route path="/admin/village/index/" component={MainLayout} >
 
-            <IndexRedirect to="/people" />
-            <Route path="people" component={PeopleContainer}></Route>
+            <IndexRedirect to="/admin/village/index/people" />
+            <Route path="/admin/village/index/people" component={PeopleContainer}></Route>
             
-            <Route path="product" component={ProductContainer}></Route>
+            <Route path="/admin/village/index/product" component={ProductContainer}></Route>
             
-            <Route path="enroll" component={EnrollContainer}></Route>
+            <Route path="/admin/village/index/enroll" component={EnrollContainer}></Route>
 
-            <Route path="printer" component={TestContainer}></Route>
+            <Route path="/admin/village/index/printer" component={PrinterContainer}></Route>
             
         </Route>
     </Router>

@@ -1,7 +1,7 @@
 import * as types from '../actions/action-types';
 
 const initialState = {
-    info : [{}],
+    info : [],
     visible : false,
     type : 'add', // or 'edit'
     formState : {},
@@ -15,7 +15,10 @@ const productListReducer = function (state = initialState, action) {
             return Object.assign({}, state, { info : action.info});
         
         case types.PRODUCT_MODAL:
-            return Object.assign({}, state, {...action.info})
+            return Object.assign({}, state, {...action.info});
+        
+        case types.GET_PRODUCT_RESET : 
+            return Object.assign({}, {...initialState});
         
     }
     

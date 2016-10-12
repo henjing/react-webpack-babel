@@ -7,30 +7,15 @@ export function getProductSuccess(info) {
     }
 }
 
-export function editProductSuccess(info) {
-    return {
-        type : types.EDIT_PRODUCT_SUCCESS,
-        info
-    }
-}
-
-export function deleteProductSuccess(info) {
-    return {
-        type : types.DELETE_PRODUCT_SUCCESS,
-        info
-    }
-}
-
-export function addProductSuccess(info) {
-    return {
-        type : types.ADD_PRODUCT_SUCCESS,
-        info
-    }
-}
-
 export function productModal(info) {
     return {
         type : types.PRODUCT_MODAL,
         info
+    }
+}
+
+export function getProductReset() {
+    return {
+        type : types.GET_PRODUCT_RESET
     }
 }

@@ -2,13 +2,17 @@ import * as types from '../actions/action-types';
 
 const initialState = {
     enrollOrder : {
-        info : [{}],
+        info : [],
         currentPage : 1,
         totalPage : 1,
         totalRows : 1
     },
-    enrollPeople : [{}],
-    modalVisible : false
+    enrollPeople : [],
+    modalVisible : false,
+    printPreview : {
+        visible : false,
+        info : {}
+    }
 };
 
 const enrollReducer = function (state = initialState, action) {
@@ -23,6 +27,25 @@ const enrollReducer = function (state = initialState, action) {
 
         case types.ENROLL_MODAL :
             return Object.assign({}, state, { modalVisible : action.info.visible});
+        
+        case types.PRINT_PREVIEW_MODAL : 
+            return Object.assign({}, state, { printPreview : {...action.info}});
+        
+        case types.GET_ENROLL_RESET : 
+            return Object.assign({}, {
+                            enrollOrder : {
+                                info : [],
+                                currentPage : 1,
+                                totalPage : 1,
+                                totalRows : 1
+                            },
+                            enrollPeople : [],
+                            modalVisible : false,
+                            printPreview : {
+                                visible : false,
+                                info : {}
+                            }
+                        });
     }
     
     return state;

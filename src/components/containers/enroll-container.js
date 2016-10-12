@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message } from 'antd';
-import { getEnrollList, getEnrollPeopleList } from '../../api/enroll-api';
-import { enrollModal } from '../../actions/enroll-actions';
+import { getEnrollList, getEnrollPeopleList, addEnrollProduct, deleteEnrollProduct, printPreview, submitPrint } from '../../api/enroll-api';
+import { enrollCSVUrl } from '../../appConstants/urlConfig';
+import { enrollModal, printPreviewModal } from '../../actions/enroll-actions';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
+import _ from 'lodash';
+import store from '../../store';
 
 let EnrollContainer = React.createClass({
 
@@ -24,7 +27,7 @@ let EnrollContainer = React.createClass({
         this.props.dispatch(enrollModal({ visible : false }));
         const initialState = this.getInitialState();
         this.setState({...initialState}, function () {
-            console.log('=======', this.state);
+            // console.log('=======', this.state);
             this.props.form.setFieldsValue({
                 keys : initialState.keys
             });
@@ -37,7 +40,8 @@ let EnrollContainer = React.createClass({
         const initialState = {
             selectedVillageId : value,
             keys : [1],
-            uuid : 1
+            uuid : 1,
+            selectedProductId : []
         };
 
         this.props.form.resetFields();
@@ -49,7 +53,7 @@ let EnrollContainer = React.createClass({
 
     selectVillage(value) {
         const villageId = this.state.selectedVillageId;
-        console.log('value', value, 'villageId', villageId);
+        // console.log('value', value, 'villageId', villageId);
         if (!villageId) {
             this.setState({ selectedVillageId : value, selectDisabled : false});
         } else if ( value != villageId) {
@@ -67,6 +71,28 @@ let EnrollContainer = React.createClass({
         }).bind(this);
 
     },
+
+    validateProduct(k) {
+        return ((rule, value, callback) => {
+            // 检查是否有产品被选择
+            let selectedProductId = this.state.selectedProductId;
+            selectedProductId[k] = value;
+            // console.log('value', value, 'selected', selectedProductId);
+            // value是否在数组里
+            let key = _.findKey(selectedProductId, function (o) {
+                return o == value;
+            });
+            let lastKey = _.findLastKey(selectedProductId, function (o) {
+                return o == value;
+            });
+            // 两个位置不同,则要报错
+            if (key != lastKey) {
+                callback(['请选择不同产品']);
+            } else {
+                callback();
+            }
+        }).bind(this);
+    },
     
     componentDidMount() {
         getEnrollList();
@@ -78,7 +104,12 @@ let EnrollContainer = React.createClass({
             selectedVillageId : '',
             selectDisabled : true,
             keys : [1],
-            uuid : 1
+            uuid : 1,
+            selectedProductId : [],
+            printPreview : {
+                primary_id : '',
+                printor_id : ''
+            }
         }
     },
 
@@ -90,7 +121,7 @@ let EnrollContainer = React.createClass({
                 const { form } = this.props;
                 let keys = form.getFieldValue('keys');
                 keys = keys.concat(uuid);
-                console.log('testest', keys);
+                // console.log('testest', keys);
                 form.setFieldsValue({
                     keys
                 });
@@ -103,11 +134,11 @@ let EnrollContainer = React.createClass({
     },
 
     remove(k) {
-        console.log('kkkkkkkk', k);
+        // console.log('kkkkkkkk', k);
         return (() => {
             const { form } = this.props;
             let keys = this.state.keys;
-            console.log('keyskeyskeys', keys);
+            // console.log('keyskeyskeys', keys);
             keys = keys.filter((key) => {
                 return key !== k;
             });
@@ -130,8 +161,8 @@ let EnrollContainer = React.createClass({
                 const obj = record['productInfo'][i];
                 row = (
                     <p key={obj['id']}>
-                        <span>{i+1}.</span> &nbsp;
-                        <span>{obj['product_name']}</span> &nbsp;
+                        <span>{i+1}.</span>&nbsp;
+                        <span>{obj['product_name']}</span>&nbsp;
                         <span>{obj['product_num']}</span>
                         <span>{obj['product_unit']}</span>
                     </p>
@@ -193,13 +224,29 @@ let EnrollContainer = React.createClass({
 
     handleClick(record) {
         return () => {
-            this.props.dispatch(productModal({ visible : true, type : 'edit', formState : Object.assign({}, record)}));
+            const primary_id = record.id;
+            printPreview({primary_id});
         }
     },
 
     deleteRow(record) {
         return () => {
-            deleteProduct({ id : record.id});
+            deleteEnrollProduct({ primary_id : record.id}, function () {
+                try {
+                    this.getEnrollListContinuously();
+                } catch (e) {
+                    getEnrollList();
+                }
+            }.bind(this));
+        }
+    },
+
+    getEnrollListContinuously() {
+        const page = this.props.orderState.currentPage;
+        if (page) {
+            getEnrollList({page : page});
+        } else {
+            getEnrollList();
         }
     },
 
@@ -213,9 +260,35 @@ let EnrollContainer = React.createClass({
                 return;
             }
             console.log('values! ', values);
-            config = values;
+            config = this.handleFormData(values);
+            addEnrollProduct(config, function () {
+                this.hideModal();
+                this.getEnrollListContinuously();
+                getEnrollPeopleList();
+            }.bind(this));
         });
         
+    },
+
+    handleFormData(valueObj) {
+        let people_id = valueObj.name;
+        let village_info_id = valueObj.village_info_id;
+        let products = [];
+        let nums = [];
+        _.forEach(valueObj, function (value, key) {
+            if (key.slice(0, 3) == 'num') {
+                nums.push(value);
+            }
+            if (key.slice(0, 3) == 'pro') {
+                products.push(value);
+            }
+        });
+        return {
+            people_id,
+            village_info_id,
+            products,
+            nums
+        };
     },
 
     productPrice() {
@@ -234,10 +307,38 @@ let EnrollContainer = React.createClass({
 
     test() {
         return ((value, option) => {
-            console.log('test value', value); // value就是我想要的
-            console.log('test option', option);
+            // console.log('test value', value); // value就是我想要的
+            // console.log('test option', option);
+
             return true;
         }).bind(this);
+    },
+
+    testProduct() {
+        return ((value, option) => {
+            return true;
+        }).bind(this);
+    },
+
+    handlePreviewSubmit(info) {
+        return function () {
+            submitPrint(Object.assign({}, {...this.state.printPreview}, {primary_id : info.info.primary_id}));
+        }.bind(this);
+    },
+
+    hidePreviewModal(info) {
+        return function () {
+            store.dispatch(printPreviewModal(Object.assign({}, {...info}, { visible : false})));
+        }
+    },
+
+    selectVillageForPrint(value) {
+        console.log('打印预览的村庄选择', value);
+        this.setState({
+            printPreview : {
+                printor_id : value
+            }
+        });
     },
 
     render() {
@@ -268,6 +369,11 @@ let EnrollContainer = React.createClass({
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
             )
         });
+        const selectPrinterOptions = this.props.printerList.map(function (option) {
+            return (
+                <Option key={option.id} value={option.id}>{option.village_name}&nbsp;&nbsp;打印机编号:{option.id}</Option>
+            )
+        });
         const formItemLayout = {
             labelCol : { span : 6 },
             wrapperCol : { span : 18}
@@ -282,6 +388,16 @@ let EnrollContainer = React.createClass({
         };
         const disabled = this.state.selectDisabled;
 
+        const pagination = {
+            current : parseInt(this.props.orderState.currentPage),
+            total : this.props.orderState.totalRows,
+            onChange : function (page) {
+                getEnrollList({page : page});
+            }
+        };
+
+        const printPreview = this.props.printPreview;
+
         let formItems = '';
 
         try {
@@ -295,13 +411,13 @@ let EnrollContainer = React.createClass({
                                     rules : [{
                                         required : true, whitespace : true, message : '必填项'
                                     }, {
-                                        validator : this.validateVillage()
+                                        validator : this.validateProduct(k)
                                     }]
                                 })(
                                     <Select
                                         placeholder="选择产品"
                                         showSearch
-                                        onSelect={this.test()}
+                                        onSelect={this.testProduct()}
                                         disabled={disabled}
                                         notFoundContent="没有可选择的内容"
                                         optionFilterProp="children"
@@ -340,7 +456,9 @@ let EnrollContainer = React.createClass({
                     <Col>
                         <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="plus">添加订单</Button>
                         &nbsp;
-                        <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="download">导出数据</Button>
+                        <form action={enrollCSVUrl} style={{display : 'inline-block'}}>
+                        <Button htmlType="submit" style={{marginBottom : 20}} type="primary" icon="download">导出数据</Button>
+                        </form>
                     </Col>
                     <Col>
                         <Modal title="订单信息录入" visible={visible} onOk={this.handleSubmit} onCancel={this.hideModal}>
@@ -402,9 +520,26 @@ let EnrollContainer = React.createClass({
                 </Row>
                 <Row>
                     <Col>
-                        <Table columns={columns} dataSource={dataSource} />
+                        <Table pagination={{...pagination}} columns={columns} dataSource={dataSource} />
                     </Col>
                 </Row>
+                <Modal title="打印预览" visible={printPreview.visible} onOk={this.handlePreviewSubmit(printPreview)} onCancel={this.hidePreviewModal(printPreview)}>
+                    <Row type="flex" align="middle" justify="center">
+                        <Col>
+                            <img src={printPreview.info.path} alt=""/>
+                        </Col>
+                    </Row>
+                    <Row type="flex" align="middle" justify="center">
+                        <Col>
+                            <Select
+                                style={{width : 380}}
+                                onSelect={this.selectVillageForPrint}
+                                placeholder="在这里绑定打印设备">
+                                {selectPrinterOptions}
+                            </Select>
+                        </Col>
+                    </Row>
+                </Modal>
             </div>
         )
     }
@@ -418,7 +553,9 @@ const mapStateToProps = function (store) {
         orderState : store.enrollState.enrollOrder,
         productList : store.productListState.info,
         modalVisible : store.enrollState.modalVisible,
-        villageState : store.villageState
+        villageState : store.villageState,
+        printPreview : store.enrollState.printPreview,
+        printerList : store.printerState.info
     }
 };
 

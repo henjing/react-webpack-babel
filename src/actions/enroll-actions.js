@@ -20,3 +20,16 @@ export function enrollModal(info) {
         info
     }
 }
+
+export function printPreviewModal(info) {
+    return {
+        type : types.PRINT_PREVIEW_MODAL,
+        info
+    }
+}
+
+export function getEnrollReset() {
+    return {
+        type : types.GET_ENROLL_RESET
+    }
+}

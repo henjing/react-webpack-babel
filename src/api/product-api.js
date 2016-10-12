@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import { getProductUrl, editProductUrl, deleteProductUrl, addProductUrl } from '../appConstants/urlConfig';
-import { getProductSuccess, editProductSuccess, deleteProductSuccess, addProductSuccess, productModal } from '../actions/product-actions';
+import { getProductSuccess, getProductReset, productModal } from '../actions/product-actions';
 import { message } from 'antd';
 
 export function getProductList() {
@@ -14,7 +14,8 @@ export function getProductList() {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                
+                message.info(response.info);
+                store.dispatch(getProductReset(Object.assign([], response.info)));
             }
         }).catch(errHandler)
 }

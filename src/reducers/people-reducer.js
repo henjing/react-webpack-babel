@@ -2,11 +2,9 @@ import * as types from '../actions/action-types';
 
 const initialState = {
     currentPage : 1,
-    info : [{}],
+    info : [],
     totalPage : 1,
     totalRows : 10,
-    hasData : true,
-    emptyText : ''
 };
 
 const peopleReducer = function (state = initialState, action) {
@@ -17,6 +15,8 @@ const peopleReducer = function (state = initialState, action) {
             action.info.currentPage = parseInt(action.info.currentPage);
             return Object.assign({}, state, {...action.info});
 
+        case types.GET_PEOPLE_RESET :
+            return Object.assign({}, {...initialState});
     }
 
     return state;

@@ -1,48 +1,58 @@
-import { Select } from 'antd';
+import { Select, Form } from 'antd';
 const Option = Select.Option;
+const FormItem = Form.Item;
+const createForm = Form.create;
 import React from 'react';
 import { Row, Col } from 'antd';
 import SearchInput from './searchInput';
-import styles from './villageSelect.less';
 import { connect } from 'react-redux';
+import { getPeople } from '../../api/people-api';
+import store from '../../store';
+import { updatePeopleSearch } from '../../actions/people-actions';
 
-const provinceData = ['Zhejiang', 'Jiangsu'];
-const cityData = {
-  Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
-  Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang'],
-};
+let App = React.createClass({
 
-const App = React.createClass({
-  getInitialState() {
-    return {
-      cities: cityData[provinceData[0]],
-      secondCity: cityData[provinceData[0]][0],
-    };
-  },
-  handleProvinceChange(value) {
-    this.setState({
-      cities: cityData[value],
-      secondCity: cityData[value][0],
-    });
-  },
-  onSecondCityChange(value) {
-    this.setState({
-      secondCity: value,
-    });
+  handleChange(value) {
+      // console.log('value', value);
+      store.dispatch(updatePeopleSearch({ village_info_id : value}));
+      if (value == 'all') {
+          store.dispatch(updatePeopleSearch({ village_info_id : ''}));
+      }
+      getPeople();
   },
   render() {
-    const provinceOptions = provinceData.map(province => <Option key={province}>{province}</Option>);
-    const cityOptions = this.state.cities.map(city => <Option key={city}>{city}</Option>);
+    let villageSelection = this.props.villageState.info.map((option) => {
+       return (
+           <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
+       )
+    });
+    villageSelection.unshift(
+        <Option key={'all'} value={'all'}>{'所有村'}</Option>
+    );
+    const { getFieldDecorator } = this.props.form;
+    if (this.props.isReset) {
+        this.props.form.resetFields();
+    }
+      
     return (
       <Row>
         <Col md={12} lg={10} className="lineHeight" style={{width : 380}}>
             <span className="spanWidth">所在村查询:</span>
-            <Select defaultValue={provinceData[0]} style={{ width: 90, marginLeft : 8 }} onChange={this.handleProvinceChange}>
-              {provinceOptions}
-            </Select>
-            <Select value={this.state.secondCity} style={{ width: 90, marginLeft : 8 }} onChange={this.onSecondCityChange}>
-              {cityOptions}
-            </Select>
+            <Form inline style={{display : 'inline-block'}}>
+                <FormItem>
+                    {getFieldDecorator('village')(
+                        <Select
+                            showSearch
+                            style={{ width : 200, marginLeft : 8 }}
+                            onSelect={this.handleChange}
+                            notFoundContent="没有可选择的内容"
+                            optionFilterProp="children"
+                        >
+                          {villageSelection}
+                        </Select>
+                    )}
+                </FormItem>
+            </Form>
         </Col>
         <Col md={10} lg={6} className="lineHeight">
             <SearchInput placeholder="输入姓名、手机号" style={{ width: 200 }} />
@@ -54,8 +64,11 @@ const App = React.createClass({
 
 const mapStateToProps = function (store) {
     return {
-        villageState : Object.assign({}, {...store.villageState})
+        villageState : Object.assign({}, {...store.villageState}),
+        isReset : store.peopleSearchState.isReset
     }
 };
+
+App = createForm()(App);
 
 export default connect(mapStateToProps)(App);

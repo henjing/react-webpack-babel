@@ -11,6 +11,7 @@ import peopleSearchReducer from './people-search-reducer';
 import modifyPasswordReducer from './modifyPassword-reducer';
 import productListReducer from './product-list-reducer';
 import enrollReducer from './enroll-reducer';
+import printerReducer from './printer-reducer';
 
 var reducers = combineReducers({
     mainLayoutState : mainLayoutReducer,
@@ -22,7 +23,8 @@ var reducers = combineReducers({
     peopleSearchState : peopleSearchReducer,
     modifyPasswordState : modifyPasswordReducer,
     productListState : productListReducer,
-    enrollState : enrollReducer
+    enrollState : enrollReducer,
+    printerState : printerReducer
 });
 
 export default reducers;

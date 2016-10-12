@@ -87,17 +87,10 @@ const PeopleTable = React.createClass({
     render() {
         const columns = this.getColumns();
         const dataSource = this.props.dataSource;
-        if (this.props.hasData) {
-            return (
-                <Table pagination={{ current : this.props.current, total : this.props.total, onChange : this.onChange }} columns={columns} dataSource={dataSource} />
-            )
-        } else {
-            return (
-                <div>
-                    {this.props.emptyText}
-                </div>
-            )
-        }
+        
+        return (
+            <Table pagination={{ current : this.props.current, total : this.props.total, onChange : this.onChange }} columns={columns} dataSource={dataSource} />
+        )
 
     }
 });
@@ -107,8 +100,6 @@ const mapStateToProps = function (store) {
         dataSource : Object.assign([], store.peopleState.info),
         current : store.peopleState.currentPage,
         total : store.peopleState.totalRows,
-        hasData : store.peopleState.hasData,
-        emptyText : store.peopleState.emptyText
     }
 };
 
