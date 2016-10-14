@@ -11,6 +11,8 @@ const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
 
+let defaultKey = '';
+
 let AddPeopleForm = React.createClass({
 
     showModal() {
@@ -93,23 +95,25 @@ let AddPeopleForm = React.createClass({
         this.props.form.validateFieldsAndScroll((errors, values) => {
             if (errors) {
                 console.log('errors', errors);
-                return;
+                return ;
+            } else {
+                let finalConfig = Object.assign({}, {...this.props.form.getFieldsValue()});
+                // console.log('原装的finalConfig', finalConfig);
+
+                try {
+                    finalConfig = Object.assign({}, {...finalConfig}, { head_img : this.state.fileList[0].response.info });
+                } catch (e) {}
+
+                if (this.props.peopleFormState.type === 'add') {
+                    addPeople(finalConfig, this.hideModal);
+                } else {
+                    finalConfig = Object.assign({}, finalConfig, { id : this.props.peopleFormState.id});
+                    editPeople(finalConfig, this.hideModal);
+                }
             }
         });
 
-        let finalConfig = Object.assign({}, {...this.props.form.getFieldsValue()});
-        // console.log('原装的finalConfig', finalConfig);
 
-        try {
-            finalConfig = Object.assign({}, {...finalConfig}, { head_img : this.state.fileList[0].response.info });
-        } catch (e) {}
-
-        if (this.props.peopleFormState.type === 'add') {
-            addPeople(finalConfig, this.hideModal);
-        } else {
-            finalConfig = Object.assign({}, finalConfig, { id : this.props.peopleFormState.id});
-            editPeople(finalConfig, this.hideModal);
-        }
     },
 
     uploadOnChange(info) {
@@ -121,6 +125,10 @@ let AddPeopleForm = React.createClass({
         this.setState({ fileList }, () => {
             console.log('this.state', this.state);
         });
+    },
+
+    selectVillage(value) {
+        defaultKey = value;
     },
 
     render() {
@@ -139,6 +147,14 @@ let AddPeopleForm = React.createClass({
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
             )
         });
+        // 制定select当前选中的条目
+        try {
+            if (!defaultKey) {
+                defaultKey = this.props.villageState.info[0].id;
+            }
+        } catch (e) {}
+        // this.props.form.setFieldsValue({ village_info_id : defaultKey });
+        //
         const imgProps = {
           action: uploadUrl,
           listType: 'picture',
@@ -213,11 +229,16 @@ let AddPeopleForm = React.createClass({
                                 )}
                             </FormItem>
                             <FormItem
-                                {...formItemLayout} hasFeedback label="所在村">
+                                {...formItemLayout}
+                                hasFeedback label="所在村">
                                 {getFieldDecorator('village_info_id', {
+                                    // initialValue : [defaultKey],
                                     rules : [{ required : true, message : '请输入村庄信息' }]
                                 })(
-                                    <Select>
+                                    <Select 
+                                        showSearch
+                                        optionFilterProp="children"
+                                        onSelect={this.selectVillage}>
                                         {selectOptions}
                                     </Select>
                                 )}
@@ -256,7 +277,9 @@ AddPeopleForm = createForm({
                 village_info_id : { value : formData.village_info_id}
             }
         } else {
-            return {}
+            return {
+                village_info_id : { value : defaultKey }
+            }
         }
     },
 

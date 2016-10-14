@@ -44,14 +44,15 @@ module.exports = {
 				NODE_ENV: '"production"'
 			}
 		}),
-		// new webpack.optimize.UglifyJsPlugin({
-		// 	compress: {
-		// 		warnings: false,
-		// 		screw_ie8: true,
-		// 		drop_console: true,
-		// 		drop_debugger: true
-		// 	}
-		// }),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false,
+				screw_ie8: true,
+				// drop_console: true,
+				drop_console: false,
+				drop_debugger: true
+			}
+		}),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		// new ExtractTextPlugin('[contenthash].css', {
 		new ExtractTextPlugin('bundle.css', {

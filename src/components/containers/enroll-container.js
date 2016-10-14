@@ -39,8 +39,8 @@ let EnrollContainer = React.createClass({
     changeAfterChangeVillage(value) {
         const initialState = {
             selectedVillageId : value,
-            keys : [1],
-            uuid : 1,
+            keys : [1, 2, 3],
+            uuid : 3,
             selectedProductId : []
         };
 
@@ -103,8 +103,8 @@ let EnrollContainer = React.createClass({
         return {
             selectedVillageId : '',
             selectDisabled : true,
-            keys : [1],
-            uuid : 1,
+            keys : [1, 2, 3],
+            uuid : 3,
             selectedProductId : [],
             printPreview : {
                 primary_id : '',
@@ -258,14 +258,15 @@ let EnrollContainer = React.createClass({
             if (errors) {
                 console.log('errors', errors);
                 return;
+            } else {
+                console.log('values! ', values);
+                config = this.handleFormData(values);
+                addEnrollProduct(config, function () {
+                    this.hideModal();
+                    this.getEnrollListContinuously();
+                    getEnrollPeopleList();
+                }.bind(this));
             }
-            console.log('values! ', values);
-            config = this.handleFormData(values);
-            addEnrollProduct(config, function () {
-                this.hideModal();
-                this.getEnrollListContinuously();
-                getEnrollPeopleList();
-            }.bind(this));
         });
         
     },
@@ -341,6 +342,33 @@ let EnrollContainer = React.createClass({
         });
     },
 
+    calculatePrice(valueObj) {
+        const productList = this.props.productList;
+        var numList = [];
+        var productIdList = [];
+        var priceList = [];
+        for (let i in valueObj) {
+            if (i.slice(0, 3) == 'num') {
+                numList.push(valueObj[i]);
+            }
+            if (i.slice(0, 3) == 'pro') {
+                productIdList.push(valueObj[i]);
+            }
+        }
+        _.forEach(productIdList, function (value) {
+            if (value) {
+                const pos = _.findIndex(productList, function (o) {
+                    return o.id == value;
+                });
+                if (pos != -1) {
+                    let price = productList[pos].price;
+                    priceList.push(parseFloat(price) * parseFloat(numList.shift()));
+                }
+            }
+        });
+        return priceList;
+    },
+
     render() {
         const columns = this.getColumns();
         const dataSource = this.props.orderState.info;
@@ -358,7 +386,9 @@ let EnrollContainer = React.createClass({
             return option.village_info_id == villageId;
         }).map((option) => {
             return (
-                <Option key={option.id} value={option.id}>{option.product_name}</Option>
+                <Option key={option.id} value={option.id}>
+                    {option.product_name + '  ' + option.price + '元' + ' / ' + option.unit}
+                </Option>
             )
         });
 
@@ -398,6 +428,23 @@ let EnrollContainer = React.createClass({
 
         const printPreview = this.props.printPreview;
 
+        // 计算总价
+        let overallPrice = this.props.form.getFieldsValue();
+        console.log('overallValues', overallPrice);
+        let priceList = this.calculatePrice(overallPrice);
+        console.log('priceList', priceList);
+        try {
+            overallPrice = priceList.reduce(function (a, b) {
+                var aa = isNaN(a) ? 0 : a;
+                var bb = isNaN(b) ? 0 : b;
+                return aa + bb;
+            });
+        } catch (e){
+            overallPrice = 0;
+        }
+        console.log('overallValues', overallPrice);
+        //
+
         let formItems = '';
 
         try {
@@ -429,7 +476,7 @@ let EnrollContainer = React.createClass({
                         </Col>
 
                         <Col span={7} pull={2}>
-                            <FormItem {...formItemUnitLayout} hasFeedback label={'数量' + '(斤)'} key={'num' + k}>
+                            <FormItem {...formItemUnitLayout} hasFeedback label={'数量'} key={'num' + k}>
                                 {getFieldDecorator(`num${k}`, {
                                     rules : [
                                         {required : true, whitespace : true, message : '必填项'},
@@ -471,6 +518,8 @@ let EnrollContainer = React.createClass({
                                         })(
                                             <Select
                                                 onSelect={this.selectVillage}
+                                                showSearch
+                                                optionFilterProp="children"
                                                 placeholder="请先选择所在村">
                                                 {selectOptions}
                                             </Select>
@@ -506,8 +555,13 @@ let EnrollContainer = React.createClass({
                                 <Col span={16}>
                                     <Row>
                                         <Col span={6}/>
-                                        <Col>
+                                        <Col span={9}>
                                             <a onClick={this.handleAddRow}>增加产品...</a>
+                                        </Col>
+                                        <Col span={8}>
+                                            {overallPrice > 0 ? (
+                                                <span>总价: {overallPrice} 元</span>
+                                            ) : ''}
                                         </Col>
                                     </Row>
                                 </Col>

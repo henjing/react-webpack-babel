@@ -4,7 +4,6 @@ const initialState = {
     super : '',
     user_name : '',
     wechat_avatar : ''
-    
 };
 
 const navbarLayoutReducer = function (state = initialState, action) {

@@ -42,7 +42,7 @@ export const bindPriterUrl = '/Printinfo/bindPrintor';
 // 删除打印机
 export const delPrinterUrl = '/Printinfo/delPrintorInfo';
 
-// 长传图片
+// 上传图片
 export const uploadUrl = '/Printinfo/doUpload';
 
 // 注销
@@ -53,6 +53,12 @@ export const defaultAvatar = '/img/avatar.jpg';
 
 // 修改密码
 export const modifyPasswordUrl = '/Base/modifyPassWord';
+
+// 根据开发环境还是生产环境决定路由
+export const routeBase = process.env.NODE_ENV !== 'production' ? '/' : '/admin/village/index/';
+
+//
+
 
 
 

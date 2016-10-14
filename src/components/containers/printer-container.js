@@ -47,6 +47,8 @@ let PrinterContainer = React.createClass({
                                       <Select
                                           style={{width : 200}}
                                           placeholder="选择村"
+                                          showSearch
+                                          optionFilterProp="children"
                                         notFoundContent="没有可选择的内容"
                                         >
                                         {selectOptions}

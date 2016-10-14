@@ -7,21 +7,23 @@ import PrinterContainer from './components/containers/printer-container';
 
 // Layouts
 import MainLayout from './components/layouts/main-layout';
+// Route base
+import { routeBase } from './appConstants/urlConfig';
 
 
 export default (
     <Router history={browserHistory}>
-        <Route path="/admin/village/index/" component={MainLayout} >
+        <Route path={routeBase} component={MainLayout} >
 
-            <IndexRedirect to="/admin/village/index/people" />
-            <Route path="/admin/village/index/people" component={PeopleContainer}></Route>
-            
-            <Route path="/admin/village/index/product" component={ProductContainer}></Route>
-            
-            <Route path="/admin/village/index/enroll" component={EnrollContainer}></Route>
+            <IndexRedirect to={routeBase + 'people'} />
+            <Route path={routeBase + 'people'} component={PeopleContainer}></Route>
+           
+            <Route path={routeBase + 'product'} component={ProductContainer}></Route>
+           
+            <Route path={routeBase + 'enroll'} component={EnrollContainer}></Route>
 
-            <Route path="/admin/village/index/printer" component={PrinterContainer}></Route>
-            
+            <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
+           
         </Route>
     </Router>
 )

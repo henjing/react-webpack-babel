@@ -7,6 +7,8 @@ const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
 
+let defaultKey = '';
+
 let ProductContainer = React.createClass({
 
     showModal() {
@@ -75,17 +77,16 @@ let ProductContainer = React.createClass({
             if (errors) {
                 console.log('errors', errors);
                 return;
+            } else {
+                console.log('values! ', values);
+                config = values;
+                if (this.props.productListState.type == 'add') {
+                    addProduct(config);
+                } else {
+                    editProduct(Object.assign({}, config, { id : this.props.productListState.formState.id}));
+                }
             }
-            console.log('values! ', values);
-            config = values;
         });
-        
-        if (this.props.productListState.type == 'add') {
-            addProduct(config);
-        } else {
-            editProduct(Object.assign({}, config, { id : this.props.productListState.formState.id}));
-        }
-        
     },
 
     productPrice(rule, value, callback) {
@@ -98,6 +99,10 @@ let ProductContainer = React.createClass({
         } catch (e) {
             callback([]);
         }
+    },
+
+    selectVillage(value) {
+        defaultKey = value;
     },
 
     render() {
@@ -115,6 +120,12 @@ let ProductContainer = React.createClass({
             labelCol : { span : 6 },
             wrapperCol : { span : 13}
         };
+
+        try {
+            if (!defaultKey) {
+                defaultKey = this.props.villageState.info[0].id
+            }
+        } catch (e) {}
 
         return (
             <div className="container-fluid">
@@ -155,9 +166,13 @@ let ProductContainer = React.createClass({
                                 </FormItem>
                                 <FormItem {...formItemLayout} hasFeedback label="村庄">
                                     {getFieldDecorator('village_info_id', {
+                                        // initialValue : [defaultKey],
                                         rules : [{ required : true, message : '必填项' }]
                                     })(
-                                        <Select>
+                                        <Select
+                                            optionFilterProp="children"
+                                            onSelect={this.selectVillage}
+                                            showSearch>
                                             {selectOptions}
                                         </Select>
                                     )}
@@ -187,7 +202,9 @@ ProductContainer = createForm({
                 village_info_id : { value : formState.village_info_id }
             }
         }
-        return {}
+        return {
+            village_info_id : { value : defaultKey }
+        }
     }
 })(ProductContainer);
 
