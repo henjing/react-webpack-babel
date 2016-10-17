@@ -14,7 +14,7 @@ export function getProductList() {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.info(response.info);
+                // message.info(response.info);
                 store.dispatch(getProductReset(Object.assign([], response.info)));
             }
         }).catch(errHandler)

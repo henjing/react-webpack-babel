@@ -84,3 +84,11 @@ To do the actual linting, run:
 
 ### Contribute
 Please contribute to the project if you think this can be done better in anyway even for this README :)
+
+对antd使用bootstrap和fontawesome样式需要的修改:
+1. className中填写相应的bootstrap的样式名
+2. 在icon type中填写"空格 + fontawesome名字", 并且用css-modules在这个i标签上给一个类名,并且规定次类名的:before { font-family : 'FontAwsome' !important }
+
+开发时的修改
+1. vi /etc/hosts
+2. 按下"A"进入编辑模式,增加host数据后,按下ESC,输入':wq!'退出vim.

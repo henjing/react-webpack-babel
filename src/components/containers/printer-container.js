@@ -8,6 +8,11 @@ const Option = Select.Option;
 const Panel = Collapse.Panel;
 
 let PrinterContainer = React.createClass({
+    
+    componentDidMount() {
+        getPrinterList();
+    },
+    
     render() {
         const { getFieldDecorator } = this.props.form;
         const selectOptions = this.props.villageState.info.map(function (option) {

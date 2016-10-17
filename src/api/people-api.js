@@ -16,7 +16,7 @@ export function getPeople() {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
+                // message.warning(response.info);
                 store.dispatch(getPeopleReset());
             }
         }).catch(err => {
@@ -34,7 +34,7 @@ export function getVillage() {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
+                // message.warning(response.info);
             }
         }).catch(err => {
             message.error('服务器错误! ' + err);

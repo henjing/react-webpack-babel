@@ -38,7 +38,7 @@ export const submitPrintUrl = '/Printinfo/submitPrint';
 export const getPeopleForEnroll = '/Printinfo/getPeopleList';
 
 // 绑定打印机
-export const bindPriterUrl = '/Printinfo/bindPrintor';
+export const bindPrinterUrl = '/Printinfo/bindPrintor';
 // 删除打印机
 export const delPrinterUrl = '/Printinfo/delPrintorInfo';
 
@@ -57,7 +57,6 @@ export const modifyPasswordUrl = '/Base/modifyPassWord';
 // 根据开发环境还是生产环境决定路由
 export const routeBase = process.env.NODE_ENV !== 'production' ? '/' : '/admin/village/index/';
 
-//
 
 
 

@@ -23,7 +23,7 @@ export default (
             <Route path={routeBase + 'enroll'} component={EnrollContainer}></Route>
 
             <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
-           
+            
         </Route>
     </Router>
 )

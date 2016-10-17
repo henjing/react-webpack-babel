@@ -19,7 +19,7 @@ export function getUser() {
         }).then(response => {
             if (response.status === 0) {
                 // 服务器没有返回值
-                message.warning(response.info);
+                // message.warning(response.info);
             }
         }).catch(err => {
             message.error('服务器错误! ' + err);

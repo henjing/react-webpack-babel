@@ -37,35 +37,24 @@ const SidebarLayoutContainer = React.createClass({
                       defaultSelectedKeys={[pathName]} defaultOpenKeys={['sub1']}>
                       <SubMenu key="sub1" title={<span><Icon type="user" /><span className={styles.navText}>精准扶贫管理</span></span>}>
                         <Menu.Item key={routeBase + 'people'}>
-                            <Link to={routeBase + 'people'} activeClassName={styles.activeName}>
+                            <Link to={routeBase + 'people'}>
                                 贫困户列表</Link>
                         </Menu.Item>
                         <Menu.Item key={routeBase + 'product'}>
-                            <Link to={routeBase + 'product'} activeClassName={styles.activeName}>
+                            <Link to={routeBase + 'product'} >
                                 农产品列表
                             </Link>
                         </Menu.Item>
                         <Menu.Item key={routeBase + 'enroll'}>
-                            <Link to={routeBase + 'enroll'} activeClassName={styles.activeName}>
+                            <Link to={routeBase + 'enroll'} >
                                 产品入库
                             </Link>
                         </Menu.Item>
                         <Menu.Item key={routeBase + 'printer'}>
-                            <Link to={routeBase + 'printer'} activeClassName={styles.activeName}>
+                            <Link to={routeBase + 'printer'} >
                                 打印机信息
                             </Link>
                         </Menu.Item>
-                      </SubMenu>
-                    </Menu>
-
-                    <Menu mode={mode}
-                      defaultSelectedKeys={[pathName]}>
-                      <SubMenu key="" title={<span><Icon type="home" /><span className={styles.navText}>厂商订单列表</span></span>}>
-                        <Menu.Item key={routeBase + 'order_overview'}>
-                            <Link to={routeBase + 'order_overview'} activeClassName={styles.activeName}>
-                                用户订单列表</Link>
-                        </Menu.Item>
-
                       </SubMenu>
                     </Menu>
 

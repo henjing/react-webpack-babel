@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { getPrinterListUrl, bindPriterUrl, delPrinterUrl } from '../appConstants/urlConfig';
+import { getPrinterListUrl, bindPrinterUrl, delPrinterUrl } from '../appConstants/urlConfig';
 import { getPrinterListSuccess } from '../actions/printer-actions';
 import { message } from 'antd';
 import qs from 'qs';
@@ -16,13 +16,13 @@ export function getPrinterList(config, callback) {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
+                // message.warning(response.info);
             }
         }).catch(errHandler)
 }
 
 export function bindPrinter(config, callback) {
-    return axios.post(bindPriterUrl, formData(config))
+    return axios.post(bindPrinterUrl, formData(config))
         .then(data => {
             const response = data.data;
             if (response.status == 1) {

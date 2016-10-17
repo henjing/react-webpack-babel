@@ -17,7 +17,7 @@ export function getEnrollList(config, callback) {
         }).then(response => {
             if (response.status == 0) {
                 store.dispatch(getEnrollReset());
-                message.warning(response.info);
+                // message.warning(response.info);
             }
         }).catch(errHandler)
 }
@@ -33,7 +33,7 @@ export function getEnrollPeopleList(callback) {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
+                // message.warning(response.info);
             }
         }).catch(errHandler)
 }
