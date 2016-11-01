@@ -16,6 +16,16 @@ loaders.push({
 		'css'
 	]
 });
+// global less
+loaders.push({
+	test: /[\/\\]outside-components[\/\\].*\.less$/,
+	loaders: [
+		// 'style?sourceMap',
+		'style',
+		'css',
+        'less'
+	]
+});
 // local css modules
 loaders.push({
 	test: /[\/\\]src[\/\\].*\.css$/,

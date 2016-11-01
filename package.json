@@ -27,7 +27,15 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.7.0",
     "redux": "^3.5.2",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+
+    "rc-pagination": "^1.5.4",
+    "jquery": "1.12.4",
+    "react-datepicker": "^0.29.0",
+    "react-modal-bootstrap": "^1.1.0",
+    "react-s-alert": "^1.1.4",
+    "react-dropdown": "^1.1.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.6.1",

@@ -20,6 +20,11 @@ loaders.push({
 	test: /[\/\\](node_modules|global)[\/\\].*\.css$/,
 	loader: ExtractTextPlugin.extract('style', 'css')
 });
+// global less files
+loaders.push({
+	test: /[\/\\]outside-components[\/\\].*\.less$/,
+	loader: ExtractTextPlugin.extract('style', 'css!less')
+});
 
 module.exports = {
 	entry: [

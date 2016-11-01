@@ -1,6 +1,7 @@
 import * as types from '../actions/action-types';
 
 const initialState = {
+    menu : [],
     super : '',
     user_name : '',
     wechat_avatar : ''

@@ -10,6 +10,11 @@ import MainLayout from './components/layouts/main-layout';
 // Route base
 import { routeBase } from './appConstants/urlConfig';
 
+// 外部组件 用户订单
+import orderOverviewContainer from '../outside-components/orderOverview/index.js';
+// 外部组件 厂商补货订单
+import goodsSupplementContainer from '../outside-components/goodsSupplement/index.js';
+
 
 export default (
     <Router history={browserHistory}>
@@ -23,7 +28,13 @@ export default (
             <Route path={routeBase + 'enroll'} component={EnrollContainer}></Route>
 
             <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
-            
+
+            <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
+
+            {/*外部组件*/}
+            <Route path={routeBase + 'order_overview'} component={orderOverviewContainer}></Route>
+            <Route path={routeBase + 'goods_supplement'} component={goodsSupplementContainer}></Route>
+
         </Route>
     </Router>
 )

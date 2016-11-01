@@ -1,0 +1,385 @@
+//@import "common.less";
+//
+//.wrapper, body {
+//  min-height: 100vh;
+//  position: relative;
+//  font-size: 12px;
+//}
+//
+//.wrapper {
+//  top: 0;
+//  height: 100vh;
+//}
+//
+// 和.wrapper同属于body的第一代子元素的还有.fixed-plugin,可以自由选择弹出的位置
+.fixed-plugin {
+  @media (min-width: 992px) {
+    top : 300px;
+  }
+  position: absolute;
+  right: 0;
+  width: 64px;
+  top: 180px;
+}
+//
+//.sidebar, .main-panel {
+//  overflow: auto;
+//  max-height: 100%;
+//  height: 100%;
+//}
+//
+//.sidebar {
+//  position: absolute;
+//  top: 0;
+//  bottom: 0;
+//  left: 0;
+//  width: 200px;
+//  display: block;
+//  z-index: 1;
+//  color: #fff;
+//  font-weight:200;
+//  background-image: linear-gradient(#02326B, #0D6688);
+//  .list-group-item {
+//    background: transparent;
+//    text-align: center;
+//    border: 0;
+//    color : white;
+//    font-size:12px;
+//    height: 50px;
+//    vertical-align: middle;
+//    display: inline-block;
+//    width: 100%;
+//    line-height: 30px;
+//    .fa {
+//      padding: 0 5px;
+//    }
+//  }
+//  .list-group-item.current, .list-group-item:hover {
+//    background: #03376e;
+//    border-left: 3px solid #ffcd36;
+//  }
+//  .list-group-item:hover {
+//    color : darken(white, 20%);
+//  }
+//
+//}
+//
+//.logo {
+//  text-align: center;
+//  height: 80px;
+//  line-height: 80px;
+//  img {
+//    height: 33px;
+//    width: 63px;
+//    text-align: center;
+//  }
+//}
+//
+//.main-panel {
+//  position: relative;
+//  z-index: 2;
+//  float: right;
+//  width: calc(~"100% - 200px"); // less编译calc的hack
+//  min-height: 100%;
+//}
+//
+//.navbar {
+//  height : 80px;
+//  line-height: 80px;
+//}
+//
+//.navbar-lists {
+//  ul {
+//    li {
+//      display: inline-block;
+//      height: 80px;
+//      line-height:80px;
+//      padding-right: 30px;
+//      a {
+//        display: inline;
+//        height: 80px;
+//        line-height: 80px;
+//        padding-right: 50px;
+//        span {
+//          font-size: 30px;
+//          text-align: center;
+//          vertical-align: middle;
+//        }
+//      }
+//    }
+//  }
+//}
+//
+//table th {
+//  text-align: center !important;
+//  vertical-align: middle !important;
+//}
+//
+//.products {
+//  ol {
+//    margin: 0;
+//  }
+//}
+//
+//////////////////////////////////////////////// 贫困户列表
+//.search-box {
+//  width : auto !important;
+//  display: inline-block !important;
+//  float: none !important;
+//}
+//
+//.search-box-container {
+//  margin-top: 16px;
+//}
+//
+//.button-list {
+//  button, span {
+//    margin-right:10px;
+//  }
+//  button {
+//    //background: transparent;
+//    border-radius : 20px !important;
+//  }
+//}
+//
+//.row-divider {
+//  padding-top:20px;
+//  border-top : 2px solid ghostwhite;
+//}
+//
+//.avatar img {
+//  width: 60px;
+//  height: 60px;
+//}
+//
+//.avatar-product-order {
+//  img {
+//    width: 42px;
+//    height: 42px;
+//  }
+//}
+//
+//.avatar span {
+//  font-size: 21px;
+//}
+//
+//.pagination-container {
+//  text-align: center;
+//  margin: 0 auto;
+//}
+//
+//////////////////////////////////////////////////////打印预览
+//.print-modal-header {
+//  display: inline-block;
+//  vertical-align: middle;
+//}
+//
+///////////////////////////////////////////贫困户信息录入
+//.img-container {
+//  width: 100px;
+//  height: 100px;
+//  border: 1px solid floralwhite;
+//  background: darkgray;
+//  vertical-align: baseline;
+//  text-align: center;
+//  //padding-top: 15px;
+//}
+//
+//.search-hover {
+//  cursor: pointer;
+//}
+//
+////////////////////////////////////////////// react-modal-boostrap demo用
+//.layout-main{
+//  padding: 30px 0;
+//}
+//
+////////// react alert的插件代码
+/* Common, default styles for the notification box */
+
+.s-alert-box,
+.s-alert-box * {
+    box-sizing: border-box;
+}
+
+.s-alert-box {
+    position: fixed;
+    background: rgba(42,45,50,0.85);
+    padding: 22px;
+    line-height: 1.4;
+    z-index: 1000;
+    pointer-events: none;
+    color: rgba(250,251,255,0.95);
+    font-size: 100%;
+    font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif;
+    max-width: 300px;
+    -webkit-transition: top .4s, bottom .4s;
+    transition: top .4s, bottom .4s;
+}
+
+.s-alert-box.s-alert-show {
+    pointer-events: auto;
+}
+
+.s-alert-box a {
+    color: inherit;
+    opacity: 0.7;
+    font-weight: 700;
+}
+
+.s-alert-box a:hover,
+.s-alert-box a:focus {
+    opacity: 1;
+}
+
+.s-alert-box p {
+    margin: 0;
+}
+
+.s-alert-box.s-alert-show,
+.s-alert-box.s-alert-visible {
+    pointer-events: auto;
+}
+
+.s-alert-close {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    overflow: hidden;
+    text-indent: 100%;
+    cursor: pointer;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.s-alert-close:hover,
+.s-alert-close:focus {
+    outline: none;
+}
+
+.s-alert-close::before,
+.s-alert-close::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 60%;
+    top: 50%;
+    left: 50%;
+    background: #fff;
+}
+
+.s-alert-close:hover::before,
+.s-alert-close:hover::after {
+    background: #fff;
+}
+
+.s-alert-close::before {
+    -webkit-transform: translate(-50%,-50%) rotate(45deg);
+    transform: translate(-50%,-50%) rotate(45deg);
+}
+
+.s-alert-close::after {
+    -webkit-transform: translate(-50%,-50%) rotate(-45deg);
+    transform: translate(-50%,-50%) rotate(-45deg);
+}
+
+/* positions */
+
+.s-alert-bottom-left {
+    top: auto;
+    right: auto;
+    bottom: 30px;
+    left: 30px;
+}
+.s-alert-top-left {
+    top: 30px;
+    right: auto;
+    bottom: auto;
+    left: 30px;
+}
+.s-alert-top-right {
+    top: 30px;
+    right: 30px;
+    bottom: auto;
+    left: auto;
+}
+.s-alert-bottom-right { /*default*/
+    top: auto;
+    right: 30px;
+    bottom: 30px;
+    left: auto;
+}
+.s-alert-bottom {
+    width: 100%;
+    max-width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+}
+.s-alert-top {
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+  text-align: center;
+}
+
+/* conditions */
+
+.s-alert-info {
+    background: rgba(0,214,255,.9);
+    color: #fff;
+}
+.s-alert-success {
+    background: rgba(39,174,96,.9);
+    color: #fff;
+}
+.s-alert-warning {
+    background: rgba(241,196,15,.9);
+    color: #fff;
+}
+.s-alert-error {
+    background: rgba(231,76,60,.9);
+    color: #fff;
+}
+
+[class^="s-alert-effect-"].s-alert-hide,
+[class*=" s-alert-effect-"].s-alert-hide {
+    -webkit-animation-direction: reverse;
+    animation-direction: reverse;
+}
+
+/* height measurement helper */
+.s-alert-box-height {
+    visibility: hidden;
+    position: fixed;
+}
+////////////////////////////////////
+.modal-title, .modal-footer {
+  text-align: center;
+}
+.fa {
+  padding-right:3px;
+}
+.content {
+  //min-width: 1260px !important;
+  min-width: 1000px !important;
+}
+
+#img-avatar {
+  width:42px;
+  height:42px;
+
+}
+////////
+.modal-body {
+  text-align: center;
+}
+.fa-cog {
+  color : #b7b5b5;
+}

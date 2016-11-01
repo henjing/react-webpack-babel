@@ -1,0 +1,260 @@
+.kd-search {
+  height:200px;
+  margin-top: -20px;
+  background: #f6f9fb;
+  span, input {
+    font-size: 12px;
+  }
+  .kd-flex-search-panel {
+    height: 200px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    p {
+      color: grey;
+    }
+  }
+  .kd-flex-search {
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+    height: 200px;
+    padding-left: 15px;
+    .kd-search-container {
+      //width: 314px;
+      span.kd-search-button {
+        position: absolute;
+        right: -25px;
+        top: 5px;
+        width: 80px;
+      }
+      input {
+        height: 40px;
+        line-height: 40px;
+        max-width: 314px;
+        width: 78%;
+        border-radius: 20px;
+        padding-left: 50px;
+      }
+      .kd-search-box {
+        position: relative;
+      }
+      .search-icon {
+        position: absolute;
+        left: 25px;
+        top: 10px;
+        font-size: 14px;
+        color: gray;
+        //cursor: pointer;
+      }
+    }
+  }
+}
+.kd-select {
+  height:130px;
+  line-height: 130px;
+  padding-left:15px;
+  span {
+    font-size: 12px;
+  }
+  .kd-select-left {
+
+  }
+}
+.kd-caption {
+  height:40px;
+  line-height: 40px;
+  margin-bottom:10px;
+  text-align: center;
+  background: #f6f9fb;
+}
+.kd-order {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.kd-order-overview {
+  height: 40px;
+  line-height:40px;
+  padding-left:30px;
+  text-align: left;
+  margin-top: 10px;
+  background: #f6f9fb;
+}
+.kd-order-product {
+  width: 301/1260*100%;
+}
+.kd-order-price, .kd-order-num {
+  width: 178/1260*100%;
+}
+.kd-order-num {
+  width: 178/1260*100%;;
+}
+.kd-order-status {
+  width: 186/1260*100%;
+  span {
+    font-size: 12px;
+    background: transparent;
+  }
+}
+.kd-order-add {
+  width: 231/1260*100%;
+}
+.kd-order-sum {
+  width: 186/1260*100%;
+}
+.kd-order-cell {
+  width: 657/1260*100%;
+  border-bottom : 1px solid #f6f9fb;
+}
+.kd-cell-product {
+  width: 301/657*100%;
+}
+.kd-cell-price, .kd-cell-num {
+  width: 178/657*100%;
+}
+.kd-order {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.kd-cell-product {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+.kd-pagination {
+  text-align: center;
+  ul {
+    display: inline-block;
+    margin:10px auto;
+    padding: 0;
+  }
+}
+.kd-cell-price, .kd-cell-num {
+  height: 120px;
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.kd-cell-text {
+  height: 40px;
+  line-height: 40px;
+  text-align: left;
+  padding-left: 30px;
+  color: darken(red, 10%);
+}
+//flexbox布局,高度在react component中另外标出
+.kd-order-sum, .kd-order-add, .kd-order-status {
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
+}
+//////////////
+.kd-date-input {
+  width: 102px !important;
+  border-radius: 17px;
+  text-align: center;
+}
+.kd-date-picker {
+  width: 52px !important;
+  height: 23px;
+  line-height: 23px;
+  text-align: center;
+  display: inline-block;
+  border:1px solid gainsboro;
+  cursor: pointer;
+  border-radius : 12.5px;
+  margin:0 5px;
+}
+.kd-type-picker {
+  width: 120px;
+  border-radius: 20px;
+  height: 40px;
+  padding-top:12px;
+  margin-right: 20px;
+  display: inline-block;
+  position: relative;
+  i {
+    position: absolute;
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    line-height: 23px;
+    border-radius: 23px;
+    background: orange;
+    top: -7px;
+    right: 0;
+  }
+}
+.kd-select-right {
+  button {
+    width: 90px;
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-top:9.5px;
+    padding-bottom:9.5px;
+    margin-left:67%;
+    background: #2ecc71;
+    i {
+      font-size: 16px;
+      vertical-align: middle;
+      line-height: 17px;
+    }
+  }
+}
+.kd-order-overview {
+  span {
+    margin-right: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    i {
+      font-size: 14px;
+      color: red;
+    }
+  }
+}
+.kd-order {
+  .kd-order-sum, .kd-order-add, .kd-order-status {
+    border: 1px solid gainsboro;
+  }
+}
+
+.kd-cell-product, .kd-cell-price, .kd-cell-num {
+  border-bottom: 1px solid gainsboro;
+}
+.kd-order-status {
+  span {
+
+  }
+  p {
+    margin-top:10px;
+  }
+}
+.kd-cell-product {
+  span {
+    padding-left:3px;
+    width:70px;
+  }
+}
+.kd-cell-text {
+  border-bottom: 1px solid gainsboro;
+}
+.kd-rowInTableRow-img {
+  width: 80px;
+  height: 80px;
+}
+.kd-date-picker.active {
+  background: #e4e4e4;
+}
+.txt-al-l {
+  text-align: left;
+}
+.txt-al-r {
+  text-align: right;
+}
+.kd-button {
+  border: 0;
+}
