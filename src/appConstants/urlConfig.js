@@ -89,3 +89,6 @@ export const getVillagesByDistrictUrl = '/Administrator/getVillages';
 
 // 获取村列表(包括第一书记的姓名和联系方式)
 export const getVillageDetailListUrl = '/Printinfo/getVillageList';
+
+// 添加一个村
+export const addVillageUrl = '/Printinfo/addVillageStore';

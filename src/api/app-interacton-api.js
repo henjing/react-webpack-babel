@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { getProvincesUrl, getVillageDetailListUrl, getCitiesByProvinceUrl, getDistrictsByCityUrl, getVillagesByDistrictUrl } from '../appConstants/urlConfig';
+import { getProvincesUrl, getVillageDetailListUrl, getCitiesByProvinceUrl, getDistrictsByCityUrl, getVillagesByDistrictUrl, addVillageUrl } from '../appConstants/urlConfig';
 import { updateAppInteractionState } from '../actions/app-actions';
 import { message } from 'antd';
 import qs from 'qs';
@@ -12,7 +12,7 @@ export function getProvinces(config, callback) {
             const response = data.data;
             if (response.status == 1) {
                 store.dispatch(updateAppInteractionState(Object.assign({}, { provinces : {...response} })));
-                if (callback) callback();
+                if (callback) callback(response);
             }
             return response;
         }).then(response => {
@@ -45,6 +45,16 @@ export function getDistricts(config, sucCallback, failCallback) {
 
 export function getVillages(config, sucCallback, failCallback) {
     return commonAjax(getVillagesByDistrictUrl, config, function (info) {
+        // store.dispatch(updateAppInteractionState(Object.assign({}, { cities : [...info] })));
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        // store.dispatch(updateAppInteractionState(Object.assign({}, { cities : [...info] })));
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function addVillage(config, sucCallback, failCallback) {
+    return commonAjax(addVillageUrl, config, function (info) {
         // store.dispatch(updateAppInteractionState(Object.assign({}, { cities : [...info] })));
         if (sucCallback) sucCallback(info);
     }, function (info) {

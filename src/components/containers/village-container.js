@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getVillageDetailList, getCities, getDistricts, getProvinces, getVillages } from '../../api/app-interacton-api';
+import { getVillageDetailList, getCities, getDistricts, getProvinces, getVillages, addVillage } from '../../api/app-interacton-api';
 import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message, Cascader, TreeSelect } from 'antd';
+import _ from 'lodash';
 const TreeNode = TreeSelect.TreeNode;
 const FormItem = Form.Item;
 const createForm = Form.create;
@@ -9,23 +10,28 @@ const Option = Select.Option;
 import store from '../../store';
 import { updateAppInteractionState } from '../../actions/app-actions';
 import SearchInput from '../views/commonSearchInput';
+const ajaxMap = {
+    province : getCities,
+    city : getDistricts,
+    district : getVillages
+};
+let stringObj = {};
 
 let VillageContainer = React.createClass({
     
     componentDidMount() {
         getVillageDetailList({});
-    },
-    componentWillMount() {
-        console.log('optionoptionoption', this.props.provinces.info);
-        this.setState({
-            treeData : this.props.provinces.info.map(function (option) {
-                return {
-                    value : option.province_id,
-                    label : option.province_name,
-                    tag : option.tag
-                }
+        getProvinces({}, function (response) {
+            this.setState({
+                treeData : response.info.map(function (option) {
+                  return {
+                      value : option.id,
+                      title : option.name,
+                      tag : option.tag
+                  }
+                })
             })
-        })
+        }.bind(this))
     },
     getColumns() {
         return [{
@@ -94,24 +100,74 @@ let VillageContainer = React.createClass({
     hideModal() {
         this.setState({ isVisible : false });
     },
-
-    handleSubmit() {
-
+    onSelect(value, node, extra) {
+        console.log('value', value, 'node', node, 'extra', extra);
+        stringObj[node.props.tag] = node.props.title;
     },
+    handleSubmit(e) {
+        if(e) e.preventDefault();
 
-    onSelect(info) {
-        console.log('selected', info);
+        this.props.form.validateFieldsAndScroll((errors, values) => {
+            if (errors) {
+                console.log('errors', errors);
+                return ;
+            } else {
+                console.log('values', values);
+                addVillage(assembleId(values), function (info) {
+                    message.success(info.info);
+                }.bind(this), function (info) {
+                    message.error(info.info);
+                }.bind(this))
+            }
+        });
+    },
+    cellphone(rule, value, callback) {
+        try {
+            if(/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/.test(value) || !value) {
+                callback();
+            } else {
+                callback(['请输入正确的手机号码']);
+            }
+        } catch (e) {
+            callback(['请输入正确的手机号码'])
+        }
+    },
+    selectVillage(rule, value, callback) {
+        console.log('rule', rule, 'value', value);
+        // callback();
+        try {
+            if(parseInt(value) < 1000) {
+                callback(['请具体到某一个村']);
+            } else if (parseInt(value) % 10000 === 0) {
+                callback(['请具体到某一个村']);
+            } else callback();
+
+        } catch (e) { callback(['请具体到某一个村']); }
     },
     onLoadData(treeNode) {
-        // return new Promise((resolve) => {
-        //     setTimeout(() => {
-        //         const treeData = [...this.state.treeData];
-        //         getNewTreeData(treeData, treeNode.props.eventKey, generateTreeNodes(treeNode, 2));
-        //         this.setState({treeData});
-        //         resolve();
-        //     }, 500);
-        // });
-        console.log('treeNode', treeNode);
+        // console.log('treeNode', treeNode);
+        const tag = treeNode.props.tag;
+        const id = treeNode.props.value;
+        const ajax = ajaxMap[tag];
+        stringObj[tag] = treeNode.props.title;
+        if (!(!!ajax)) {
+            return new Promise((resolve, reject) => {
+                resolve();
+                // reject();
+            })
+        }
+        return ajax({ id : id}, function (info) {
+            const newTreeNodes = info.info.map(function (option) {
+                return {
+                    value : option.id,
+                    title : option.name,
+                    tag : option.tag
+                }
+            });
+            const treeData = [...this.state.treeData];
+            getNewTreeData(treeData, id, newTreeNodes);
+            this.setState({treeData});
+        }.bind(this));
     },
     
     render() {
@@ -129,14 +185,17 @@ let VillageContainer = React.createClass({
         const loop = (data) => {
             return data.map((item) => {
                 if (item.children) {
-                    return <TreeNode title={item.label + ' label'} value={item.value} key={item.value}>{loop(item.children)}</TreeNode>;
+                    return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={false}>{loop(item.children)}</TreeNode>;
                 }
-                return <TreeNode title={item.label + ' label'} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
+                // if (item.isLeaf) {
+                //     return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
+                // }
+                return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
             })
         };
         const treeNodes = loop(this.state.treeData);
-        console.log('11111111111111', this.state);
-        console.log('22222222222222', this.props);
+        // console.log('11111111111111', this.state);
+        // console.log('22222222222222', this.props);
 
         return (
             <div className="container-fluid">
@@ -150,12 +209,12 @@ let VillageContainer = React.createClass({
                         <Modal title={'添加乡村空店'} visible={visible} onOk={this.handleSubmit} onCancel={this.hideModal}>
                             <Form horizontal>
                                 <FormItem {...formItemLayout} hasFeedback label="选择一个村">
-                                    {getFieldDecorator('product_name', {
+                                    {getFieldDecorator('id', {
                                         rules : [
-                                            {required : true, whitespace : true, message : '必填项'}
+                                            {required : true, whitespace : true, message : '请选择村'}, { validator : this.selectVillage}
                                         ]
                                     })(
-                                          <TreeSelect onSelect={this.onSelect} loadData={this.onLoadData} treeNodeFilterProp="title" showSearch >
+                                          <TreeSelect onSelect={this.onSelect} showCheckedStrategy={TreeSelect.SHOW_ALL} dropdownStyle={{maxHeight : '900px', overflow : 'auto'}} loadData={this.onLoadData} treeNodeFilterProp="title" showSearch >
                                               {treeNodes}
                                           </TreeSelect>
 
@@ -163,8 +222,8 @@ let VillageContainer = React.createClass({
                                 </FormItem>
 
                                 <FormItem {...formItemLayout} hasFeedback label="第一书记手机号">
-                                    {getFieldDecorator('village_info_id', {
-                                        rules : [{ required : true, message : '必填项', whitespace : true }]
+                                    {getFieldDecorator('cellphone', {
+                                        rules : [{ required : true, message : '请输入正确的手机号码', whitespace : true }, { validator : this.cellphone}]
                                     })(
                                         <Input />
                                     )}
@@ -193,22 +252,10 @@ const mapStateToProps = function (store) {
 
 export default connect(mapStateToProps)(VillageContainer);
 
-function generateTreeNodes(treeNode) {
-    const arr = [];
-    const key = treeNode.props.eventKey;
-    for (let i = 0; i < 3; i++) {
-        arr.push({ name : `leaf ${key}-${i}`, key : `${key}-${i}`});
-    }
-    return arr;
-}
-
-function setLeaf(treeData, curKey, level) {
+function setLeaf(treeData, level) {
     const loopLeaf = (data, lev) => {
         const l = lev - 1;
         data.forEach((item) => {
-            if ((item.key.length > curKey.length) ? item.key.indexOf(curKey) !== 0 : curKey.indexOf(item.key) !== 0){
-                return;
-            }
             if (item.children) {
                 loopLeaf(item.children, l);
             } else if (l < 1) {
@@ -219,19 +266,34 @@ function setLeaf(treeData, curKey, level) {
     loopLeaf(treeData, level + 1);
 }
 
-function getNewTreeData(treeData, curKey, child, level) {
+function getNewTreeData(treeData, curKey, child) {
     const loop = (data) => {
-        if (level < 1 || curKey.length - 3 > level * 2) return;
         data.forEach((item) => {
-            if (curKey.indexOf(item.key) === 0) {
-                if (item.children) {
-                    loop(item.children);
-                } else {
-                    item.children = child;
-                }
+            if (curKey == item.value) {
+                if (item.children) return;
+                item.children = child;
+            } else if (item.children) {
+                loop(item.children)
             }
         });
     };
+
     loop(treeData);
-    setLeaf(treeData, curKey, level);
+    setLeaf(treeData, 4);
+}
+
+function assembleId(config) {
+    const id = config.id;
+    const province = id.slice(0, 3);
+    const city = Math.floor(parseInt(id) / 10000000) * 10000000 + '';
+    const district = Math.floor(parseInt(id) / 1000000) * 1000000 + '';
+    // return {
+    //     province : province,
+    //     city : city,
+    //     district : district,
+    //     village : id,
+    //     cellphone : config.cellphone
+    // }
+    stringObj.cellphone = config.cellphone;
+    return stringObj;
 }

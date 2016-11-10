@@ -17,7 +17,7 @@ const NavbarLayoutContainer = React.createClass({
     componentDidMount : function () {
         userApi.getUser();
         getVillage();
-        getProvinces();
+        // getProvinces();
     },
 
     handleClick() {
