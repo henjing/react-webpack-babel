@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select } from 'antd';
-import { addProduct, editProduct, deleteProduct } from '../../api/product-api';
+import { addProduct, editProduct, deleteProduct, getProductList } from '../../api/product-api';
 import { productModal } from '../../actions/product-actions';
 const FormItem = Form.Item;
 const createForm = Form.create;
@@ -18,6 +18,10 @@ let ProductContainer = React.createClass({
     hideModal() {
         this.props.dispatch(productModal({ visible : false }));
         this.props.form.resetFields();
+    },
+    
+    componentDidMount() {
+        getProductList();
     },
 
     getColumns() {

@@ -6,13 +6,29 @@ export default function (url, config, suncCallback, failCallback) {
         .then(data => {
             const response = data.data;
             if (response.status == 1) {
-                if (suncCallback) suncCallback();
+                if (suncCallback) suncCallback(response);
             }
             return response;
         }).then(response => {
             if (response.status == 0) {
-                message.warning(response.info);
-                if (failCallback) failCallback();
+                // message.warning(response.info);
+                if (failCallback) failCallback(response);
+            }
+        }).catch(errHandler)
+}
+
+export function commonGetAjax (url, config, suncCallback, failCallback) {
+    return axios.get(url, formData(config))
+        .then(data => {
+            const response = data.data;
+            if (response.status == 1) {
+                if (suncCallback) suncCallback(response);
+            }
+            return response;
+        }).then(response => {
+            if (response.status == 0) {
+                // message.warning(response.info);
+                if (failCallback) failCallback(response);
             }
         }).catch(errHandler)
 }

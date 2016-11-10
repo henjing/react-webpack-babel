@@ -57,7 +57,35 @@ export const modifyPasswordUrl = '/Base/modifyPassWord';
 // 根据开发环境还是生产环境决定路由
 export const routeBase = process.env.NODE_ENV !== 'production' ? '/' : '/admin/village/index/';
 
+// 添加管理员
+export const addAdminUrl = '/Administrator/addAdmin';
 
+// 添加村助理管理员
+export const addAdminAssistantUrl = '/Administrator/addVillageAssitant';
 
+// 删除店铺管理员、省管理员、县管理员、村助理管理员等
+export const deleteAdminUrl = '/Administrator/delAdmin';
 
+// 管理员列表
+export const adminListUrl = '/Administrator/showAdminList';
 
+// 店铺直播地址
+export const storeLiveUrl = '/Administrator/LivePathList';
+
+// 设定匹配关系
+export const setMatchListUrl = '/Administrator/doMatch';
+
+// 获得省列表
+export const getProvincesUrl = '/Administrator/getProvinces';
+
+// 获得制定省的市列表
+export const getCitiesByProvinceUrl = '/Administrator/getCitys';
+
+// 获得制定市的区县列表
+export const getDistrictsByCityUrl = '/Administrator/getDistricts';
+
+// 获得制定县的村列表
+export const getVillagesByDistrictUrl = '/Administrator/getVillages';
+
+// 获取村列表(包括第一书记的姓名和联系方式)
+export const getVillageDetailListUrl = '/Printinfo/getVillageList';

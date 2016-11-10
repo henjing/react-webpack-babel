@@ -18,8 +18,9 @@ const SidebarLayoutContainer = React.createClass({
     //匹配的导航列表
     matchSubMenu(pathName) {
         const subMenuArray =  {
-            'sub1' : ['people', 'product', 'enroll', 'printer'],
-            'sub2' : ['order_overview', 'goods_supplement']
+            'sub1' : ['people', 'product', 'village', 'enroll', 'printer'],
+            'sub2' : ['order_overview', 'goods_supplement'],
+            'sub3' : ['author_management']
         };
         let matchSubMenu = '';
         for (let i in subMenuArray) {
@@ -41,7 +42,8 @@ const SidebarLayoutContainer = React.createClass({
         const mode = collapse ? 'vertical' : 'inline';
         const pathName = window.location.pathname;
         const matchSubMenu = this.matchSubMenu(pathName);
-        const menuList = this.props.navbar.menu;
+        const menuList = process.env.NODE_ENV === 'production' ? this.props.navbar.menu : ['精准扶贫管理', '社区店订单列表'];
+        const isSuper = process.env.NODE_ENV === 'production' ? this.props.navbar.super : 1;
 
         return (
                 <div className={styles[sidebarWrapperName]} style={{transition: 'all 0.3s ease'}}>
@@ -65,6 +67,11 @@ const SidebarLayoutContainer = React.createClass({
                                         农产品列表
                                     </Link>
                                 </Menu.Item>
+                                {isSuper == 1 ? (<Menu.Item key={routeBase + 'village'}>
+                                    <Link to={routeBase + 'village'} >
+                                        村列表
+                                    </Link>
+                                </Menu.Item>) : ''}
                                 <Menu.Item key={routeBase + 'enroll'}>
                                     <Link to={routeBase + 'enroll'} >
                                         产品入库
@@ -78,20 +85,46 @@ const SidebarLayoutContainer = React.createClass({
                               </SubMenu>
                         ) : ''}
 
-                        {menuList[1] == '社区店订单列表' ? (
+                        {menuList[0] == '社区店订单列表' ? (
                             <SubMenu key="sub2" title={<span><Icon type="home" /><span className={styles.navText}>社区店订单列表</span></span>}>
                                 <Menu.Item key={routeBase + 'order_overview'}>
                                     <Link to={routeBase + 'order_overview'}>
-                                        社区店订单
+                                        用户订单
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key={routeBase + 'goods_supplement'}>
                                     <Link to={routeBase + 'goods_supplement'} >
-                                        厂商补货订单
+                                        厂商发货订单
                                     </Link>
                                 </Menu.Item>
                               </SubMenu>
                         ) : ''}
+
+                        {menuList[1] == '社区店订单列表' ? (
+                            <SubMenu key="sub2" title={<span><Icon type="home" /><span className={styles.navText}>社区店订单列表</span></span>}>
+                                <Menu.Item key={routeBase + 'order_overview'}>
+                                    <Link to={routeBase + 'order_overview'}>
+                                        用户订单
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'goods_supplement'}>
+                                    <Link to={routeBase + 'goods_supplement'} >
+                                        厂商发货订单
+                                    </Link>
+                                </Menu.Item>
+                              </SubMenu>
+                        ) : ''}
+
+                        {/*isSuper == 1 ? (
+                            <SubMenu key="sub3" title={<span><Icon type="bars" /><span className={styles.navText}>权限管理</span></span>}>
+                                <Menu.Item key={routeBase + 'author_management'}>
+                                    <Link to={routeBase + 'author_management'}>
+                                        新增管理员
+                                    </Link>
+                                </Menu.Item>
+
+                              </SubMenu>
+                        ) : ''*/}
                         
                     </Menu>
 

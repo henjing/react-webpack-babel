@@ -22,6 +22,11 @@ loaders.push({
 });
 // global less files
 loaders.push({
+	test: /[\/\\](node_modules|global)[\/\\].*\.less$/,
+	loader: ExtractTextPlugin.extract('style', 'css!less')
+});
+// global less files
+loaders.push({
 	test: /[\/\\]outside-components[\/\\].*\.less$/,
 	loader: ExtractTextPlugin.extract('style', 'css!less')
 });

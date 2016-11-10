@@ -18,6 +18,16 @@ loaders.push({
 });
 // global less
 loaders.push({
+	test: /[\/\\](node_modules|global)[\/\\].*\.less$/,
+	loaders: [
+		// 'style?sourceMap',
+		'style',
+		'css',
+        'less'
+	]
+});
+// global less
+loaders.push({
 	test: /[\/\\]outside-components[\/\\].*\.less$/,
 	loaders: [
 		// 'style?sourceMap',

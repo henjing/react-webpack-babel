@@ -12,6 +12,7 @@ import modifyPasswordReducer from './modifyPassword-reducer';
 import productListReducer from './product-list-reducer';
 import enrollReducer from './enroll-reducer';
 import printerReducer from './printer-reducer';
+import appInteractionReducer from './app-interaction-reducer';
 
 var reducers = combineReducers({
     mainLayoutState : mainLayoutReducer,
@@ -24,7 +25,8 @@ var reducers = combineReducers({
     modifyPasswordState : modifyPasswordReducer,
     productListState : productListReducer,
     enrollState : enrollReducer,
-    printerState : printerReducer
+    printerState : printerReducer,
+    appInteractionState : appInteractionReducer
 });
 
 export default reducers;

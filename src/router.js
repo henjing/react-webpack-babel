@@ -4,6 +4,7 @@ import PeopleContainer from './components/containers/people-container';
 import ProductContainer from './components/containers/product-container';
 import EnrollContainer from './components/containers/enroll-container';
 import PrinterContainer from './components/containers/printer-container';
+import VillageContainer from './components/containers/village-container';
 
 // Layouts
 import MainLayout from './components/layouts/main-layout';
@@ -29,7 +30,7 @@ export default (
 
             <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
 
-            <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
+            <Route path={routeBase + 'village'} component={VillageContainer}></Route>
 
             {/*外部组件*/}
             <Route path={routeBase + 'order_overview'} component={orderOverviewContainer}></Route>

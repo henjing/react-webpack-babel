@@ -10,15 +10,14 @@ import ModifyPassword from '../views/modifyPassword';
 import { showPasswordModal } from '../../actions/user-actions';
 import store from '../../store';
 import { logoutUrl, defaultAvatar } from '../../appConstants/urlConfig';
+import { getProvinces } from '../../api/app-interacton-api';
 
 const NavbarLayoutContainer = React.createClass({
     
     componentDidMount : function () {
         userApi.getUser();
         getVillage();
-        getProductList();
-        
-        getPrinterList();
+        getProvinces();
     },
 
     handleClick() {

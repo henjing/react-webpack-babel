@@ -587,6 +587,8 @@ let EnrollContainer = React.createClass({
                         <Col>
                             <Select
                                 style={{width : 380}}
+                                showSearch
+                                optionFilterProp="children"
                                 onSelect={this.selectVillageForPrint}
                                 placeholder="在这里绑定打印设备">
                                 {selectPrinterOptions}

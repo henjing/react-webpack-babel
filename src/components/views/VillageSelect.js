@@ -43,7 +43,7 @@ let App = React.createClass({
                     {getFieldDecorator('village')(
                         <Select
                             showSearch
-                            style={{ width : 200, marginLeft : 8 }}
+                            style={{ width : 282, marginLeft : 8 }}
                             onSelect={this.handleChange}
                             notFoundContent="没有可选择的内容"
                             optionFilterProp="children"
