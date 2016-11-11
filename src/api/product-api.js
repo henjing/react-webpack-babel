@@ -4,8 +4,8 @@ import { getProductUrl, editProductUrl, deleteProductUrl, addProductUrl } from '
 import { getProductSuccess, getProductReset, productModal } from '../actions/product-actions';
 import { message } from 'antd';
 
-export function getProductList() {
-    return axios.post(getProductUrl)
+export function getProductList(config) {
+    return axios.post(getProductUrl, formData(config))
         .then(data => {
             const response = data.data;
             if (response.status == 1) {

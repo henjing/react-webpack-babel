@@ -12,6 +12,10 @@ let PrinterContainer = React.createClass({
     componentDidMount() {
         getPrinterList();
     },
+
+    onChange(page) {
+        getPrinterList({ page : page });
+    },
     
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -20,6 +24,13 @@ let PrinterContainer = React.createClass({
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
             )
         });
+        const { currentPage, totalRows } = this.props;
+        const pagination = {
+            current : parseInt(currentPage),
+            total : totalRows,
+            onChange : this.onChange,
+            defaultPageSize : 10
+        };
         return (
             <div className="container-fluid">
                 <Row>
@@ -66,7 +77,7 @@ let PrinterContainer = React.createClass({
                         </Collapse>
                     </Col>
                     <Col>
-                        <Table pagination={false} columns={this.getColumns()} dataSource={this.props.printerList} />
+                        <Table pagination={pagination} columns={this.getColumns()} dataSource={this.props.printerList} />
                     </Col>
                 </Row>
             </div>
@@ -136,7 +147,9 @@ PrinterContainer = createForm()(PrinterContainer);
 const mapStateToProps = function (store) {
     return {
         printerList : store.printerState.info,
-        villageState : store.villageState
+        villageState : store.villageState,
+        currentPage : store.printerState.currentPage,
+        totalRows : store.printerState.totalRows
     }
 };
 

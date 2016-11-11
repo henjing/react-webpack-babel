@@ -1,7 +1,9 @@
 import * as types from '../actions/action-types';
 
 const initialState = {
-    info : []
+    info : [],
+    currentPage : 1,
+    totalRows : 0
 };
 
 const printerListReducer = function (state = initialState, action) {

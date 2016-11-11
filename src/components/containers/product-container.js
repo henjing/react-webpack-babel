@@ -108,6 +108,9 @@ let ProductContainer = React.createClass({
     selectVillage(value) {
         defaultKey = value;
     },
+    handleSelect(value) {
+        getProductList({ village_info_id : value });
+    },
 
     render() {
         const columns = this.getColumns();
@@ -120,6 +123,10 @@ let ProductContainer = React.createClass({
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
             )
         });
+        let villageSelection = Object.assign([], [...selectOptions]);
+        villageSelection.unshift(
+            <Option key={'all'} value={'all'}>{'所有村'}</Option>
+        );
         const formItemLayout = {
             labelCol : { span : 6 },
             wrapperCol : { span : 13}
@@ -134,8 +141,20 @@ let ProductContainer = React.createClass({
         return (
             <div className="container-fluid">
                 <Row>
+                    <Col style={{ paddingBottom : '8px'}}>
+                        <span>所在村查询:</span>
+                        <Select 
+                            showSearch
+                            style={{ width : 282, marginLeft : 8 }}
+                            onSelect={this.handleSelect}
+                            notFoundContent="没有可选择的内容"
+                            optionFilterProp="children"
+                            key="select">
+                            {villageSelection}
+                        </Select>
+                    </Col>
                     <Col>
-                        <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="plus">添加产品</Button>
+                        <Button onClick={this.showModal} style={{marginBottom : '16px'}} type="primary" icon="plus">添加产品</Button>
                     </Col>
                     <Col>
                         <Modal title={type == 'add' ? '添加农产品' : '编辑农产品信息'} visible={visible} onOk={this.handleSubmit} onCancel={this.hideModal}>
@@ -174,6 +193,7 @@ let ProductContainer = React.createClass({
                                         rules : [{ required : true, message : '必填项' }]
                                     })(
                                         <Select
+                                            key="modal"
                                             optionFilterProp="children"
                                             onSelect={this.selectVillage}
                                             showSearch>

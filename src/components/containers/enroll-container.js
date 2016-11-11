@@ -368,6 +368,10 @@ let EnrollContainer = React.createClass({
         });
         return priceList;
     },
+    handleSelect(value) {
+        this.setState({ village_info_id : value});
+        getEnrollList({ village_info_id : value, page : 1 });
+    },
 
     render() {
         const columns = this.getColumns();
@@ -404,6 +408,11 @@ let EnrollContainer = React.createClass({
                 <Option key={option.id} value={option.id}>{option.village_name}&nbsp;&nbsp;打印机编号:{option.id}</Option>
             )
         });
+        // 添加根据村筛选入库产品列表
+        let villageSelection = Object.assign([], [...selectOptions]);
+        villageSelection.unshift(
+            <Option key={'all'} value={'all'}>{'所有村'}</Option>
+        );
         const formItemLayout = {
             labelCol : { span : 6 },
             wrapperCol : { span : 18}
@@ -422,8 +431,8 @@ let EnrollContainer = React.createClass({
             current : parseInt(this.props.orderState.currentPage),
             total : this.props.orderState.totalRows,
             onChange : function (page) {
-                getEnrollList({page : page});
-            }
+                getEnrollList({page : page, village_info_id : this.state.village_info_id});
+            }.bind(this)
         };
 
         const printPreview = this.props.printPreview;
@@ -500,6 +509,18 @@ let EnrollContainer = React.createClass({
         return (
             <div className="container-fluid">
                 <Row>
+                    <Col style={{ paddingBottom : '8px'}}>
+                        <span>所在村查询:</span>
+                        <Select
+                            showSearch
+                            style={{ width : 282, marginLeft : 8 }}
+                            onSelect={this.handleSelect}
+                            notFoundContent="没有可选择的内容"
+                            optionFilterProp="children"
+                            key="select">
+                            {villageSelection}
+                        </Select>
+                    </Col>
                     <Col>
                         <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="plus">添加订单</Button>
                         &nbsp;

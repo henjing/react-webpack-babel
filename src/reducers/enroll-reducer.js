@@ -12,7 +12,8 @@ const initialState = {
     printPreview : {
         visible : false,
         info : {}
-    }
+    },
+    village_info_id : 'all'
 };
 
 const enrollReducer = function (state = initialState, action) {

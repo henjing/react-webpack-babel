@@ -15,9 +15,9 @@ let App = React.createClass({
   handleChange(value) {
       // console.log('value', value);
       store.dispatch(updatePeopleSearch({ village_info_id : value, page : 1 }));
-      if (value == 'all') {
-          store.dispatch(updatePeopleSearch({ village_info_id : '', page : 1}));
-      }
+      // if (value == 'all') {
+      //     store.dispatch(updatePeopleSearch({ village_info_id : '', page : 1}));
+      // }
       getPeople();
   },
   render() {
