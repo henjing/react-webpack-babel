@@ -5,7 +5,7 @@ const initialState = {
     dateEnd : '',
     search : '',
     timeLimit : '',
-    page : '',
+    page : 1,
     village_info_id : '',
     isReset : false
 };

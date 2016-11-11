@@ -20,6 +20,7 @@ const SearchInput = React.createClass({
     });
   },
   handleSearch() {
+      store.dispatch(updatePeopleSearch({ page : 1 }));
       getPeople();
   },
   handleInputChange(e) {

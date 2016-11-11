@@ -11,13 +11,13 @@ const datePicker = React.createClass({
     onChange(dates, dateStrings) {
       // console.log('From: ', dates[0], ', to: ', dates[1]);
       // console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-        this.props.dispatch(updatePeopleSearch({ dateStart : dateStrings[0], dateEnd : dateStrings[1]}));
+        this.props.dispatch(updatePeopleSearch({ dateStart : dateStrings[0], dateEnd : dateStrings[1], page : 1}));
         getPeople();
     },
 
     handleClick(timeLimit) {
         return () => {
-            this.props.dispatch(updatePeopleSearch({ timeLimit : timeLimit}));
+            this.props.dispatch(updatePeopleSearch({ timeLimit : timeLimit, page : 1}));
             getPeople();
         }
     },

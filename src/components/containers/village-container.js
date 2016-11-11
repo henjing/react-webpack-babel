@@ -187,10 +187,10 @@ let VillageContainer = React.createClass({
                 if (item.children) {
                     return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={false}>{loop(item.children)}</TreeNode>;
                 }
-                // if (item.isLeaf) {
-                //     return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
-                // }
-                return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
+                if (item.isLeaf) {
+                    return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} isLeaf={item.isLeaf} />;
+                }
+                return <TreeNode tag={item.tag} title={item.title} value={item.value} key={item.value} selectable={false} />;
             })
         };
         const treeNodes = loop(this.state.treeData);
@@ -214,7 +214,9 @@ let VillageContainer = React.createClass({
                                             {required : true, whitespace : true, message : '请选择村'}, { validator : this.selectVillage}
                                         ]
                                     })(
-                                          <TreeSelect onSelect={this.onSelect} showCheckedStrategy={TreeSelect.SHOW_ALL} dropdownStyle={{maxHeight : '900px', overflow : 'auto'}} loadData={this.onLoadData} treeNodeFilterProp="title" showSearch >
+                                          <TreeSelect onSelect={this.onSelect}
+                                                      dropdownStyle={{maxHeight : '900px', overflow : 'auto'}} loadData={this.onLoadData}
+                                                      treeNodeFilterProp="title" showSearch >
                                               {treeNodes}
                                           </TreeSelect>
 
@@ -259,11 +261,12 @@ function setLeaf(treeData, level) {
             if (item.children) {
                 loopLeaf(item.children, l);
             } else if (l < 1) {
+                // console.log('hahahahahha');
                 item.isLeaf = true;
             }
         });
     };
-    loopLeaf(treeData, level + 1);
+    loopLeaf(treeData, level);
 }
 
 function getNewTreeData(treeData, curKey, child) {
