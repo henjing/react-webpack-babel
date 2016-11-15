@@ -4,7 +4,7 @@ const initialState = {
     currentPage : 1,
     info : [],
     totalPage : 1,
-    totalRows : 10,
+    totalRows : 0,
 };
 
 const peopleReducer = function (state = initialState, action) {

@@ -12,8 +12,9 @@ export function getUser() {
         .then(data => {
             // console.log(data);
             const response = data.data;
+            // console.log('data', data);
             if (response.status === 1) {
-                store.dispatch(getUserSuccess(response.info));
+                store.dispatch(getUserSuccess(response));
             }
             return response;
         }).then(response => {
@@ -21,7 +22,9 @@ export function getUser() {
                 // 服务器没有返回值
                 // message.warning(response.info);
             }
+            return response;
         }).catch(err => {
             message.error('服务器错误! ' + err);
+            // console.error(err);
         })
 }

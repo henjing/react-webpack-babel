@@ -1,10 +1,10 @@
 import * as types from '../actions/action-types';
 
-export function getUserSuccess(user) {
+export function getUserSuccess(info) {
 
     return {
         type : types.GET_USER_SUCCESS,
-        user
+        info
     };
 }
 

@@ -18,6 +18,7 @@ const NavbarLayoutContainer = React.createClass({
         userApi.getUser();
         getVillage();
         // getProvinces();
+        getPrinterList();
     },
 
     handleClick() {
@@ -45,9 +46,9 @@ const NavbarLayoutContainer = React.createClass({
                             <div className="navbar-lists">
                                 <ul className="nav navbar-nav navbar-right">
                                     <li className={styles.navLi}>
-                                        <img src={this.props.user.wechat_avatar ? this.props.user.wechat_avatar : defaultAvatar} alt="avatar"/>
+                                        <img src={this.props.user.info.wechat_avatar ? this.props.user.info.wechat_avatar : defaultAvatar} alt="avatar"/>
                                         &nbsp;
-                                        <span>{this.props.user.user_name}</span>
+                                        <span>{this.props.user.info.user_name}</span>
                                     </li>
                                     <li className={styles.navLi + ' ' + styles.setup}>
                                         <Dropdown overlay={menu}>

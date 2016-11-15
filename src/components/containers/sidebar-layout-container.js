@@ -42,8 +42,59 @@ const SidebarLayoutContainer = React.createClass({
         const mode = collapse ? 'vertical' : 'inline';
         const pathName = window.location.pathname;
         const matchSubMenu = this.matchSubMenu(pathName);
-        const menuList = process.env.NODE_ENV === 'production' ? this.props.navbar.menu : ['精准扶贫管理', '社区店订单列表'];
-        const isSuper = process.env.NODE_ENV === 'production' ? this.props.navbar.super : 1;
+        const menuList = process.env.NODE_ENV === 'production' ? this.props.navbar.info.menu : ['精准扶贫管理', '社区店订单列表'];
+        const isSuper = process.env.NODE_ENV === 'production' ? this.props.navbar.info.super : 1;
+        // console.log('isSuper', isSuper);
+        let fuPinRender = (isSuper == 1) ? (
+            <SubMenu key="sub1" title={<span><Icon type="user" /><span className={styles.navText}>精准扶贫管理</span></span>}>
+                <Menu.Item key={routeBase + 'people'}>
+                    <Link to={routeBase + 'people'}>
+                        贫困户列表</Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'product'}>
+                    <Link to={routeBase + 'product'} >
+                        农产品列表
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'village'}>
+                    <Link to={routeBase + 'village'} >
+                        村列表
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'enroll'}>
+                    <Link to={routeBase + 'enroll'} >
+                        产品入库
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'printer'}>
+                    <Link to={routeBase + 'printer'} >
+                        打印机信息
+                    </Link>
+                </Menu.Item>
+              </SubMenu>
+        ) : (
+            <SubMenu key="sub1" title={<span><Icon type="user" /><span className={styles.navText}>精准扶贫管理</span></span>}>
+                <Menu.Item key={routeBase + 'people'}>
+                    <Link to={routeBase + 'people'}>
+                        贫困户列表</Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'product'}>
+                    <Link to={routeBase + 'product'} >
+                        农产品列表
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'enroll'}>
+                    <Link to={routeBase + 'enroll'} >
+                        产品入库
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'printer'}>
+                    <Link to={routeBase + 'printer'} >
+                        打印机信息
+                    </Link>
+                </Menu.Item>
+              </SubMenu>
+        );
 
         return (
                 <div className={styles[sidebarWrapperName]} style={{transition: 'all 0.3s ease'}}>
@@ -57,32 +108,7 @@ const SidebarLayoutContainer = React.createClass({
                       defaultSelectedKeys={[pathName]} defaultOpenKeys={[matchSubMenu]}>
 
                         {menuList[0] == '精准扶贫管理' ? (
-                            <SubMenu key="sub1" title={<span><Icon type="user" /><span className={styles.navText}>精准扶贫管理</span></span>}>
-                                <Menu.Item key={routeBase + 'people'}>
-                                    <Link to={routeBase + 'people'}>
-                                        贫困户列表</Link>
-                                </Menu.Item>
-                                <Menu.Item key={routeBase + 'product'}>
-                                    <Link to={routeBase + 'product'} >
-                                        农产品列表
-                                    </Link>
-                                </Menu.Item>
-                                {isSuper == 1 ? (<Menu.Item key={routeBase + 'village'}>
-                                    <Link to={routeBase + 'village'} >
-                                        村列表
-                                    </Link>
-                                </Menu.Item>) : ''}
-                                <Menu.Item key={routeBase + 'enroll'}>
-                                    <Link to={routeBase + 'enroll'} >
-                                        产品入库
-                                    </Link>
-                                </Menu.Item>
-                                <Menu.Item key={routeBase + 'printer'}>
-                                    <Link to={routeBase + 'printer'} >
-                                        打印机信息
-                                    </Link>
-                                </Menu.Item>
-                              </SubMenu>
+                            fuPinRender
                         ) : ''}
 
                         {menuList[0] == '社区店订单列表' ? (
