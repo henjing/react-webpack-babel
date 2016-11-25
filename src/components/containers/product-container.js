@@ -139,9 +139,9 @@ let ProductContainer = React.createClass({
         } catch (e) {}
 
         return (
-            <div className="container-fluid">
-                <Row>
-                    <Col style={{ paddingBottom : '8px'}}>
+            <div>
+                <Row style={{paddingLeft : '15px'}}>
+                    <Col style={{ paddingBottom : '8px', paddingTop : '8px'}}>
                         <span>所在村查询:</span>
                         <Select 
                             showSearch

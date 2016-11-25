@@ -16,7 +16,7 @@ const PeopleContainer = React.createClass({
 
     render : function () {
         return (
-            <div className="container-fluid">
+            <div>
                 <Row>
                     <Col sm={20}>
                         <VillageSelect />

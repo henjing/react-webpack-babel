@@ -11,6 +11,7 @@ import { showPasswordModal } from '../../actions/user-actions';
 import store from '../../store';
 import { logoutUrl, defaultAvatar } from '../../appConstants/urlConfig';
 import { getProvinces } from '../../api/app-interacton-api';
+import { Row, Col } from 'antd';
 
 const NavbarLayoutContainer = React.createClass({
     
@@ -19,6 +20,7 @@ const NavbarLayoutContainer = React.createClass({
         getVillage();
         // getProvinces();
         getPrinterList();
+        getProductList();
     },
 
     handleClick() {
@@ -38,13 +40,12 @@ const NavbarLayoutContainer = React.createClass({
           </Menu>
         );
         return (
-            <nav className="navbar navbar-default navbar-fixed">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="navbar-header"></div>
-                            <div className="navbar-lists">
-                                <ul className="nav navbar-nav navbar-right">
+            <nav style={{marginBottom : '0px', background : 'white', position : 'relative', height : '80px', lineHeight : '80px', borderBottom : '1px solid #e7e7e7' }}>
+                <Row>
+                    <Col>
+                        <Row>
+                            <Col>
+                                <ul style={{float : 'right'}}>
                                     <li className={styles.navLi}>
                                         <img src={this.props.user.info.wechat_avatar ? this.props.user.info.wechat_avatar : defaultAvatar} alt="avatar"/>
                                         &nbsp;
@@ -58,10 +59,10 @@ const NavbarLayoutContainer = React.createClass({
                                         </Dropdown>
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
             </nav>
         )
     }

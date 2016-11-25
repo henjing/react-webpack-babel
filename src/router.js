@@ -16,26 +16,66 @@ import orderOverviewContainer from '../outside-components/orderOverview/index.js
 // 外部组件 厂商补货订单
 import goodsSupplementContainer from '../outside-components/goodsSupplement/index.js';
 
+/////// 厂商提现管理
+import applyingContainer from './components/containers/cashier-applying-container';
+// 查看详情
+import cashierAccountDetail from './components/containers/detail-template';
+// 付款
+import cashierPayContainer from './components/containers/cashier-paying-container';
+// 已付款
+import cashierPayedContainer from './components/containers/cashier-payed-container';
+// 已驳回
+import cashierRejectedContainer from './components/containers/cashier-rejected-container';
 
 export default (
     <Router history={browserHistory}>
         <Route path={routeBase} component={MainLayout} >
 
-            <IndexRedirect to={routeBase + 'people'} />
-            <Route path={routeBase + 'people'} component={PeopleContainer}></Route>
-           
-            <Route path={routeBase + 'product'} component={ProductContainer}></Route>
-           
-            <Route path={routeBase + 'enroll'} component={EnrollContainer}></Route>
+            <IndexRedirect to={'people'} />
+            <Route breadcrumbName="贫困户列表" path={'people'} component={PeopleContainer}>
 
-            <Route path={routeBase + 'printer'} component={PrinterContainer}></Route>
+            </Route>
+           
+            <Route breadcrumbName="农产品列表" path={'product'} component={ProductContainer}>
 
-            <Route path={routeBase + 'village'} component={VillageContainer}></Route>
+            </Route>
+           
+            <Route breadcrumbName="产品入库" path={'enroll'} component={EnrollContainer}>
+
+            </Route>
+
+            <Route breadcrumbName="打印机列表" path={'printer'} component={PrinterContainer}>
+
+            </Route>
+
+            <Route breadcrumbName="村列表" path={'village'} component={VillageContainer}>
+
+            </Route>
 
             {/*外部组件*/}
-            <Route path={routeBase + 'order_overview'} component={orderOverviewContainer}></Route>
-            <Route path={routeBase + 'goods_supplement'} component={goodsSupplementContainer}></Route>
+            <Route breadcrumbName="用户订单" path={'order_overview'} component={orderOverviewContainer}>
 
+            </Route>
+            <Route breadcrumbName="厂商发货订单" path={'goods_supplement'} component={goodsSupplementContainer}>
+
+            </Route>
+            
+            {/*提现管理*/}
+            <Route breadcrumbName="审核" path={'applying'} component={applyingContainer}>
+                <Route breadcrumbName="结算单详情" path={'apply_detail/:account_sn'} component={cashierAccountDetail} />
+            </Route>
+
+            <Route breadcrumbName="付款" path={'paying'} component={cashierPayContainer}>
+                <Route breadcrumbName="结算单详情" path={'paying_detail/:account_sn'} component={cashierAccountDetail} />
+            </Route>
+
+            <Route breadcrumbName="已付款" path={'pay_success'} component={cashierPayedContainer}>
+                <Route breadcrumbName="结算单详情" path={'pay_success_detail/:account_sn'} component={cashierAccountDetail} />
+            </Route>
+            
+            <Route breadcrumbName="已驳回" path={'rejected'} component={cashierRejectedContainer}>
+                <Route breadcrumbName="结算单详情" path={'rejected_detail/:account_sn'} component={cashierAccountDetail} />
+            </Route>
         </Route>
     </Router>
 )

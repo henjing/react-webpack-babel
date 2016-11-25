@@ -20,20 +20,23 @@ const SidebarLayoutContainer = React.createClass({
         const subMenuArray =  {
             'sub1' : ['people', 'product', 'village', 'enroll', 'printer'],
             'sub2' : ['order_overview', 'goods_supplement'],
-            'sub3' : ['author_management']
+            'sub3' : ['applying', 'paying', 'pay_success', 'rejected']
         };
         let matchSubMenu = '';
+        let defaultSelectedKey = '';
         for (let i in subMenuArray) {
             // console.log('iiiiiii', i);
             subMenuArray[i].forEach(function (ownPathName) {
                 // console.log('ownPathName', ownPathName);
-                if ((routeBase + ownPathName) == pathName) {
+                if (routeBase + ownPathName == pathName) {
                     matchSubMenu = i;
+                    defaultSelectedKey = routeBase + ownPathName;
                     // console.log('hey!', i);
                 }
             })
         }
-        return matchSubMenu;
+        // console.log('aaaaaaaaa', [matchSubMenu, defaultSelectedKey]);
+        return [matchSubMenu, defaultSelectedKey];
     },
 
     render : function () {
@@ -41,6 +44,7 @@ const SidebarLayoutContainer = React.createClass({
         const sidebarWrapperName = collapse ? 'sidebarWrapperCollapse' : 'sidebarWrapper';
         const mode = collapse ? 'vertical' : 'inline';
         const pathName = window.location.pathname;
+        // const pathName = window.location.hash.slice(1, 8);
         const matchSubMenu = this.matchSubMenu(pathName);
         const menuList = process.env.NODE_ENV === 'production' ? this.props.navbar.info.menu : ['精准扶贫管理', '社区店订单列表'];
         const isSuper = process.env.NODE_ENV === 'production' ? this.props.navbar.info.super : 1;
@@ -105,7 +109,7 @@ const SidebarLayoutContainer = React.createClass({
                     </div>
 
                     <Menu mode={mode}
-                      defaultSelectedKeys={[pathName]} defaultOpenKeys={[matchSubMenu]}>
+                        defaultSelectedKeys={[matchSubMenu[1]]} defaultOpenKeys={[matchSubMenu[0]]}>
 
                         {menuList[0] == '精准扶贫管理' ? (
                             fuPinRender
@@ -124,6 +128,33 @@ const SidebarLayoutContainer = React.createClass({
                                     </Link>
                                 </Menu.Item>
                               </SubMenu>
+
+                        ) : ''}
+
+                        {menuList[0] == '社区店订单列表' ? (
+                            <SubMenu key="sub3" title={<span><Icon type="pay-circle-o" /><span className={styles.navText}>厂商提现</span></span>}>
+                                <Menu.Item key={routeBase + 'applying'}>
+                                    <Link to={routeBase + 'applying'}>
+                                        审核
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'paying'}>
+                                    <Link to={routeBase + 'paying'}>
+                                        付款
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'pay_success'}>
+                                    <Link to={routeBase + 'pay_success'}>
+                                        已付款
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'rejected'}>
+                                    <Link to={routeBase + 'rejected'}>
+                                        已驳回
+                                    </Link>
+                                </Menu.Item>
+                            </SubMenu>
+
                         ) : ''}
 
                         {menuList[1] == '社区店订单列表' ? (
@@ -138,19 +169,33 @@ const SidebarLayoutContainer = React.createClass({
                                         厂商发货订单
                                     </Link>
                                 </Menu.Item>
-                              </SubMenu>
+                            </SubMenu>
                         ) : ''}
 
-                        {/*isSuper == 1 ? (
-                            <SubMenu key="sub3" title={<span><Icon type="bars" /><span className={styles.navText}>权限管理</span></span>}>
-                                <Menu.Item key={routeBase + 'author_management'}>
-                                    <Link to={routeBase + 'author_management'}>
-                                        新增管理员
+                        {menuList[1] == '社区店订单列表' ? (
+                            <SubMenu key="sub3" title={<span><Icon type="pay-circle-o" /><span className={styles.navText}>厂商提现</span></span>}>
+                                <Menu.Item key={routeBase + 'applying'}>
+                                    <Link to={routeBase + 'applying'}>
+                                        审核
                                     </Link>
                                 </Menu.Item>
-
-                              </SubMenu>
-                        ) : ''*/}
+                                <Menu.Item key={routeBase + 'paying'}>
+                                    <Link to={routeBase + 'paying'}>
+                                        付款
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'pay_success'}>
+                                    <Link to={routeBase + 'pay_success'}>
+                                        已付款
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'rejected'}>
+                                    <Link to={routeBase + 'rejected'}>
+                                        已驳回
+                                    </Link>
+                                </Menu.Item>
+                            </SubMenu>
+                        ) : ''}
                         
                     </Menu>
 

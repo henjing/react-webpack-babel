@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { message } from 'antd';
+import { logoutUrl } from '../appConstants/urlConfig';
 
 export default function (url, config, suncCallback, failCallback) {
     return axios.post(url, formData(config))
@@ -13,6 +14,11 @@ export default function (url, config, suncCallback, failCallback) {
             if (response.status == 0) {
                 // message.warning(response.info);
                 if (failCallback) failCallback(response);
+            }
+            return response;
+        }).then(response => {
+            if (response.status == -1) {
+                window.location.pathname = logoutUrl;
             }
         }).catch(errHandler)
 }
@@ -30,11 +36,17 @@ export function commonGetAjax (url, config, suncCallback, failCallback) {
                 // message.warning(response.info);
                 if (failCallback) failCallback(response);
             }
+            return response;
+        }).then(response => {
+            if (response.status == -1) {
+                window.location.pathname = logoutUrl;
+            }
         }).catch(errHandler)
 }
 
 function errHandler(err) {
     message.error('服务器错误! ' + err);
+    console.log(err);
 }
 
 function formData(config) {

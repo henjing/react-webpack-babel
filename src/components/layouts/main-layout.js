@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import styles from './main-layout.less';
 import SidebarLayoutContainer from '../containers/sidebar-layout-container';
 import NavbarLayoutContainer from '../containers/navbar-layout-container';
-
+import { Breadcrumb } from 'antd';
+import ReactRouter from 'react-router';
 
 const MainLayout  = React.createClass({
     render : function () {
@@ -16,8 +17,11 @@ const MainLayout  = React.createClass({
                 </div>
                 <div className={styles.main}>
                     <NavbarLayoutContainer />
+                    {/*<div style={{height : '30px', lineHeight : '30px', paddingLeft : '15px',background: '#f4f4f5'}}>
+                        <Breadcrumb {...this.props} router={ReactRouter} />
+                    </div>*/}
 
-                    <div id="content" className="content">
+                    <div>
 
                         {this.props.children}
 

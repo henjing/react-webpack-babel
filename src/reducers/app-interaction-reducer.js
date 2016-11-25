@@ -11,7 +11,9 @@ const initialState = {
         totalRows : 0
     },
     villageSearch : '',
-    villagePageSearch : 1
+    villagePageSearch : 1,
+    cashierModalVisible : false,
+    cashierRefreshCount : 0
 };
 
 const appInteractionReducer = function (state = initialState, action) {

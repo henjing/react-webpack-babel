@@ -32,7 +32,7 @@ let PrinterContainer = React.createClass({
             defaultPageSize : 10
         };
         return (
-            <div className="container-fluid">
+            <div>
                 <Row>
                     <Col>
                         <Collapse>

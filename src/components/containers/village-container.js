@@ -198,8 +198,8 @@ let VillageContainer = React.createClass({
         // console.log('22222222222222', this.props);
 
         return (
-            <div className="container-fluid">
-                <Row>
+            <div>
+                <Row style={{paddingLeft : '15px'}}>
                     <Col style={{ height : '48px', lineHeight : '48px'}}>
                         <SearchInput placeholder="请输入村的地理位置信息" style={{ width : '290px'}} update={this.updateKeywordSearch} search={this.commonSearch} />
 

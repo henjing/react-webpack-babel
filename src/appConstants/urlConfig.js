@@ -76,19 +76,31 @@ export const storeLiveUrl = '/Administrator/LivePathList';
 export const setMatchListUrl = '/Administrator/doMatch';
 
 // 获得省列表
-export const getProvincesUrl = '/Administrator/getProvinces';
+export const getProvincesUrl = '/Printinfo/getProvinces';
 
 // 获得制定省的市列表
-export const getCitiesByProvinceUrl = '/Administrator/getCitys';
+export const getCitiesByProvinceUrl = '/Printinfo/getCitys';
 
 // 获得制定市的区县列表
-export const getDistrictsByCityUrl = '/Administrator/getDistricts';
+export const getDistrictsByCityUrl = '/Printinfo/getDistricts';
 
 // 获得制定县的村列表
-export const getVillagesByDistrictUrl = '/Administrator/getVillages';
+export const getVillagesByDistrictUrl = '/Printinfo/getVillages';
 
 // 获取村列表(包括第一书记的姓名和联系方式)
 export const getVillageDetailListUrl = '/Printinfo/getVillageList';
 
 // 添加一个村
 export const addVillageUrl = '/Printinfo/addVillageStore';
+
+///////////////////////////提现管理
+// 厂商提现申请列表, type: 0待审核 1已通过 2已付款 -1已驳回
+export const getCashierApplyUrlList = '/admin/store/getAccountSnList';
+// 通过厂商的结算申请, status : 1, account_sn
+// 驳回厂商的结算申请, status : -1, reason : [ 驳回原因 ], 结算单号 account_sn
+// 付款, state : 2, account_sn
+export const decideCashierApplyUrl = '/admin/store/dealFactoryAccount';
+// 查看结算单号的详情
+export const getCashierApplyDetailUrl = '/admin/store/getAccountDetail';
+// 查看结算详情有几种商品
+export const getCashierGoodsTypeList = '/admin/store/showGoodsList';
