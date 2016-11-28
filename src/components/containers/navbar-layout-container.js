@@ -40,7 +40,7 @@ const NavbarLayoutContainer = React.createClass({
           </Menu>
         );
         return (
-            <nav style={{marginBottom : '0px', background : 'white', position : 'relative', height : '80px', lineHeight : '80px', borderBottom : '1px solid #e7e7e7' }}>
+            <nav style={{marginBottom : '0px', background : 'white', position : 'relative', height : '82px', lineHeight : '82px', borderBottom : '1px solid #e7e7e7' }}>
                 <Row>
                     <Col>
                         <Row>

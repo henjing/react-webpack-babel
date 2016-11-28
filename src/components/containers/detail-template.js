@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 const RangePicker = DatePicker.RangePicker;
 import { getGoodsList, getCashierApplyList, getCashierApplyDetailList, decideCashierResult } from '../../api/cashier-api';
 import { routeBase } from '../../appConstants/urlConfig';
+import { hashHistory } from 'react-router';
 
 const TemplateContainer = React.createClass({
     commonSearch() {
@@ -83,6 +84,9 @@ const TemplateContainer = React.createClass({
         }]
     },
     getInitialState() {
+        const account_sn_Plus_type = this.props.params.account_sn.split('+');
+        const account_sn = account_sn_Plus_type[0];
+        const type = account_sn_Plus_type[1];
         return {
             search : '',
             page : 1,
@@ -94,8 +98,10 @@ const TemplateContainer = React.createClass({
             totalRows : 0, // 总数
             totalNumber : 0, // 商品数量
             columns : this.getColumns(),
-            account_sn : this.props.params.account_sn,
-            type : 3,
+            // account_sn : this.props.params.account_sn,
+            account_sn : account_sn,
+            type : type,
+            title : ''
         }
     },
     onSelect(value) {
@@ -110,14 +116,15 @@ const TemplateContainer = React.createClass({
             totalRows : info.totalRows,
             totalMoney : info.totalMoney,
             totalNumber : info.totalNumber,
-            limit : info.limit || this.state.limit
+            limit : info.limit || this.state.limit,
+            title : info.title
         });
     },
     getCashierResultFail(info) {
-        this.setState({dataSource : [], page : 1, totalMoney : 0, totalRows : 0, totalNumber : 0});
+        this.setState({dataSource : [], page : 1, totalMoney : 0, totalRows : 0, totalNumber : 0, title : ''});
     },
     componentDidMount() {
-        getCashierApplyDetailList({account_sn : this.state.account_sn, type : 3, goods_id : 'all'}, this.getCashierResultSuccess);
+        getCashierApplyDetailList({account_sn : this.state.account_sn, type : this.state.type, goods_id : 'all'}, this.getCashierResultSuccess);
         getGoodsList({nopage : 1}, this.getGoodsListSuccess);
     },
     getGoodsListSuccess(info) {
@@ -145,6 +152,9 @@ const TemplateContainer = React.createClass({
 
         return (
             <div>
+                <Row style={{paddingLeft : '8px', paddingTop : '6px'}}>
+                    <a onClick={hashHistory.goBack}>返回上一级</a> / {this.state.title}
+                </Row>
                 <Row style={{marginTop : '32px'}}>
                     <Col sm={14}>
                         <Row>

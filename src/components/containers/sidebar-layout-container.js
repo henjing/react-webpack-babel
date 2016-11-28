@@ -176,12 +176,12 @@ const SidebarLayoutContainer = React.createClass({
                             <SubMenu key="sub3" title={<span><Icon type="pay-circle-o" /><span className={styles.navText}>厂商提现</span></span>}>
                                 <Menu.Item key={routeBase + 'applying'}>
                                     <Link to={routeBase + 'applying'}>
-                                        审核
+                                        审核中
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key={routeBase + 'paying'}>
                                     <Link to={routeBase + 'paying'}>
-                                        付款
+                                        已审核
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key={routeBase + 'pay_success'}>

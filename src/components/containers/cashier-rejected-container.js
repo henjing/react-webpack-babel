@@ -117,7 +117,7 @@ const BalanceOrderContainer = React.createClass({
             render(text, record, index) {
                 return (
                     <div>
-                        <Link to={`${routeBase}rejected/rejected_detail/${record.account_sn}`}>
+                        <Link to={`${routeBase}rejected/rejected_detail/${record.account_sn}+${type}`}>
                             <Button type="primary" size="small" icon="file-text">详情</Button>
                         </Link>
                     </div>

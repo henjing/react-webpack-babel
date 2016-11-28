@@ -119,7 +119,7 @@ const BalanceOrderContainer = React.createClass({
                 // console.log('routeBase', routeBase);
                 return (
                     <div>
-                        <Link to={`${routeBase}paying/paying_detail/${record.account_sn}`}>
+                        <Link to={`${routeBase}paying/paying_detail/${record.account_sn}+${type}`}>
                             <Button type="primary" size="small" icon="file-text">详情</Button>
                         </Link>
                     </div>

@@ -121,7 +121,7 @@ const BalanceOrderContainer = React.createClass({
                     <div>
                         <Button className="btn-danger" size="small" icon="smile-o" onClick={toggleModal(record.account_sn)}>付款</Button>
                         &nbsp;&nbsp;
-                        <Link to={`${routeBase}paying/paying_detail/${record.account_sn}`}>
+                        <Link to={`${routeBase}paying/paying_detail/${record.account_sn}+${type}`}>
                             <Button type="primary" size="small" icon="file-text">详情</Button>
                         </Link>
                     </div>
