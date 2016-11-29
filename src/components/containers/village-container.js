@@ -17,6 +17,53 @@ const ajaxMap = {
 };
 let stringObj = {};
 
+function setLeaf(treeData, level) {
+    const loopLeaf = (data, lev) => {
+        const l = lev - 1;
+        data.forEach((item) => {
+            if (item.children) {
+                loopLeaf(item.children, l);
+            } else if (l < 1) {
+                // console.log('hahahahahha');
+                item.isLeaf = true;
+            }
+        });
+    };
+    loopLeaf(treeData, level);
+}
+
+function getNewTreeData(treeData, curKey, child) {
+    const loop = (data) => {
+        data.forEach((item) => {
+            if (curKey == item.value) {
+                if (item.children) return;
+                item.children = child;
+            } else if (item.children) {
+                loop(item.children)
+            }
+        });
+    };
+
+    loop(treeData);
+    setLeaf(treeData, 4);
+}
+
+function assembleId(config) {
+    const id = config.id;
+    const province = id.slice(0, 3);
+    const city = Math.floor(parseInt(id) / 10000000) * 10000000 + '';
+    const district = Math.floor(parseInt(id) / 1000000) * 1000000 + '';
+    // return {
+    //     province : province,
+    //     city : city,
+    //     district : district,
+    //     village : id,
+    //     cellphone : config.cellphone
+    // }
+    stringObj.cellphone = config.cellphone;
+    return stringObj;
+}
+
 let VillageContainer = React.createClass({
     
     componentDidMount() {
@@ -31,6 +78,8 @@ let VillageContainer = React.createClass({
                   }
                 })
             })
+        }.bind(this), function () {
+            this.setState({treeData : [{ value : '', title : '', tag : ''}]});
         }.bind(this))
     },
     getColumns() {
@@ -254,49 +303,3 @@ const mapStateToProps = function (store) {
 
 export default connect(mapStateToProps)(VillageContainer);
 
-function setLeaf(treeData, level) {
-    const loopLeaf = (data, lev) => {
-        const l = lev - 1;
-        data.forEach((item) => {
-            if (item.children) {
-                loopLeaf(item.children, l);
-            } else if (l < 1) {
-                // console.log('hahahahahha');
-                item.isLeaf = true;
-            }
-        });
-    };
-    loopLeaf(treeData, level);
-}
-
-function getNewTreeData(treeData, curKey, child) {
-    const loop = (data) => {
-        data.forEach((item) => {
-            if (curKey == item.value) {
-                if (item.children) return;
-                item.children = child;
-            } else if (item.children) {
-                loop(item.children)
-            }
-        });
-    };
-
-    loop(treeData);
-    setLeaf(treeData, 4);
-}
-
-function assembleId(config) {
-    const id = config.id;
-    const province = id.slice(0, 3);
-    const city = Math.floor(parseInt(id) / 10000000) * 10000000 + '';
-    const district = Math.floor(parseInt(id) / 1000000) * 1000000 + '';
-    // return {
-    //     province : province,
-    //     city : city,
-    //     district : district,
-    //     village : id,
-    //     cellphone : config.cellphone
-    // }
-    stringObj.cellphone = config.cellphone;
-    return stringObj;
-}

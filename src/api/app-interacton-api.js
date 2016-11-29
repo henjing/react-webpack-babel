@@ -93,7 +93,7 @@ export function getVillageDetailList(config, callback) {
             return response;
         }).then(response => {
             if (response.status == 0) {
-                store.dispatch(updateAppInteractionState(Object.assign({}, { villages : {...response}})));
+                store.dispatch(updateAppInteractionState(Object.assign({}, { villages : {...response} }, { villages : { info : []}})));
                 // message.warning(response.info);
             }
         }).catch(errHandler)
