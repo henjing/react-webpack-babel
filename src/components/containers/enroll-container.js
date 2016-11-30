@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message } from 'antd';
+import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message, DatePicker } from 'antd';
 import { getEnrollList, getEnrollPeopleList, addEnrollProduct, deleteEnrollProduct, printPreview, submitPrint } from '../../api/enroll-api';
 import { enrollCSVUrl } from '../../appConstants/urlConfig';
 import { enrollModal, printPreviewModal } from '../../actions/enroll-actions';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
+const RangePicker = DatePicker.RangePicker;
 import _ from 'lodash';
 import store from '../../store';
 
@@ -95,13 +96,16 @@ let EnrollContainer = React.createClass({
     },
     
     componentDidMount() {
-        getEnrollList();
+        this.commonSearch();
         getEnrollPeopleList();
     },
 
     getInitialState() {
         return {
-            selectedVillageId : '',
+            selectedVillageId : '', // 弹窗的
+            village_info_id : '', // 村选择的
+            dateStart : '',
+            dateEnd : '',
             selectDisabled : true,
             keys : [1, 2, 3],
             uuid : 3,
@@ -111,6 +115,18 @@ let EnrollContainer = React.createClass({
                 printor_id : ''
             }
         }
+    },
+
+    toFile() { // 导出数据
+        const { village_info_id, dateStart, dateEnd} = this.state;
+        let inputList = (
+            <div>
+                <input key="village_info_id" type="hidden" name="village_info_id" value={village_info_id}/>
+                <input key="dateStart" type="hidden" name="dateStart" value={dateStart} />
+                <input key="dateEnd" type="hidden" name="dateEnd" value={dateEnd} />
+            </div>
+        );
+        return inputList;
     },
 
     handleAddRow(e) {
@@ -233,20 +249,11 @@ let EnrollContainer = React.createClass({
         return () => {
             deleteEnrollProduct({ primary_id : record.id}, function () {
                 try {
-                    this.getEnrollListContinuously();
+                    this.commonSearch();
                 } catch (e) {
-                    getEnrollList();
+
                 }
             }.bind(this));
-        }
-    },
-
-    getEnrollListContinuously() {
-        const page = this.props.orderState.currentPage;
-        if (page) {
-            getEnrollList({page : page});
-        } else {
-            getEnrollList();
         }
     },
 
@@ -263,7 +270,7 @@ let EnrollContainer = React.createClass({
                 config = this.handleFormData(values);
                 addEnrollProduct(config, function () {
                     this.hideModal();
-                    this.getEnrollListContinuously();
+                    this.commonSearch();
                     getEnrollPeopleList();
                 }.bind(this));
             }
@@ -369,8 +376,27 @@ let EnrollContainer = React.createClass({
         return priceList;
     },
     handleSelect(value) {
-        this.setState({ village_info_id : value});
-        getEnrollList({ village_info_id : value, page : 1 });
+        this.setState({ village_info_id : value}, function () {
+            this.commonSearch();
+        }.bind(this));
+    },
+
+    onDateChange(dates, dateStrings) {
+        this.setState({dateStart : dateStrings[0], dateEnd : dateStrings[1]}, function () {
+            this.commonSearch();
+        }.bind(this));
+    },
+
+    commonSearch() {
+        const {village_info_id, dateStart, dateEnd} = this.state;
+        const searchState = {village_info_id, dateStart, dateEnd, page : 1};
+        getEnrollList(searchState);
+    },
+
+    pageSearch(page) {
+        const {village_info_id, dateStart, dateEnd} = this.state;
+        const searchState = {village_info_id, dateStart, dateEnd, page : page};
+        getEnrollList(searchState);
     },
 
     render() {
@@ -431,7 +457,7 @@ let EnrollContainer = React.createClass({
             current : parseInt(this.props.orderState.currentPage),
             total : this.props.orderState.totalRows,
             onChange : function (page) {
-                getEnrollList({page : page, village_info_id : this.state.village_info_id});
+                this.pageSearch(page);
             }.bind(this)
         };
 
@@ -510,7 +536,7 @@ let EnrollContainer = React.createClass({
             <div>
                 <Row style={{paddingLeft : '15px'}}>
                     <Col style={{ paddingBottom : '8px', paddingTop : '8px'}}>
-                        <span>所在村查询:</span>
+                        <span style={{display:'inline-block', width:'66px'}}>所在村查询:</span>
                         <Select
                             showSearch
                             style={{ width : 282, marginLeft : 8 }}
@@ -521,10 +547,15 @@ let EnrollContainer = React.createClass({
                             {villageSelection}
                         </Select>
                     </Col>
+                    <Col style={{ paddingBottom : '8px', paddingTop : '8px'}}>
+                        <span style={{display:'inline-block', width:'66px'}}>入库时间:</span>
+                        <RangePicker style={{ width: 282, marginLeft: 8 }} onChange={this.onDateChange} />
+                    </Col>
                     <Col>
                         <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="plus">添加订单</Button>
                         &nbsp;
-                        <form action={enrollCSVUrl} style={{display : 'inline-block'}}>
+                        <form method="post" action={enrollCSVUrl} style={{display : 'inline-block'}}>
+                            {this.toFile()}
                         <Button htmlType="submit" style={{marginBottom : 20}} type="primary" icon="download">导出数据</Button>
                         </form>
                     </Col>
