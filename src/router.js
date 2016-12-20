@@ -27,6 +27,9 @@ import cashierPayedContainer from './components/containers/cashier-payed-contain
 // 已驳回
 import cashierRejectedContainer from './components/containers/cashier-rejected-container';
 
+// 土货结算
+import tuHuoJieSuanContainer from './components/containers/tuhuo-jiesuan-container';
+
 export default (
     <Router history={browserHistory}>
         <Route path={routeBase} component={MainLayout} >
@@ -41,6 +44,10 @@ export default (
             </Route>
            
             <Route breadcrumbName="产品入库" path={'enroll'} component={EnrollContainer}>
+
+            </Route>
+
+            <Route breadcrumbName="土货结算" path={'tu_huo'} component={tuHuoJieSuanContainer}>
 
             </Route>
 

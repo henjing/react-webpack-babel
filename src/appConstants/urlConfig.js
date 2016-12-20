@@ -104,3 +104,9 @@ export const decideCashierApplyUrl = '/admin/store/dealFactoryAccount';
 export const getCashierApplyDetailUrl = '/admin/store/getAccountDetail';
 // 查看结算详情有几种商品
 export const getCashierGoodsTypeList = '/admin/store/showGoodsList';
+
+//////////////土货结算信息
+// 查看当前村的收款账户信息
+export const villageBankInfo = '/printinfo/villageBankInfo';
+// 添加当前村的收款账户信息
+export const addVillageBankInfo = '/printinfo/addVillageBankInfo';
