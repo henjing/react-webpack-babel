@@ -1,43 +1,50 @@
 import React from 'react';
-import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message, Cascader, TreeSelect } from 'antd';
+import { Row, Col, Button, Table, Popconfirm, Modal, Form, Input, Select, message, Cascader, TreeSelect, Upload, Icon, DatePicker } from 'antd';
 import store from '../../store';
 import { connect } from 'react-redux';
-import { showVillageBankInfo, addVillageBank } from '../../api/cashier-api';
+import { getJieSuanInfoFromVillage, addJieSuanInfoToVillage, deleteTuHuoJieSuanPicture } from '../../api/cashier-api';
 const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
+import { bankUpload } from '../../appConstants/urlConfig';
 
 let TuHuoJieSuanContainer = React.createClass({
     getInitialState() {
         return {
             village_info_id: '',
-            account_name: '',
-            account_card: '',
-            account_bank: '',
+            total_money: '',
+            store_time: '',
+            introduce: '',
             isVisible: false,
-            add_account_name: '',
-            add_account_card: '',
-            add_account_bank: ''
+            dataSource: [],
+            pictureReset: 0,
+            fileListLength: 0
         }
     },
     componentWillUnmount() {
         this.setState(this.getInitialState());
     },
-    componentDidMount() {
-
+    total_money(rule, value, callback) {
+        try {
+            if(/^\d+(\.\d{1,2})?$/.test(String(value))) {
+                callback();
+            } else {
+                callback(['最多两位小数点'])
+            }
+        } catch (e) {
+            callback([]);
+        }
     },
     handleSelect(value) {
-        console.log('value', value);
         this.setState({village_info_id: value}, function () {
             this.updateBank();
         }.bind(this));
     },
     updateBank() {
-        showVillageBankInfo({village_info_id: this.state.village_info_id}, function (info) {
-            const {account_name, account_card, account_bank} = info.info;
-            this.setState({account_name: account_name, account_bank: account_bank, account_card: account_card});
+        getJieSuanInfoFromVillage({village_info_id: this.state.village_info_id}, function (info) {
+            this.setState({dataSource: info.info});
         }.bind(this), function (info) {
-            this.setState({account_name: '', account_bank: '', account_card: ''});
+            this.setState({dataSource: []});
         }.bind(this));
     },
     handleSubmit(e) {
@@ -46,10 +53,14 @@ let TuHuoJieSuanContainer = React.createClass({
         this.props.form.validateFieldsAndScroll((errors, values) => {
             if (errors) {
                 console.log('errors', errors);
-                return ;
+                return;
+            } else if(this.state.fileListLength == 0 || !values.store_time) {
+                message.error('请上传结算凭证并选择结算日期！');
+                return;
             } else {
                 console.log('values', values);
-                addVillageBank(this.assembleBankInfo(values), function (info) {
+                // window.v = values.store_time;
+                addJieSuanInfoToVillage(this.assembleBankInfo(values), function (info) {
                     message.success(info.info);
                     this.hideModal();
                     this.updateBank();
@@ -59,32 +70,51 @@ let TuHuoJieSuanContainer = React.createClass({
             }
         });
     },
+    getFileListLength(length) {
+        this.setState({fileListLength : length});
+    },
     assembleBankInfo(values) {
+        values.store_time = values.store_time.toISOString().slice(0, 10);
+        // v.toISOString().slice(0, 10);
         return Object.assign({}, {...values}, {village_info_id: this.state.village_info_id});
     },
     hideModal() {
-        this.setState({isVisible: false, add_account_bank: '', add_account_card: '', add_account_name: ''});
+        this.props.form.resetFields(['total_money', 'introduce']);
+        try {
+            document.getElementsByClassName('ant-calendar-picker-clear')[0].click();
+        } catch (e) {}
+        setTimeout(function () {
+            this.setState({isVisible: false, pictureReset: Math.random()});
+        }.bind(this), 10);
     },
     openModal() {
-        this.setState({isVisible: true});
-    },
-    validate_account_card(rule, value, callback) {
-        try {
-            if(/^\d{16}|\d{19}$/.test(value)) {
-                callback();
-            } else {
-                callback(['请输入正确的收款账号']);
-            }
-        } catch (e) {
-            callback(['请输入正确的收款账号']);
+        if(this.state.village_info_id) {
+            this.setState({isVisible: true});
+        } else {
+            message.error('请先选择要添加的村！');
         }
     },
     getColumns() {
-        return [{title: '收款账户名', dataIndex: 'account_name', key: 'account_name'}, {title: '收款账号', dataIndex: 'account_card', key: 'account_card'}, {title: '开户银行网点信息', dataIndex: 'account_bank', key: 'account_bank'}];
-    },
-    getDataSource() {
-        const {account_name, account_card, account_bank, village_info_id} = this.state;
-        return account_name ? [{account_name, account_card, account_bank, key: village_info_id}] : [];
+        return [{title: '结算总价(元)', dataIndex: 'total_money', key: 'total_money'},
+            {title: '收货凭证', dataIndex: 'inbound_pictures', key: 'inbound_pictures', render: (text, record, index) => {
+            let imgList = record.inbound_pictures.map(function (option) {
+                return (
+                    <span>
+                        <a href={option} target="_blank"><img key={option} style={{width:120, height: 80}} src={option}/></a> &nbsp;
+                    </span>
+                )
+            });
+            return (
+                <span>
+                    {imgList}
+                </span>
+            )
+            }},
+            {title: '收货时间', dataIndex: 'store_time', key: 'store_time'},
+            {title: '备注', dataIndex: 'introduce', key: 'introduce'},
+            {title: '结算状态', dataIndex: 'pay_status', key: 'pay_status'},
+            {title: '结算时间', dataIndex: 'pay_time', key: 'pay_time'},
+            {title: '申请时间', dataIndex: 'add_time', key: 'add_time'}];
     },
     render() {
         let selectOptions = this.props.villageList.map(function (option) {
@@ -92,8 +122,6 @@ let TuHuoJieSuanContainer = React.createClass({
                 <Option key={option.id} value={option.id}>{option.province + option.city + option.district + option.village}</Option>
             )
         });
-        let one = selectOptions[0];
-        // console.log('one', one);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol : { span : 6 },
@@ -117,38 +145,39 @@ let TuHuoJieSuanContainer = React.createClass({
                             {selectOptions}
                         </Select>
                         &nbsp;&nbsp;
-                        {this.state.village_info_id && !this.state.account_name ? (
-                            <Button type="primary" onClick={this.openModal}>添加收款账户</Button>
-                        ) : ''}
+                        <Button type="primary" onClick={this.openModal}>添加结算信息</Button>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <Table pagination={false} columns={this.getColumns()} dataSource={this.getDataSource()} />
+                        <Table pagination={false} columns={this.getColumns()} dataSource={this.state.dataSource} />
                     </Col>
                 </Row>
                 <Modal title={'收款账户'} visible={this.state.isVisible} onOk={this.handleSubmit} onCancel={this.hideModal}>
                             <Form horizontal>
-                                <FormItem {...formItemLayout} hasFeedback label="收款账户名">
-                                    {getFieldDecorator('account_name', {
-                                        rules : [{ required : true, message : '请输入正确的收款账户名', whitespace : true }]
+                                <FormItem {...formItemLayout} hasFeedback label="结算总价（元）">
+                                    {getFieldDecorator('total_money', {
+                                        rules : [{ required : true, message : '请输入总价', whitespace : true }, { validator : this.total_money}]
+                                    })(
+                                        <Input type="number" />
+                                    )}
+                                </FormItem>
+                                <FormItem {...formItemLayout} hasFeedback label="结算日期">
+                                    {getFieldDecorator('store_time', {
+
+                                    })(
+                                        <DatePicker />
+                                    )}
+                                </FormItem>
+                                <FormItem {...formItemLayout} hasFeedback label="备注说明">
+                                    {getFieldDecorator('introduce', {
+
                                     })(
                                         <Input />
                                     )}
                                 </FormItem>
-                                <FormItem {...formItemLayout} hasFeedback label="收款账号">
-                                    {getFieldDecorator('account_card', {
-                                        rules : [{ required : true, message : '请输入正确的收款账号', whitespace : true }, { validator : this.validate_account_card}]
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem>
-                                <FormItem {...formItemLayout} hasFeedback label="开户银行网点信息">
-                                    {getFieldDecorator('account_bank', {
-                                        rules : [{ required : true, message : '请输入正确的网点信息', whitespace : true }]
-                                    })(
-                                        <Input />
-                                    )}
+                                <FormItem {...formItemLayout} label="结算凭证">
+                                        <PicturesWall setFileListLength={this.getFileListLength}  pictureReset={this.state.pictureReset} />
                                 </FormItem>
                             </Form>
                 </Modal>
@@ -167,3 +196,88 @@ const mapStateToProps = function (store) {
 TuHuoJieSuanContainer = createForm()(TuHuoJieSuanContainer);
 
 export default connect(mapStateToProps)(TuHuoJieSuanContainer);
+
+class PicturesWall extends React.Component {
+  state = {
+    previewVisible: false,
+    uploadUrl: '',
+    previewImage: '',
+    fileList: []
+  };
+
+  handleCancel = () => {
+      this.setState({ previewVisible: false });
+  };
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  };
+
+  componentDidMount = () => this.setState({uploadUrl: bankUpload + '?number=' + new Date().getTime()});
+
+  componentWillUnmount() {
+      this.setState({
+        previewVisible: false,
+        uploadUrl: '',
+        previewImage: '',
+        fileList: []
+      });
+  }
+
+  componentWillReceiveProps(nextProps) {
+      if (this.props.pictureReset !== nextProps.pictureReset) {
+          this.setState({fileList: []});
+      }
+  }
+
+  handleChange = ({ file, fileList }) => {
+      this.setState({ fileList });
+      // console.log('fileList', fileList);
+      // console.log('file', file);
+      this.props.setFileListLength(fileList.length);
+  };
+
+  onRemove = (file) => {
+      console.log('file', file);
+      let toRemovedPicPath = file.response.info;
+
+      if(toRemovedPicPath) {
+          deleteTuHuoJieSuanPicture({pic_path: toRemovedPicPath}, function (info) {
+              console.log(info.info);
+          }.bind(this), function (info) {
+              console.log(info.info);
+          }.bind(this));
+      }
+  }
+
+  render() {
+    const { previewVisible, previewImage, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">上传图片</div>
+      </div>
+    );
+    return (
+      <div className="clearfix">
+        <Upload
+          action={this.state.uploadUrl}
+          listType="picture-card"
+          fileList={fileList}
+          multiple={true}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+          onRemove={this.onRemove}
+        >
+          {uploadButton}
+        </Upload>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
+      </div>
+    );
+  }
+}

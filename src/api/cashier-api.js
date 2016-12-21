@@ -1,5 +1,5 @@
 import commonAjax, { commonGetAjax} from '../helpers/commonAjax';
-import {getCashierApplyUrlList, decideCashierApplyUrl, getCashierApplyDetailUrl, getCashierGoodsTypeList, villageBankInfo, addVillageBankInfo} from '../appConstants/urlConfig';
+import {getCashierApplyUrlList, decideCashierApplyUrl, getCashierApplyDetailUrl, getCashierGoodsTypeList, villageBankInfo, addVillageBankInfo, deleteTuHuoJieSuanPictureUrl, addJieSuanInfoToVillageUrl, getJieSuanInfoFromVillageUrl} from '../appConstants/urlConfig';
 
 export function getGoodsList(config, sucCallback, failCallback) {
     return commonAjax(getCashierGoodsTypeList, config, function (info) {
@@ -33,6 +33,7 @@ export function getCashierApplyDetailList(config, sucCallback, failCallback) {
     });
 }
 
+// 土货结算
 export function showVillageBankInfo(config, sucCallback, failCallback) {
     return commonAjax(villageBankInfo, config, function (info) {
         if (sucCallback) sucCallback(info);
@@ -43,6 +44,30 @@ export function showVillageBankInfo(config, sucCallback, failCallback) {
 
 export function addVillageBank(config, sucCallback, failCallback) {
     return commonAjax(addVillageBankInfo, config, function (info) {
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function deleteTuHuoJieSuanPicture(config, sucCallback, failCallback) {
+    return commonAjax(deleteTuHuoJieSuanPictureUrl, config, function (info) {
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function addJieSuanInfoToVillage(config, sucCallback, failCallback) {
+    return commonAjax(addJieSuanInfoToVillageUrl, config, function (info) {
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function getJieSuanInfoFromVillage(config, sucCallback, failCallback) {
+    return commonAjax(getJieSuanInfoFromVillageUrl, config, function (info) {
         if (sucCallback) sucCallback(info);
     }, function (info) {
         if (failCallback) failCallback(info);

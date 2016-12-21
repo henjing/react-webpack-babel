@@ -18,7 +18,7 @@ const SidebarLayoutContainer = React.createClass({
     //匹配的导航列表
     matchSubMenu(pathName) {
         const subMenuArray =  {
-            'sub1' : ['people', 'product', 'village', 'enroll', 'printer', 'tu_huo'],
+            'sub1' : ['people', 'product', 'village', 'enroll', 'printer', 'tu_huo', 'shou_kuan'],
             'sub2' : ['order_overview', 'goods_supplement'],
             'sub3' : ['applying', 'paying', 'pay_success', 'rejected']
         };
@@ -75,6 +75,11 @@ const SidebarLayoutContainer = React.createClass({
                         土货结算
                     </Link>
                 </Menu.Item>
+                <Menu.Item key={routeBase + 'shou_kuan'}>
+                    <Link to={routeBase + 'shou_kuan'} >
+                        收款账户
+                    </Link>
+                </Menu.Item>
                 <Menu.Item key={routeBase + 'printer'}>
                     <Link to={routeBase + 'printer'} >
                         打印机信息
@@ -100,6 +105,11 @@ const SidebarLayoutContainer = React.createClass({
                 <Menu.Item key={routeBase + 'tu_huo'}>
                     <Link to={routeBase + 'tu_huo'} >
                         土货结算
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={routeBase + 'shou_kuan'}>
+                    <Link to={routeBase + 'shou_kuan'} >
+                        收款账户
                     </Link>
                 </Menu.Item>
                 <Menu.Item key={routeBase + 'printer'}>

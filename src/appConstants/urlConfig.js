@@ -110,3 +110,11 @@ export const getCashierGoodsTypeList = '/admin/store/showGoodsList';
 export const villageBankInfo = '/printinfo/villageBankInfo';
 // 添加当前村的收款账户信息
 export const addVillageBankInfo = '/printinfo/addVillageBankInfo';
+// 上传图片
+export const bankUpload = '/printinfo/inboundUpload';
+// 删除图片
+export const deleteTuHuoJieSuanPictureUrl = '/printinfo/delInboundPic';
+// 给一个村添加结算信息
+export const addJieSuanInfoToVillageUrl = '/printinfo/addVillageAccountInfo';
+// 查询一个村的结算信息
+export const getJieSuanInfoFromVillageUrl = '/printinfo/villageAccountList';
