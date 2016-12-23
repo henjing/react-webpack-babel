@@ -31,6 +31,8 @@ import cashierRejectedContainer from './components/containers/cashier-rejected-c
 import tuHuoJieSuanContainer from './components/containers/tuhuo-jiesuan-container';
 // 收款账户
 import shouKuanAccountContainer from './components/containers/tuhuo-bank-account-container';
+// 电商部 土货结算审核
+import tuHuoJieSuanAdminByDianShangBuContainer from './components/containers/tuhuo-jiesuan-admin-container';
 
 export default (
     <Router history={browserHistory}>
@@ -54,6 +56,10 @@ export default (
             </Route>
 
             <Route breadcrumbName="收款账户" path={'shou_kuan'} component={shouKuanAccountContainer}>
+
+            </Route>
+
+            <Route breadcrumbName="土货结算审核" path={'admin_tu_huo'} component={tuHuoJieSuanAdminByDianShangBuContainer}>
 
             </Route>
 

@@ -1,5 +1,5 @@
 import commonAjax, { commonGetAjax} from '../helpers/commonAjax';
-import {getCashierApplyUrlList, decideCashierApplyUrl, getCashierApplyDetailUrl, getCashierGoodsTypeList, villageBankInfo, addVillageBankInfo, deleteTuHuoJieSuanPictureUrl, addJieSuanInfoToVillageUrl, getJieSuanInfoFromVillageUrl} from '../appConstants/urlConfig';
+import {getCashierApplyUrlList, decideCashierApplyUrl, getCashierApplyDetailUrl, getCashierGoodsTypeList, villageBankInfo, addVillageBankInfo, deleteTuHuoJieSuanPictureUrl, addJieSuanInfoToVillageUrl, getJieSuanInfoFromVillageUrl, getJieSuanListForDianShangBu, successJieSuanApplyForDianShangBu} from '../appConstants/urlConfig';
 
 export function getGoodsList(config, sucCallback, failCallback) {
     return commonAjax(getCashierGoodsTypeList, config, function (info) {
@@ -68,6 +68,22 @@ export function addJieSuanInfoToVillage(config, sucCallback, failCallback) {
 
 export function getJieSuanInfoFromVillage(config, sucCallback, failCallback) {
     return commonAjax(getJieSuanInfoFromVillageUrl, config, function (info) {
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function getJieSuanApplyListForDianShangBu(config, sucCallback, failCallback) {
+    return commonAjax(getJieSuanListForDianShangBu, config, function (info) {
+        if (sucCallback) sucCallback(info);
+    }, function (info) {
+        if (failCallback) failCallback(info);
+    })
+}
+
+export function successJieSuanApplyFromDianShangBu(config, sucCallback, failCallback) {
+    return commonAjax(successJieSuanApplyForDianShangBu, config, function (info) {
         if (sucCallback) sucCallback(info);
     }, function (info) {
         if (failCallback) failCallback(info);

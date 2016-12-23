@@ -19,7 +19,7 @@ const SidebarLayoutContainer = React.createClass({
     matchSubMenu(pathName) {
         const subMenuArray =  {
             'sub1' : ['people', 'product', 'village', 'enroll', 'printer', 'tu_huo', 'shou_kuan'],
-            'sub2' : ['order_overview', 'goods_supplement'],
+            'sub2' : ['order_overview', 'goods_supplement', 'admin_tu_huo'],
             'sub3' : ['applying', 'paying', 'pay_success', 'rejected']
         };
         let matchSubMenu = '';
@@ -147,6 +147,11 @@ const SidebarLayoutContainer = React.createClass({
                                         厂商发货订单
                                     </Link>
                                 </Menu.Item>
+                                <Menu.Item key={routeBase + 'admin_tu_huo'}>
+                                    <Link to={routeBase + 'admin_tu_huo'} >
+                                        土货结算审核
+                                    </Link>
+                                </Menu.Item>
                               </SubMenu>
 
                         ) : ''}
@@ -187,6 +192,11 @@ const SidebarLayoutContainer = React.createClass({
                                 <Menu.Item key={routeBase + 'goods_supplement'}>
                                     <Link to={routeBase + 'goods_supplement'} >
                                         厂商发货订单
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key={routeBase + 'admin_tu_huo'}>
+                                    <Link to={routeBase + 'admin_tu_huo'} >
+                                        土货结算审核
                                     </Link>
                                 </Menu.Item>
                             </SubMenu>

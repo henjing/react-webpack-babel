@@ -118,3 +118,7 @@ export const deleteTuHuoJieSuanPictureUrl = '/printinfo/delInboundPic';
 export const addJieSuanInfoToVillageUrl = '/printinfo/addVillageAccountInfo';
 // 查询一个村的结算信息
 export const getJieSuanInfoFromVillageUrl = '/printinfo/villageAccountList';
+// 电商部审核的结算信息列表
+export const getJieSuanListForDianShangBu = '/store/allVillageAccountList';
+// 电商部通过结算的申请
+export const successJieSuanApplyForDianShangBu = '/store/confirmVillageAccount';

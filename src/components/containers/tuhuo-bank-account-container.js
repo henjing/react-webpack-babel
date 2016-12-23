@@ -25,7 +25,18 @@ let TuHuoJieSuanContainer = React.createClass({
         this.setState(this.getInitialState());
     },
     componentDidMount() {
-
+        if(this.props.villageList.length > 0) {
+            let manualTrickSelectOption = this.props.villageList[0].id;
+            this.handleSelect(manualTrickSelectOption);
+        }
+    },
+    componentWillReceiveProps(nextProps) {
+        console.log('nextProps', nextProps.villageList);
+        if(this.props.villageList.length === 0 && nextProps.villageList.length > 0) {
+            console.log('this will only appear ones.');
+            let manualTrickSelectOption = nextProps.villageList[0].id;
+            this.handleSelect(manualTrickSelectOption);
+        }
     },
     handleSelect(value) {
         console.log('value', value);
@@ -70,15 +81,16 @@ let TuHuoJieSuanContainer = React.createClass({
         this.setState({isVisible: true});
     },
     validate_account_card(rule, value, callback) {
-        try {
-            if(/^\d{16}|\d{19}$/.test(value)) {
-                callback();
-            } else {
-                callback(['请输入正确的收款账号']);
-            }
-        } catch (e) {
-            callback(['请输入正确的收款账号']);
-        }
+        // try {
+        //     if(/^\d{16}|\d{19}$/.test(value)) {
+        //         callback();
+        //     } else {
+        //         callback(['请输入正确的收款账号']);
+        //     }
+        // } catch (e) {
+        //     callback(['请输入正确的收款账号']);
+        // }
+        callback();
     },
     getColumns() {
         return [{title: '收款账户名', dataIndex: 'account_name', key: 'account_name'}, {title: '收款账号', dataIndex: 'account_card', key: 'account_card'}, {title: '开户银行网点信息', dataIndex: 'account_bank', key: 'account_bank'}];
@@ -144,7 +156,7 @@ let TuHuoJieSuanContainer = React.createClass({
                                         <Input />
                                     )}
                                 </FormItem>
-                                <FormItem {...formItemLayout} hasFeedback label="开户银行网点信息">
+                                <FormItem {...formItemLayout} hasFeedback label="开户银行">
                                     {getFieldDecorator('account_bank', {
                                         rules : [{ required : true, message : '请输入正确的网点信息', whitespace : true }]
                                     })(

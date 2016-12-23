@@ -18,11 +18,28 @@ let TuHuoJieSuanContainer = React.createClass({
             isVisible: false,
             dataSource: [],
             pictureReset: 0,
-            fileListLength: 0
+            fileListLength: 0,
+            currentPage: 1,
+            totalRows: 1,
+            pageSize: 1
         }
     },
     componentWillUnmount() {
         this.setState(this.getInitialState());
+    },
+    componentDidMount() {
+        if(this.props.villageList.length > 0) {
+            let manualTrickSelectOption = this.props.villageList[0].id;
+            this.handleSelect(manualTrickSelectOption);
+        }
+    },
+    componentWillReceiveProps(nextProps) {
+        console.log('nextProps', nextProps.villageList);
+        if(this.props.villageList.length === 0 && nextProps.villageList.length > 0) {
+            console.log('this will only appear ones.');
+            let manualTrickSelectOption = nextProps.villageList[0].id;
+            this.handleSelect(manualTrickSelectOption);
+        }
     },
     total_money(rule, value, callback) {
         try {
@@ -40,12 +57,15 @@ let TuHuoJieSuanContainer = React.createClass({
             this.updateBank();
         }.bind(this));
     },
-    updateBank() {
-        getJieSuanInfoFromVillage({village_info_id: this.state.village_info_id}, function (info) {
-            this.setState({dataSource: info.info});
+    updateBank(page) {
+        getJieSuanInfoFromVillage({village_info_id: this.state.village_info_id, page: page ? page : ''}, function (info) {
+            this.setState({dataSource: info.info, currentPage: info.current_page, pageSize: info.list_rows, totalRows: info.total_rows});
         }.bind(this), function (info) {
-            this.setState({dataSource: []});
+            this.setState({dataSource: [], currentPage: 1, totalRows: 1, pageSize: 1});
         }.bind(this));
+    },
+    onPageChange(page) {
+        this.updateBank(page);
     },
     handleSubmit(e) {
         if(e) e.preventDefault();
@@ -96,7 +116,7 @@ let TuHuoJieSuanContainer = React.createClass({
     },
     getColumns() {
         return [{title: '结算总价(元)', dataIndex: 'total_money', key: 'total_money'},
-            {title: '收货凭证', dataIndex: 'inbound_pictures', key: 'inbound_pictures', render: (text, record, index) => {
+            {title: '交易清单', dataIndex: 'inbound_pictures', key: 'inbound_pictures', render: (text, record, index) => {
             let imgList = record.inbound_pictures.map(function (option) {
                 return (
                     <span>
@@ -110,11 +130,11 @@ let TuHuoJieSuanContainer = React.createClass({
                 </span>
             )
             }},
-            {title: '收货时间', dataIndex: 'store_time', key: 'store_time'},
+            {title: '交易时间', dataIndex: 'store_time', key: 'store_time'},
             {title: '备注', dataIndex: 'introduce', key: 'introduce'},
+            {title: '申请时间', dataIndex: 'add_time', key: 'add_time'},
             {title: '结算状态', dataIndex: 'pay_status', key: 'pay_status'},
-            {title: '结算时间', dataIndex: 'pay_time', key: 'pay_time'},
-            {title: '申请时间', dataIndex: 'add_time', key: 'add_time'}];
+            {title: '结算时间', dataIndex: 'pay_time', key: 'pay_time'}];
     },
     render() {
         let selectOptions = this.props.villageList.map(function (option) {
@@ -127,6 +147,8 @@ let TuHuoJieSuanContainer = React.createClass({
             labelCol : { span : 6 },
             wrapperCol : { span : 13}
         };
+
+        const pagination = {current: this.state.currentPage, pageSize: this.state.pageSize, total: this.state.totalRows, onChange: this.onPageChange};
 
         return (
             <div>
@@ -150,19 +172,19 @@ let TuHuoJieSuanContainer = React.createClass({
                 </Row>
                 <Row>
                     <Col>
-                        <Table pagination={false} columns={this.getColumns()} dataSource={this.state.dataSource} />
+                        <Table pagination={pagination} columns={this.getColumns()} dataSource={this.state.dataSource} />
                     </Col>
                 </Row>
                 <Modal title={'收款账户'} visible={this.state.isVisible} onOk={this.handleSubmit} onCancel={this.hideModal}>
                             <Form horizontal>
-                                <FormItem {...formItemLayout} hasFeedback label="结算总价（元）">
+                                <FormItem {...formItemLayout} hasFeedback label="结算总价(元)">
                                     {getFieldDecorator('total_money', {
                                         rules : [{ required : true, message : '请输入总价', whitespace : true }, { validator : this.total_money}]
                                     })(
                                         <Input type="number" />
                                     )}
                                 </FormItem>
-                                <FormItem {...formItemLayout} hasFeedback label="结算日期">
+                                <FormItem {...formItemLayout} hasFeedback label="交易日期">
                                     {getFieldDecorator('store_time', {
 
                                     })(
@@ -176,7 +198,7 @@ let TuHuoJieSuanContainer = React.createClass({
                                         <Input />
                                     )}
                                 </FormItem>
-                                <FormItem {...formItemLayout} label="结算凭证">
+                                <FormItem {...formItemLayout} label="交易清单">
                                         <PicturesWall setFileListLength={this.getFileListLength}  pictureReset={this.state.pictureReset} />
                                 </FormItem>
                             </Form>
