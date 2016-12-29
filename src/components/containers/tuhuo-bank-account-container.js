@@ -93,7 +93,15 @@ let TuHuoJieSuanContainer = React.createClass({
         callback();
     },
     getColumns() {
-        return [{title: '收款账户名', dataIndex: 'account_name', key: 'account_name'}, {title: '收款账号', dataIndex: 'account_card', key: 'account_card'}, {title: '开户银行网点信息', dataIndex: 'account_bank', key: 'account_bank'}];
+        return [
+            {title: '收款账户名', dataIndex: 'account_name', key: 'account_name'},
+            // {title: '收款账号', dataIndex: 'account_card', key: 'account_card'},
+            {title: '收款账号', render: (text, record, index) => {
+                return (
+                    <span style={{fontSize: '18px'}}>{record.account_card}</span>
+                )
+            }},
+            {title: '开户银行网点信息', dataIndex: 'account_bank', key: 'account_bank'}];
     },
     getDataSource() {
         const {account_name, account_card, account_bank, village_info_id} = this.state;

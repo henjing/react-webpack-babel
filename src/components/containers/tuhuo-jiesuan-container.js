@@ -256,11 +256,27 @@ class PicturesWall extends React.Component {
   }
 
   handleChange = ({ file, fileList }) => {
-      this.setState({ fileList });
-      // console.log('fileList', fileList);
+      let finalFileList = this.filterFileList(fileList);
+      this.setState({ fileList: finalFileList });
+      console.log('fileList', fileList);
       // console.log('file', file);
-      this.props.setFileListLength(fileList.length);
+      this.props.setFileListLength(finalFileList.length);
   };
+
+  filterFileList(fileList) {
+      let myIndex = -1;
+      fileList.forEach(function (file, index) {
+          if (file.status === 'done' && file.response.status === 0) {
+              myIndex = index;
+          }
+      });
+      if (myIndex === -1) {
+          return fileList;
+      } else {
+          fileList.splice(myIndex, 1);
+          return fileList;
+      }
+  }
 
   onRemove = (file) => {
       console.log('file', file);
@@ -293,6 +309,7 @@ class PicturesWall extends React.Component {
           onPreview={this.handlePreview}
           onChange={this.handleChange}
           onRemove={this.onRemove}
+          accept="image/*"
         >
           {uploadButton}
         </Upload>
