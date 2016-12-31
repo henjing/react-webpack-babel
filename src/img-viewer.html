@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片预览</title>
+</head>
+<style>
+    #img-container {
+        margin-top:150px;
+    }
+
+    #img {
+        height:100vw;
+        width: 100vw;
+    }
+
+    .container {
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      top: 0;
+    }
+
+    .toggle {
+      margin: 4px;
+      display: inline-block;
+    }
+
+    .toggle {
+      box-shadow: inset 0 0 35px 5px rgba(0, 0, 0, 0.25), inset 0 2px 1px 1px rgba(255, 255, 255, 0.9), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      background: #ccd0d4;
+      position: relative;
+      height: 140px;
+      width: 140px;
+    }
+    .toggle:before {
+      box-shadow: 0 0 17.5px 8.75px #fff;
+      border-radius: 118.3px;
+      background: #fff;
+      position: absolute;
+      margin-left: -50.4px;
+      margin-top: -50.4px;
+      opacity: 0.2;
+      content: "";
+      height: 100.8px;
+      width: 100.8px;
+      left: 50%;
+      top: 50%;
+    }
+    .toggle .button {
+      -webkit-filter: blur(1px);
+      -moz-filter: blur(1px);
+      filter: blur(1px);
+      transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.5), inset 0 -3px 4px -1px rgba(0, 0, 0, 0.2), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 3px 4px -1px rgba(255, 255, 255, 0.2), inset 0 0 5px 1px rgba(255, 255, 255, 0.8), inset 0 20px 30px 0 rgba(255, 255, 255, 0.2);
+      border-radius: 96.32px;
+      position: absolute;
+      background: #ccd0d4;
+      margin-left: -48.16px;
+      margin-top: -48.16px;
+      display: block;
+      height: 96.32px;
+      width: 96.32px;
+      left: 50%;
+      top: 50%;
+    }
+    .toggle .label {
+      transition: color 300ms ease-out;
+      text-shadow: 1px 1px 3px #ccd0d4, 0 0 0 rgba(0, 0, 0, 0.8), 1px 1px 4px #fff;
+      line-height: 139px;
+      text-align: center;
+      position: absolute;
+      font-weight: 700;
+      font-size: 42px;
+      display: block;
+      opacity: 0.9;
+      height: 100%;
+      width: 100%;
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .toggle input {
+      opacity: 0;
+      position: absolute;
+      cursor: pointer;
+      z-index: 1;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+    .toggle input:active ~ .button {
+      box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 25px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
+    }
+    .toggle input:active ~ .label {
+      font-size: 40px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+    .toggle input:checked ~ .button {
+      box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 25px -1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 20px 0 rgba(0, 0, 0, 0.2), inset 0 0 5px 1px rgba(255, 255, 255, 0.6);
+    }
+    .toggle input:checked ~ .label {
+      font-size: 40px;
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+</style>
+<body>
+<div id="img-container">
+    <img src="" alt="" id="img">
+</div>
+<div class="container">
+  <div class="toggle" id="left">
+    <input type="checkbox">
+    <span class="button"></span>
+    <span class="label">左</span>
+  </div>
+  <div class="toggle" id="right">
+    <input type="checkbox" checked>
+    <span class="button"></span>
+    <span class="label">右</span>
+  </div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+<script>
+   jQuery.fn.rotate = function(angle,whence) {
+        var p = this.get(0);
+
+        // we store the angle inside the image tag for persistence
+        if (!whence) {
+            p.angle = ((p.angle==undefined?0:p.angle) + angle) % 360;
+        } else {
+            p.angle = angle;
+        }
+
+        if (p.angle >= 0) {
+            var rotation = Math.PI * p.angle / 180;
+        } else {
+            var rotation = Math.PI * (360+p.angle) / 180;
+        }
+        var costheta = Math.round(Math.cos(rotation) * 1000) / 1000;
+        var sintheta = Math.round(Math.sin(rotation) * 1000) / 1000;
+        //alert(costheta+","+sintheta);
+
+        if (document.all && !window.opera) {
+            var canvas = document.createElement('img');
+
+            canvas.src = p.src;
+            canvas.height = p.height;
+            canvas.width = p.width;
+
+            canvas.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11="+costheta+",M12="+(-sintheta)+",M21="+sintheta+",M22="+costheta+",SizingMethod='auto expand')";
+        } else {
+            var canvas = document.createElement('canvas');
+            if (!p.oImage) {
+                canvas.oImage = new Image();
+                canvas.oImage.src = p.src;
+            } else {
+                canvas.oImage = p.oImage;
+            }
+
+            canvas.style.width = canvas.width = Math.abs(costheta*canvas.oImage.width) + Math.abs(sintheta*canvas.oImage.height);
+            canvas.style.height = canvas.height = Math.abs(costheta*canvas.oImage.height) + Math.abs(sintheta*canvas.oImage.width);
+
+            var context = canvas.getContext('2d');
+            context.save();
+            if (rotation <= Math.PI/2) {
+                context.translate(sintheta*canvas.oImage.height,0);
+            } else if (rotation <= Math.PI) {
+                context.translate(canvas.width,-costheta*canvas.oImage.height);
+            } else if (rotation <= 1.5*Math.PI) {
+                context.translate(-costheta*canvas.oImage.width,canvas.height);
+            } else {
+                context.translate(0,-sintheta*canvas.oImage.width);
+            }
+            context.rotate(rotation);
+            context.drawImage(canvas.oImage, 0, 0, canvas.oImage.width, canvas.oImage.height);
+            context.restore();
+        }
+        canvas.id = p.id;
+        canvas.angle = p.angle;
+        p.parentNode.replaceChild(canvas, p);
+    }
+
+    jQuery.fn.rotateRight = function(angle) {
+        this.rotate(angle==undefined?90:angle);
+    }
+
+    jQuery.fn.rotateLeft = function(angle) {
+        this.rotate(angle==undefined?-90:-angle);
+    }
+</script>
+<script>
+    /**
+ * jQuery.query - Query String Modification and Creation for jQuery
+ * Written by Blair Mitchelmore (blair DOT mitchelmore AT gmail DOT com)
+ * Licensed under the WTFPL (http://sam.zoy.org/wtfpl/).
+ * Date: 2009/8/13
+ *
+ * @author Blair Mitchelmore
+ * @version 2.2.3
+ *
+ **/
+new function(settings) {
+  // Various Settings
+  var $separator = settings.separator || '&';
+  var $spaces = settings.spaces === false ? false : true;
+  var $suffix = settings.suffix === false ? '' : '[]';
+  var $prefix = settings.prefix === false ? false : true;
+  var $hash = $prefix ? settings.hash === true ? "#" : "?" : "";
+  var $numbers = settings.numbers === false ? false : true;
+
+  jQuery.query = new function() {
+    var is = function(o, t) {
+      return o != undefined && o !== null && (!!t ? o.constructor == t : true);
+    };
+    var parse = function(path) {
+      var m, rx = /\[([^[]*)\]/g, match = /^([^[]+)(\[.*\])?$/.exec(path), base = match[1], tokens = [];
+      while (m = rx.exec(match[2])) tokens.push(m[1]);
+      return [base, tokens];
+    };
+    var set = function(target, tokens, value) {
+      var o, token = tokens.shift();
+      if (typeof target != 'object') target = null;
+      if (token === "") {
+        if (!target) target = [];
+        if (is(target, Array)) {
+          target.push(tokens.length == 0 ? value : set(null, tokens.slice(0), value));
+        } else if (is(target, Object)) {
+          var i = 0;
+          while (target[i++] != null);
+          target[--i] = tokens.length == 0 ? value : set(target[i], tokens.slice(0), value);
+        } else {
+          target = [];
+          target.push(tokens.length == 0 ? value : set(null, tokens.slice(0), value));
+        }
+      } else if (token && token.match(/^\s*[0-9]+\s*$/)) {
+        var index = parseInt(token, 10);
+        if (!target) target = [];
+        target[index] = tokens.length == 0 ? value : set(target[index], tokens.slice(0), value);
+      } else if (token) {
+        var index = token.replace(/^\s*|\s*$/g, "");
+        if (!target) target = {};
+        if (is(target, Array)) {
+          var temp = {};
+          for (var i = 0; i < target.length; ++i) {
+            temp[i] = target[i];
+          }
+          target = temp;
+        }
+        target[index] = tokens.length == 0 ? value : set(target[index], tokens.slice(0), value);
+      } else {
+        return value;
+      }
+      return target;
+    };
+
+    var queryObject = function(a) {
+      var self = this;
+      self.keys = {};
+
+      if (a.queryObject) {
+        jQuery.each(a.get(), function(key, val) {
+          self.SET(key, val);
+        });
+      } else {
+        self.parseNew.apply(self, arguments);
+      }
+      return self;
+    };
+
+    queryObject.prototype = {
+      queryObject: true,
+      parseNew: function(){
+        var self = this;
+        self.keys = {};
+        jQuery.each(arguments, function() {
+          var q = "" + this;
+          q = q.replace(/^[?#]/,''); // remove any leading ? || #
+          q = q.replace(/[;&]$/,''); // remove any trailing & || ;
+          if ($spaces) q = q.replace(/[+]/g,' '); // replace +'s with spaces
+
+          jQuery.each(q.split(/[&;]/), function(){
+            var key = decodeURIComponent(this.split('=')[0] || "");
+            var val = decodeURIComponent(this.split('=')[1] || "");
+
+            if (!key) return;
+
+            if ($numbers) {
+              if (/^[+-]?[0-9]+\.[0-9]*$/.test(val)) // simple float regex
+                val = parseFloat(val);
+              else if (/^[+-]?[1-9][0-9]*$/.test(val)) // simple int regex
+                val = parseInt(val, 10);
+            }
+
+            val = (!val && val !== 0) ? true : val;
+
+            self.SET(key, val);
+          });
+        });
+        return self;
+      },
+      has: function(key, type) {
+        var value = this.get(key);
+        return is(value, type);
+      },
+      GET: function(key) {
+        if (!is(key)) return this.keys;
+        var parsed = parse(key), base = parsed[0], tokens = parsed[1];
+        var target = this.keys[base];
+        while (target != null && tokens.length != 0) {
+          target = target[tokens.shift()];
+        }
+        return typeof target == 'number' ? target : target || "";
+      },
+      get: function(key) {
+        var target = this.GET(key);
+        if (is(target, Object))
+          return jQuery.extend(true, {}, target);
+        else if (is(target, Array))
+          return target.slice(0);
+        return target;
+      },
+      SET: function(key, val) {
+        var value = !is(val) ? null : val;
+        var parsed = parse(key), base = parsed[0], tokens = parsed[1];
+        var target = this.keys[base];
+        this.keys[base] = set(target, tokens.slice(0), value);
+        return this;
+      },
+      set: function(key, val) {
+        return this.copy().SET(key, val);
+      },
+      REMOVE: function(key, val) {
+        if (val) {
+          var target = this.GET(key);
+          if (is(target, Array)) {
+            for (tval in target) {
+                target[tval] = target[tval].toString();
+            }
+            var index = $.inArray(val, target);
+            if (index >= 0) {
+              key = target.splice(index, 1);
+              key = key[index];
+            } else {
+              return;
+            }
+          } else if (val != target) {
+              return;
+          }
+        }
+        return this.SET(key, null).COMPACT();
+      },
+      remove: function(key, val) {
+        return this.copy().REMOVE(key, val);
+      },
+      EMPTY: function() {
+        var self = this;
+        jQuery.each(self.keys, function(key, value) {
+          delete self.keys[key];
+        });
+        return self;
+      },
+      load: function(url) {
+        var hash = url.replace(/^.*?[#](.+?)(?:\?.+)?$/, "$1");
+        var search = url.replace(/^.*?[?](.+?)(?:#.+)?$/, "$1");
+        return new queryObject(url.length == search.length ? '' : search, url.length == hash.length ? '' : hash);
+      },
+      empty: function() {
+        return this.copy().EMPTY();
+      },
+      copy: function() {
+        return new queryObject(this);
+      },
+      COMPACT: function() {
+        function build(orig) {
+          var obj = typeof orig == "object" ? is(orig, Array) ? [] : {} : orig;
+          if (typeof orig == 'object') {
+            function add(o, key, value) {
+              if (is(o, Array))
+                o.push(value);
+              else
+                o[key] = value;
+            }
+            jQuery.each(orig, function(key, value) {
+              if (!is(value)) return true;
+              add(obj, key, build(value));
+            });
+          }
+          return obj;
+        }
+        this.keys = build(this.keys);
+        return this;
+      },
+      compact: function() {
+        return this.copy().COMPACT();
+      },
+      toString: function() {
+        var i = 0, queryString = [], chunks = [], self = this;
+        var encode = function(str) {
+          str = str + "";
+          str = encodeURIComponent(str);
+          if ($spaces) str = str.replace(/%20/g, "+");
+          return str;
+        };
+        var addFields = function(arr, key, value) {
+          if (!is(value) || value === false) return;
+          var o = [encode(key)];
+          if (value !== true) {
+            o.push("=");
+            o.push(encode(value));
+          }
+          arr.push(o.join(""));
+        };
+        var build = function(obj, base) {
+          var newKey = function(key) {
+            return !base || base == "" ? [key].join("") : [base, "[", key, "]"].join("");
+          };
+          jQuery.each(obj, function(key, value) {
+            if (typeof value == 'object')
+              build(value, newKey(key));
+            else
+              addFields(chunks, newKey(key), value);
+          });
+        };
+
+        build(this.keys);
+
+        if (chunks.length > 0) queryString.push($hash);
+        queryString.push(chunks.join($separator));
+
+        return queryString.join("");
+      }
+    };
+
+    return new queryObject(location.search, location.hash);
+  };
+}(jQuery.query || {}); // Pass in jQuery.query as settings object
+</script>
+<script>
+    $(window).load(function () {
+        $('#img').attr('src', $.query.get('src'));
+
+        $('#left').click(function () {
+            $('#img').rotateLeft();
+        });
+
+        $('#right').click(function () {
+            $('#img').rotateRight();
+        });
+
+    })
+</script>
+</body>
+</html>

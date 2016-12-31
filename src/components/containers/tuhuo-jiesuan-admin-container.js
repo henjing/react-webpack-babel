@@ -71,7 +71,7 @@ let TuHuoJieSuanContainer = React.createClass({
             let imgList = record.inbound_pictures.map(function (option) {
                 return (
                     <span>
-                        <a href={option} target="_blank"><img key={option} style={{width:120, height: 80}} src={option}/></a> &nbsp;
+                        <a href={'/village/img_viewer?src=' + option} target="_blank"><img key={option} style={{width:120, height: 80}} src={option}/></a> &nbsp;
                     </span>
                 )
             });
