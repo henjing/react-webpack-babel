@@ -11,6 +11,10 @@ const RangePicker = DatePicker.RangePicker;
 import _ from 'lodash';
 import store from '../../store';
 
+/*bugFix*/
+import { selectStyle } from '../../appConstants/bugFix.js';
+import SearchInput from '../views/common-search-input';
+
 let EnrollContainer = React.createClass({
 
     showModal() {
@@ -113,7 +117,8 @@ let EnrollContainer = React.createClass({
             printPreview : {
                 primary_id : '',
                 printor_id : ''
-            }
+            },
+            village_people_name: '' // 按名字筛选入库信息
         }
     },
 
@@ -381,6 +386,10 @@ let EnrollContainer = React.createClass({
         }.bind(this));
     },
 
+    updatePeopleSearch(search, value) {
+        this.setState({ village_people_name: value });
+    },
+
     onDateChange(dates, dateStrings) {
         this.setState({dateStart : dateStrings[0], dateEnd : dateStrings[1]}, function () {
             this.commonSearch();
@@ -388,14 +397,14 @@ let EnrollContainer = React.createClass({
     },
 
     commonSearch() {
-        const {village_info_id, dateStart, dateEnd} = this.state;
-        const searchState = {village_info_id, dateStart, dateEnd, page : 1};
+        const {village_info_id, dateStart, dateEnd, village_people_name} = this.state;
+        const searchState = {village_info_id, dateStart, dateEnd, village_people_name, page : 1};
         getEnrollList(searchState);
     },
 
     pageSearch(page) {
-        const {village_info_id, dateStart, dateEnd} = this.state;
-        const searchState = {village_info_id, dateStart, dateEnd, page : page};
+        const {village_info_id, dateStart, dateEnd, village_people_name} = this.state;
+        const searchState = {village_info_id, dateStart, dateEnd, village_people_name, page : page};
         getEnrollList(searchState);
     },
 
@@ -539,7 +548,7 @@ let EnrollContainer = React.createClass({
                         <span style={{display:'inline-block', width:'66px'}}>所在村查询:</span>
                         <Select
                             showSearch
-                            style={{ width : 282, marginLeft : 8 }}
+                            style={selectStyle}
                             onSelect={this.handleSelect}
                             notFoundContent="没有可选择的内容"
                             optionFilterProp="children"
@@ -548,8 +557,13 @@ let EnrollContainer = React.createClass({
                         </Select>
                     </Col>
                     <Col style={{ paddingBottom : '8px', paddingTop : '8px'}}>
+                        <span style={{display:'inline-block', width:'66px'}}>入库检索:</span>
+                        <SearchInput placeholder="请输入农户姓名" style={{ width : '290px', marginLeft: '8px'}} updateSearchState={this.updatePeopleSearch} search={this.commonSearch} bugFix="noLineHeight" />
+
+                    </Col>
+                    <Col style={{ paddingBottom : '8px', paddingTop : '8px'}}>
                         <span style={{display:'inline-block', width:'66px'}}>入库时间:</span>
-                        <RangePicker style={{ width: 282, marginLeft: 8 }} onChange={this.onDateChange} />
+                        <RangePicker style={selectStyle} onChange={this.onDateChange} />
                     </Col>
                     <Col>
                         <Button onClick={this.showModal} style={{marginBottom : 20}} type="primary" icon="plus">添加订单</Button>

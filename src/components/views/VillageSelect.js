@@ -10,6 +10,10 @@ import { getPeople } from '../../api/people-api';
 import store from '../../store';
 import { updatePeopleSearch } from '../../actions/people-actions';
 
+/*bugFix*/
+import { selectStyle } from '../../appConstants/bugFix.js';
+// console.log('1111111111111', selectStyle);
+
 let App = React.createClass({
 
   handleChange(value) {
@@ -43,7 +47,7 @@ let App = React.createClass({
                     {getFieldDecorator('village')(
                         <Select
                             showSearch
-                            style={{ width : 282, marginLeft : 8 }}
+                            style={selectStyle}
                             onSelect={this.handleChange}
                             notFoundContent="没有可选择的内容"
                             optionFilterProp="children"

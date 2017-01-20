@@ -37,8 +37,9 @@ const SearchInput = React.createClass({
       'ant-search-input': true,
       'ant-search-input-focus': this.state.focus,
     });
+    const lineHeight = this.props.bugFix === 'noLineHeight' ? '' : 'lineHeight';
     return (
-      <div className="ant-search-input-wrapper lineHeight" style={style}>
+      <div className={"ant-search-input-wrapper " + lineHeight} style={style}>
         <InputGroup className={searchCls}>
           <Input placeholder={placeholder} value={value} onChange={this.handleInputChange}
             onFocus={this.handleFocusBlur} onBlur={this.handleFocusBlur} onPressEnter={this.handleSearch}

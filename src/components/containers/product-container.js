@@ -7,6 +7,9 @@ const FormItem = Form.Item;
 const createForm = Form.create;
 const Option = Select.Option;
 
+/*bugFix*/
+import { selectStyle } from '../../appConstants/bugFix.js';
+
 let defaultKey = '';
 
 let ProductContainer = React.createClass({
@@ -145,7 +148,7 @@ let ProductContainer = React.createClass({
                         <span>所在村查询:</span>
                         <Select 
                             showSearch
-                            style={{ width : 282, marginLeft : 8 }}
+                            style={selectStyle}
                             onSelect={this.handleSelect}
                             notFoundContent="没有可选择的内容"
                             optionFilterProp="children"

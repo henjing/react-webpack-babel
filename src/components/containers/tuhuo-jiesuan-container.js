@@ -8,6 +8,9 @@ const createForm = Form.create;
 const Option = Select.Option;
 import { bankUpload } from '../../appConstants/urlConfig';
 
+/*bugFix*/
+import { jiesuanSelectStyle } from '../../appConstants/bugFix.js';
+
 let TuHuoJieSuanContainer = React.createClass({
     getInitialState() {
         return {
@@ -157,7 +160,7 @@ let TuHuoJieSuanContainer = React.createClass({
                         <span style={{display:'inline-block', width:'66px'}}>所在村查询:</span>
                         <Select
                             showSearch
-                            style={{ width : 282, marginLeft : 8 }}
+                            style={jiesuanSelectStyle}
                             onSelect={this.handleSelect}
                             value={this.state.village_info_id}
                             notFoundContent="没有可选择的内容"

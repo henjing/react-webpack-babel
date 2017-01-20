@@ -7,6 +7,9 @@ const createForm = Form.create;
 const Option = Select.Option;
 const Panel = Collapse.Panel;
 
+/*bugFix*/
+import { printerSelectStyle } from '../../appConstants/bugFix.js';
+
 let PrinterContainer = React.createClass({
     
     componentDidMount() {
@@ -61,7 +64,7 @@ let PrinterContainer = React.createClass({
                                       rules : [{required : true, whitespace : true, message : '必填项'}]
                                   })(
                                       <Select
-                                          style={{width : 200}}
+                                          style={printerSelectStyle}
                                           placeholder="选择村"
                                           showSearch
                                           optionFilterProp="children"
@@ -71,7 +74,9 @@ let PrinterContainer = React.createClass({
                                       </Select>
                                   )}
                                 </FormItem>
-                                <Button type="primary" htmlType="submit">绑定</Button>
+                                <FormItem>
+                                    <Button type="primary" htmlType="submit">绑定</Button>
+                                </FormItem>
                               </Form>
                             </Panel>
                         </Collapse>

@@ -59,7 +59,7 @@ let TuHuoJieSuanContainer = React.createClass({
         return function () {
             successJieSuanApplyFromDianShangBu({id: record.id, status: status, do_message: this.state.message}, function (info) {
                 message.info(info.info);
-                this.updateBank();
+                this.updateBank(this.state.currentPage);
             }.bind(this), function (info) {
                 message.error(info.info);
             }.bind(this));
